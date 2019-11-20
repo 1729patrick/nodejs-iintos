@@ -1,0 +1,11 @@
+{
+	"post-queue": "Publicações por aprovar",
+	"description": "Não há publicações para serem aprovadas. <br> Para ativar esta funcionalidade, vá a <a href=\"%1\"> Settings &rarr; Post &rarr; Posting Restrictions </a>e ative a opção <strong>Post Queue</strong>.",
+	"user": "Utilizador",
+	"category": "Categoria",
+	"title": "Título",
+	"content": "Conteúdo",
+	"posted": "Publicada",
+	"reply-to": "Responder a \"%1\"",
+	"content-editable": "Podes clicar no conteúdo da publicação para o editares antes de a publicares."
+}
