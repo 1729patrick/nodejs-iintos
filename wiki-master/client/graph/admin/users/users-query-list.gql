@@ -1,0 +1,12 @@
+query {
+  users {
+    list {
+      id
+      name
+      email
+      providerKey
+      isSystem
+      createdAt
+    }
+  }
+}
