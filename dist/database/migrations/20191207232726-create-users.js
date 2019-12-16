@@ -1,8 +1,8 @@
-'use strict';
+"use strict";'use strict';
 
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		return queryInterface.createTable('Schools', {
+		return queryInterface.createTable('Users', {
 			id: {
 				type: Sequelize.INTEGER,
 				allowNull: false,
@@ -12,14 +12,19 @@ module.exports = {
 			name: {
 				type: Sequelize.STRING,
 				allowNull: false,
+			},
+			email: {
+				type: Sequelize.STRING,
+				allowNull: false,
 				unique: true,
 			},
-			phone: {
+			passwordHash: {
 				type: Sequelize.STRING,
-				allowNull: true,
+				allowNull: false,
 			},
-			country: {
-				type: Sequelize.STRING,
+			cordinator: {
+				type: Sequelize.BOOLEAN,
+				defaultValue: false,
 				allowNull: false,
 			},
 			active: {
@@ -27,13 +32,24 @@ module.exports = {
 				defaultValue: false,
 				allowNull: false,
 			},
-			city: {
-				type: Sequelize.STRING,
+			schoolId: {
+				type: Sequelize.INTEGER,
 				allowNull: false,
+				references: {
+					model: 'Schools',
+					key: 'id',
+				},
+				onUpdate: 'cascade',
+				onDelete: 'set null',
 			},
-			cep: {
-				type: Sequelize.STRING,
-				allowNull: false,
+			cordinatorVerification: {
+				type: Sequelize.INTEGER,
+				references: {
+					model: 'Files',
+					key: 'id',
+				},
+				onUpdate: 'cascade',
+				onDelete: 'set null',
 			},
 			createdAt: {
 				type: Sequelize.DATE,
@@ -47,6 +63,6 @@ module.exports = {
 	},
 
 	down: queryInterface => {
-		return queryInterface.dropTable('Schools');
+		return queryInterface.dropTable('Users');
 	},
 };

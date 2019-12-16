@@ -1,7 +1,9 @@
 import School from '../models/School';
 import User from '../models/User';
 
-import mail from '../../lib/mail';
+import Queue from '../../lib/Queue';
+
+import RegistrationEmail from '../jobs/RegistrationEmail';
 
 class CreateUserService {
 	async run({ user, school }) {
@@ -33,16 +35,19 @@ class CreateUserService {
 			schoolId,
 		});
 
-		await mail.sendMail({
-			from: '"IINTOS" <foo@iintos.com>',
-			to: 'patrick.pb845@gmail.com',
-			subject: 'New Registered Cordinator',
-			html: `
-			<p><b><u>CORDENATOR DETAILS<u></b></p>
-			<p><b>NAME:</b> ${name}</p>
-			<p><b>EMAIL:</b> ${email}</p>
-						
-			 <a href="http://localhost:3000/confirm_cordinator">SHOW MORE DETAILS</a>`,
+		let receiverEmail = process.env.ADMIN_EMAIL;
+		if (!cordinator) {
+			const cordinator = await User.findOne({
+				attributes: ['email'],
+				where: { schoolId, cordinator: true, active: true },
+			});
+
+			receiverEmail = cordinator.email;
+		}
+
+		Queue.add(RegistrationEmail.key, {
+			newUser: { name, email },
+			receiver: { email: receiverEmail },
 		});
 
 		return { name, email, cordinator, cordinatorVerification };

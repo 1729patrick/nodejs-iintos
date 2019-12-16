@@ -1,8 +1,8 @@
-'use strict';
+"use strict";'use strict';
 
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		return queryInterface.createTable('Schools', {
+		return queryInterface.createTable('Files', {
 			id: {
 				type: Sequelize.INTEGER,
 				allowNull: false,
@@ -12,26 +12,8 @@ module.exports = {
 			name: {
 				type: Sequelize.STRING,
 				allowNull: false,
-				unique: true,
 			},
-			phone: {
-				type: Sequelize.STRING,
-				allowNull: true,
-			},
-			country: {
-				type: Sequelize.STRING,
-				allowNull: false,
-			},
-			active: {
-				type: Sequelize.BOOLEAN,
-				defaultValue: false,
-				allowNull: false,
-			},
-			city: {
-				type: Sequelize.STRING,
-				allowNull: false,
-			},
-			cep: {
+			path: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
@@ -47,6 +29,6 @@ module.exports = {
 	},
 
 	down: queryInterface => {
-		return queryInterface.dropTable('Schools');
+		return queryInterface.dropTable('Files');
 	},
 };
