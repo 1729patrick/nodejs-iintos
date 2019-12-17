@@ -1,4 +1,4 @@
-require('dotenv/config');
+"use strict";require('dotenv/config');
 
 module.exports = {
 	database: process.env.DATABASE_NAME,

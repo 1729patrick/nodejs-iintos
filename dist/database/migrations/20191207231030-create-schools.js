@@ -1,4 +1,4 @@
-'use strict';
+"use strict";'use strict';
 
 module.exports = {
 	up: (queryInterface, Sequelize) => {
@@ -20,11 +20,6 @@ module.exports = {
 			},
 			country: {
 				type: Sequelize.STRING,
-				allowNull: false,
-			},
-			active: {
-				type: Sequelize.BOOLEAN,
-				defaultValue: false,
 				allowNull: false,
 			},
 			city: {
