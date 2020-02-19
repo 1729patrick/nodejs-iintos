@@ -5,8 +5,13 @@ import sequelizeConfig from '../config/database';
 import User from '../app/models/User';
 import School from '../app/models/School';
 import File from '../app/models/File';
+import Project from "../app/models/Project";
+import SchoolProject from "../app/models/SchoolProject";
+import Country from "../app/models/Country";
+import Activity from "../app/models/Activity";
+import Student from "../app/models/Student";
 
-const models = [User, School, File];
+const models = [User, School, File, Project, SchoolProject, Country, Activity, Student];
 
 class Database {
 	constructor() {
