@@ -6,7 +6,7 @@ import School from '../models/School';
 import authConfig from '../../config/auth';
 
 class SessionController {
-	async store(req, res) {
+	async create(req, res) {
 		const { email, password } = req.body;
 
 		const user = await User.findOne({

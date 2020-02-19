@@ -6,9 +6,9 @@ class Project extends Model {
 			{
                 goal: Sequelize.STRING,
                 description: Sequelize.STRING,
-                links: sequelize.STRING,
-                targetAudience: sequelize.STRING,
-                type: sequelize.STRING
+                links: Sequelize.STRING,
+                targetAudience: Sequelize.STRING,
+                type: Sequelize.STRING,
 			},
 			{ sequelize }
 		);

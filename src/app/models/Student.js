@@ -17,4 +17,4 @@ class Student extends Model {
 	}
 }
 
-export default Activity;
+export default Student;
