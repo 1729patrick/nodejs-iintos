@@ -1,5 +1,6 @@
 import School from '../models/School';
 import User from '../models/User';
+import Role from '../models/Role';
 
 import Queue from '../../lib/Queue';
 
@@ -8,6 +9,7 @@ import RegistrationEmail from '../jobs/RegistrationEmail';
 class CreateUserService {
 	async run({ user, school }) {
 		const userExists = await User.findOne({ where: { email: user.email } });
+
 		if (userExists) {
 			throw new Error('User already exists');
 		}
@@ -25,32 +27,37 @@ class CreateUserService {
 			({ id: schoolId } = await School.create(school));
 		}
 
-		const {
-			name,
-			email,
-			cordinator,
-			cordinatorVerification,
-		} = await User.create({
+		const role = await Role.findOne({
+			where: { name: user.coordinator ? 'Coordinator' : 'Professor' },
+			attributes: ['id'],
+		});
+
+		const roleId = role.id;
+		const createdUser = await User.create({
 			...user,
+			roleId,
 			schoolId,
 		});
 
 		let receiverEmail = process.env.ADMIN_EMAIL;
-		if (!cordinator) {
-			const cordinator = await User.findOne({
+		if (!user.coordinator) {
+			const coordinator = await User.findOne({
 				attributes: ['email'],
-				where: { schoolId, cordinator: true, active: true },
+				where: { schoolId, roleId: 1, active: true },
 			});
 
-			receiverEmail = cordinator.email;
+			if (coordinator) {
+				receiverEmail = coordinator.email;
+			}
 		}
 
 		Queue.add(RegistrationEmail.key, {
-			newUser: { name, email },
+			newUser: { name: createdUser.name, email: createdUser.email },
 			receiver: { email: receiverEmail },
 		});
 
-		return { name, email, cordinator, cordinatorVerification };
+		const { passwordHash, ...restUser } = createdUser.toJSON();
+		return restUser;
 	}
 }
 

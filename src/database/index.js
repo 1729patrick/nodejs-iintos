@@ -10,6 +10,7 @@ import SchoolProject from "../app/models/SchoolProject";
 import Country from "../app/models/Country";
 import Activity from "../app/models/Activity";
 import Student from "../app/models/Student";
+import Role from '../app/models/Role';
 
 const models = [User, School, File, Project, SchoolProject, Country, Activity, Student];
 

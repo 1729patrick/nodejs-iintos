@@ -22,10 +22,15 @@ module.exports = {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			cordinator: {
-				type: Sequelize.BOOLEAN,
-				defaultValue: false,
+			roleId: {
+				type: Sequelize.INTEGER,
 				allowNull: false,
+				references: {
+					model: 'Roles',
+					key: 'id',
+				},
+				onUpdate: 'cascade',
+				onDelete: 'set null',
 			},
 			active: {
 				type: Sequelize.BOOLEAN,
@@ -34,7 +39,7 @@ module.exports = {
 			},
 			schoolId: {
 				type: Sequelize.INTEGER,
-				allowNull: false,
+				allowNull: true,
 				references: {
 					model: 'Schools',
 					key: 'id',
@@ -42,8 +47,9 @@ module.exports = {
 				onUpdate: 'cascade',
 				onDelete: 'set null',
 			},
-			cordinatorVerification: {
+			fileVerificationId: {
 				type: Sequelize.INTEGER,
+				allowNull: true,
 				references: {
 					model: 'Files',
 					key: 'id',

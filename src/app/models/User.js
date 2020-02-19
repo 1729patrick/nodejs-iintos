@@ -9,7 +9,6 @@ class User extends Model {
 				email: Sequelize.STRING,
 				password: Sequelize.VIRTUAL,
 				passwordHash: Sequelize.STRING,
-				cordinator: Sequelize.BOOLEAN,
 				active: Sequelize.BOOLEAN,
 			},
 			{
@@ -29,8 +28,10 @@ class User extends Model {
 
 	static associate(models) {
 		this.belongsTo(models.School, { foreignKey: 'schoolId', as: 'school' });
+		this.belongsTo(models.Role, { foreignKey: 'roleId', as: 'role' });
 		this.belongsTo(models.File, {
-			foreignKey: 'cordinatorVerification',
+			foreignKey: 'fileVerificationId',
+			as: 'certificate',
 		});
 	}
 }
