@@ -15,16 +15,13 @@ const admin = (req, res, next) => {
 		return res.status(403).json({ error: 'Invalid token' });
 	}
 
-	const { userId, role } = jwtDecoded;
-	console.log(role);
+	const { role } = jwtDecoded;
 	if (role !== 'Admin') {
 		return res
 			.status(403)
 			.json({ error: 'You must be admin to access this route' });
 	}
 
-	req.userId = userId;
-	req.role = role;
 	return next();
 };
 

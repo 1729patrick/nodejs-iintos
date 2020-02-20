@@ -11,21 +11,23 @@ import SchoolController from './app/controllers/SchoolController';
 import SessionController from './app/controllers/SessionController';
 import FileController from './app/controllers/FileController';
 import ProjectController from './app/controllers/ProjectController';
+import RolesController from './app/controllers/RolesController';
 import SchoolProjectController from './app/controllers/SchoolProjectController';
 
 const router = Router();
 const upload = multer(multerConfig);
 
 router.post('/sessions', SessionController.create);
+router.post('/signup', UserController.create);
 
 //----- After this point, the user needs autentication -----
 router.use(authMiddleware);
 
 //User area
+router.post('/users', adminMiddleware, UserController.create);
 router.get('/users', UserController.index);
-router.post('/users', UserController.create);
-router.put('/users/:id', UserController.update);
-router.delete('/users/:id', UserController.delete);
+router.put('/users/:id', adminMiddleware, UserController.update);
+router.delete('/users/:id', adminMiddleware, UserController.delete);
 
 // School area
 router.get('/schools', SchoolController.index);
@@ -44,11 +46,11 @@ router.post('/projects', ProjectController.create);
 router.delete('/projects/:id', ProjectController.delete);
 router.put('/projects/:id', ProjectController.update);
 
+router.get('/roles', authMiddleware, RolesController.index);
+
 //SchoolProject area
 router.post('/schoolProjects', SchoolProjectController.create);
 router.get('/projects/:id/schools', SchoolProjectController.index);
 router.delete('/schoolProjects/:id', SchoolProjectController.delete);
-
-
 
 export default router;
