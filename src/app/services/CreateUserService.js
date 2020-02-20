@@ -7,7 +7,7 @@ import Queue from '../../lib/Queue';
 import RegistrationEmail from '../jobs/RegistrationEmail';
 
 class CreateUserService {
-	async run({ user, school }) {
+	async run({ user, school, role }) {
 		const userExists = await User.findOne({ where: { email: user.email } });
 
 		if (userExists) {
@@ -27,17 +27,25 @@ class CreateUserService {
 			({ id: schoolId } = await School.create(school));
 		}
 
-		const role = await Role.findOne({
+		const findedRole = await Role.findOne({
 			where: { name: user.coordinator ? 'Coordinator' : 'Professor' },
 			attributes: ['id'],
 		});
 
-		const roleId = role.id;
+		const roleId = findedRole.id;
+		const randomPass = (Math.random(1729) * 1000000).toFixed(0);
+
 		const createdUser = await User.create({
 			...user,
+			password: randomPass,
 			roleId,
-			schoolId,
 		});
+
+		const { passwordHash, password, ...restUser } = createdUser.toJSON();
+
+		if (role) {
+			return restUser;
+		}
 
 		let receiverEmail = process.env.ADMIN_EMAIL;
 		if (!user.coordinator) {
@@ -56,7 +64,6 @@ class CreateUserService {
 			receiver: { email: receiverEmail },
 		});
 
-		const { passwordHash, ...restUser } = createdUser.toJSON();
 		return restUser;
 	}
 }

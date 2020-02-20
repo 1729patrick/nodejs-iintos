@@ -1,20 +1,50 @@
 import CreateUserService from '../services/CreateUserService';
 import User from '../models/User';
+import Role from '../models/Role';
+import School from '../models/School';
 
 // Controller of all users, includes the cruds
 class UserController {
 	// Get, Returns all the users in database
 	async index(_, res) {
-		const users = await User.findAll({});
+		const users = await User.findAll({
+			attributes: {
+				exclude: ['passwordHash'],
+			},
+			include: [
+				{
+					model: Role,
+					as: 'role',
+					attributes: ['name'],
+				},
+				{
+					model: School,
+					as: 'school',
+					attributes: ['name'],
+				},
+			],
+			raw: true,
+			nest: true,
+		});
 
-		return res.json(users);
+		return res.json(
+			users.map(user => ({
+				...user,
+				role: user.role.name,
+				school: user.school ? user.school.name : null,
+			}))
+		);
 	}
 
 	// Post, creates a single user
 	async create(req, res) {
 		const { user, school } = req.body;
 
-		const userCreated = await CreateUserService.run({ user, school });
+		const userCreated = await CreateUserService.run({
+			user,
+			school,
+			role: req.role,
+		});
 
 		return res.json(userCreated);
 	}
