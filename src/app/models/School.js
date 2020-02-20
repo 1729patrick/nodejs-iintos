@@ -5,10 +5,11 @@ class School extends Model {
 		return super.init(
 			{
 				name: Sequelize.STRING,
-				phone: Sequelize.NUMBER,
+				phone: Sequelize.STRING,
 				country: Sequelize.STRING,
+				active: Sequelize.BOOLEAN,
 				city: Sequelize.STRING,
-				cep: Sequelize.STRING,
+				postalCode: Sequelize.STRING,
 			},
 			{ sequelize }
 		);

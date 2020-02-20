@@ -17,7 +17,7 @@ class SessionController {
 				{
 					model: School,
 					as: 'school',
-					attributes: ['name', 'phone', 'country', 'city', 'cep'],
+					attributes: ['name', 'phone', 'country', 'city', 'postalCode'],
 				},
 				{
 					model: Role,
@@ -39,10 +39,10 @@ class SessionController {
 			return res.status(401).json({ error: "Password don't match" });
 		}
 
-		const { id, name, cordinator, active, school, role, certificate } = user;
+		const { id, name, role, active, school, certificate } = user;
 
 		const token = jwt.sign(
-			{ userId: id, cordinator, active },
+			{ userId: id, role: role.name, active },
 			authConfig.secret,
 			{
 				expiresIn: authConfig.expiresIn,
@@ -53,7 +53,6 @@ class SessionController {
 			user: {
 				name,
 				email,
-				cordinator,
 				active,
 				certificate: certificate ? certificate.url : null,
 				role: role.name,
