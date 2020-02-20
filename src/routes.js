@@ -17,17 +17,20 @@ const upload = multer(multerConfig);
 
 router.post('/sessions', SessionController.create);
 
-// After this point, the user needs autentication -----
+//----- After this point, the user needs autentication -----
 router.use(authMiddleware);
 
 //User area
+router.get('/users', UserController.index);
 router.post('/users', UserController.create);
+router.put('/users/:id', UserController.update);
+router.delete('/users/:id', UserController.delete);
 
 // School area
 router.get('/schools', SchoolController.index);
 router.post('/schools', adminMiddleware, SchoolController.create);
-router.delete('/schools/:id', SchoolController.delete);
-router.put('/schools/:id', SchoolController.update);
+router.delete('/schools/:id', adminMiddleware, SchoolController.delete);
+router.put('/schools/:id', adminMiddleware, SchoolController.update);
 
 //Autentication area
 
@@ -35,9 +38,9 @@ router.put('/schools/:id', SchoolController.update);
 router.post('/files', upload.single('file'), FileController.create);
 
 //Project area
-router.get('/projects', ProjectController.index);
-router.post('/projects', ProjectController.create);
-router.delete('/projects/:id', ProjectController.delete);
-router.put('/projects/:id', ProjectController.update);
+router.get('/projects', authMiddleware, ProjectController.index);
+router.post('/projects', authMiddleware, ProjectController.create);
+router.delete('/projects/:id', authMiddleware, ProjectController.delete);
+router.put('/projects/:id', authMiddleware, ProjectController.update);
 
 export default router;
