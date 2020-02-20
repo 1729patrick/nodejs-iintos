@@ -4,15 +4,13 @@ class Student extends Model {
 	static init(sequelize) {
 		return super.init(
 			{
-                name: Sequelize.STRING,
-                age: Sequelize.INTEGER,
-                
+				name: Sequelize.STRING,
+				age: Sequelize.INTEGER,
 			},
 			{ sequelize }
-        );
-        
-    }
-    static associate(models) {
+		);
+	}
+	static associate(models) {
 		this.belongsTo(models.School, { foreignKey: 'projectId', as: 'project' });
 	}
 }

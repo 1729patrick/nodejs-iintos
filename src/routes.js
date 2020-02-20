@@ -12,6 +12,7 @@ import SessionController from './app/controllers/SessionController';
 import FileController from './app/controllers/FileController';
 import ProjectController from './app/controllers/ProjectController';
 import SchoolProjectController from './app/controllers/SchoolProjectController';
+import ActivityController from './app/controllers/ActivityController';
 
 const router = Router();
 const upload = multer(multerConfig);
@@ -44,11 +45,12 @@ router.post('/projects', ProjectController.create);
 router.delete('/projects/:id', ProjectController.delete);
 router.put('/projects/:id', ProjectController.update);
 
+//Activity Area
+router.get('/projects/:id/activities', ActivityController.index);
+
 //SchoolProject area
 router.post('/schoolProjects', SchoolProjectController.create);
 router.get('/projects/:id/schools', SchoolProjectController.index);
 router.delete('/schoolProjects/:id', SchoolProjectController.delete);
-
-
 
 export default router;

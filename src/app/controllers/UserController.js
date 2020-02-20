@@ -5,9 +5,7 @@ import User from '../models/User';
 class UserController {
 	// Get, Returns all the users in database
 	async index(_, res) {
-		const users = await User.findAll({
-			
-		});
+		const users = await User.findAll({});
 
 		return res.json(users);
 	}
@@ -20,7 +18,7 @@ class UserController {
 
 		return res.json(userCreated);
 	}
-	
+
 	// Delete a user
 	async delete(req, res) {
 		console.log(req.query);

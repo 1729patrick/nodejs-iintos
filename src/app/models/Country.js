@@ -4,7 +4,7 @@ class Country extends Model {
 	static init(sequelize) {
 		return super.init(
 			{
-                name: Sequelize.STRING,
+				name: Sequelize.STRING,
 			},
 			{ sequelize }
 		);

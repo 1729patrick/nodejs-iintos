@@ -4,14 +4,13 @@ class Activity extends Model {
 	static init(sequelize) {
 		return super.init(
 			{
-                title: Sequelize.STRING,
-                description: Sequelize.STRING,
+				title: Sequelize.STRING,
+				description: Sequelize.STRING,
 			},
 			{ sequelize }
-        );
-        
-    }
-    static associate(models) {
+		);
+	}
+	static associate(models) {
 		this.belongsTo(models.School, { foreignKey: 'projectId', as: 'project' });
 	}
 }

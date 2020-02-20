@@ -9,37 +9,32 @@ module.exports = {
       Example:
       return queryInterface.createTable('users', { id: Sequelize.INTEGER });
     */
-		return queryInterface.createTable('Projects', {
+		return queryInterface.createTable('SchoolProjects', {
 			id: {
 				type: Sequelize.INTEGER,
 				allowNull: false,
 				primaryKey: true,
 				autoIncrement: true,
 			},
-			title: {
-				type: Sequelize.STRING,
+			activityId: {
+				type: Sequelize.INTEGER,
 				allowNull: false,
+				references: {
+					model: 'Activies',
+					key: 'id',
+				},
+				onUpdate: 'cascade',
+				onDelete: 'set null',
 			},
-			goal: {
-				type: Sequelize.STRING,
+			userId: {
+				type: Sequelize.INTEGER,
 				allowNull: false,
-			},
-			description: {
-				type: Sequelize.STRING,
-				allowNull: false,
-			},
-			links: {
-				type: Sequelize.STRING,
-				allowNull: false,
-			},
-			targetAudience: {
-				type: Sequelize.STRING,
-				allowNull: false,
-			},
-			type: {
-				type: Sequelize.STRING,
-				defaultValue: 'online',
-				allowNull: false,
+				references: {
+					model: 'Users',
+					key: 'id',
+				},
+				onUpdate: 'cascade',
+				onDelete: 'set null',
 			},
 			createdAt: {
 				type: Sequelize.DATE,
@@ -60,6 +55,5 @@ module.exports = {
       Example:
       return queryInterface.dropTable('users');
     */
-		return queryInterface.dropTable('Projects');
 	},
 };
