@@ -3,8 +3,8 @@ import multer from 'multer';
 
 import multerConfig from './config/multer';
 
-import authMiddleware from './app/middlewares/auth';
-import adminMiddleware from './app/middlewares/admin';
+import authMiddleware from './app/middlewares/auth'; // Need to be autentication
+import adminMiddleware from './app/middlewares/admin'; // Need to be Admin Autentication
 
 import UserController from './app/controllers/UserController';
 import SchoolController from './app/controllers/SchoolController';
@@ -17,13 +17,17 @@ const upload = multer(multerConfig);
 
 router.post('/sessions', SessionController.create);
 
+// After this point, the user needs autentication -----
 router.use(authMiddleware);
 
 //User area
 router.post('/users', UserController.create);
 
+// School area
 router.get('/schools', SchoolController.index);
 router.post('/schools', adminMiddleware, SchoolController.create);
+router.delete('/schools/:id', SchoolController.delete);
+router.put('/schools/:id', SchoolController.update);
 
 //Autentication area
 
