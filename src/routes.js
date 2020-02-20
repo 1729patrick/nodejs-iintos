@@ -11,6 +11,7 @@ import SchoolController from './app/controllers/SchoolController';
 import SessionController from './app/controllers/SessionController';
 import FileController from './app/controllers/FileController';
 import ProjectController from './app/controllers/ProjectController';
+import SchoolProjectController from './app/controllers/SchoolProjectController';
 
 const router = Router();
 const upload = multer(multerConfig);
@@ -38,9 +39,16 @@ router.put('/schools/:id', adminMiddleware, SchoolController.update);
 router.post('/files', upload.single('file'), FileController.create);
 
 //Project area
-router.get('/projects', authMiddleware, ProjectController.index);
-router.post('/projects', authMiddleware, ProjectController.create);
-router.delete('/projects/:id', authMiddleware, ProjectController.delete);
-router.put('/projects/:id', authMiddleware, ProjectController.update);
+router.get('/projects', ProjectController.index);
+router.post('/projects', ProjectController.create);
+router.delete('/projects/:id', ProjectController.delete);
+router.put('/projects/:id', ProjectController.update);
+
+//SchoolProject area
+router.post('/schoolProjects', SchoolProjectController.create);
+router.get('/projects/:id/schools', SchoolProjectController.index);
+router.delete('/schoolProjects/:id', SchoolProjectController.delete);
+
+
 
 export default router;
