@@ -2,12 +2,27 @@ import CreateUserService from '../services/CreateUserService';
 import User from '../models/User';
 import Role from '../models/Role';
 import School from '../models/School';
+import File from '../models/File';
 
 // Controller of all users, includes the cruds
 class UserController {
 	// Get, Returns all the users in database
-	async index(_, res) {
+	async index(req, res) {
+		const { role } = req.query;
+
+		let findedRole = {},
+			where = {};
+
+		if (role) {
+			findedRole = await Role.findOne({ where: { name: role } });
+
+			if (findedRole) where = { where: { roleId: findedRole.id } };
+		}
+
+		console.log(where);
+
 		const users = await User.findAll({
+			...where,
 			attributes: {
 				exclude: ['passwordHash'],
 			},
@@ -21,6 +36,11 @@ class UserController {
 					model: School,
 					as: 'school',
 					attributes: ['name'],
+				},
+				{
+					model: File,
+					as: 'certificate',
+					attributes: ['name', 'path', 'url', 'id'],
 				},
 			],
 			raw: true,

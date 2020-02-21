@@ -21,6 +21,8 @@ const upload = multer(multerConfig);
 
 router.post('/sessions', SessionController.create);
 router.post('/signup', UserController.create);
+router.post('/files', upload.single('file'), FileController.create);
+router.get('/schools', SchoolController.index);
 
 //----- After this point, the user needs autentication -----
 router.use(authMiddleware);
@@ -32,15 +34,11 @@ router.put('/users/:id', adminMiddleware, UserController.update);
 router.delete('/users/:id', adminMiddleware, UserController.delete);
 
 // School area
-router.get('/schools', SchoolController.index);
 router.post('/schools', adminMiddleware, SchoolController.create);
 router.delete('/schools/:id', adminMiddleware, SchoolController.delete);
 router.put('/schools/:id', adminMiddleware, SchoolController.update);
 
 //Autentication area
-
-//Files area
-router.post('/files', upload.single('file'), FileController.create);
 
 //Project area
 router.get('/projects', ProjectController.index);
