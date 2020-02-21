@@ -41,6 +41,14 @@ module.exports = {
 				defaultValue: 'online',
 				allowNull: false,
 			},
+			startDate: {
+				type: Sequelize.DATE,
+				allowNull: false,
+			},
+			endDate: {
+				type: Sequelize.DATE,
+				allowNull: true,
+			},
 			createdAt: {
 				type: Sequelize.DATE,
 				allowNull: false,

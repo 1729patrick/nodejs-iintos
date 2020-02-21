@@ -10,6 +10,8 @@ class Project extends Model {
 				links: Sequelize.STRING,
 				targetAudience: Sequelize.STRING,
 				type: Sequelize.STRING,
+				startDate: Sequelize.DATE,
+				endDate: Sequelize.DATE
 			},
 			{ sequelize }
 		);
