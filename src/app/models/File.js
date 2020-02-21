@@ -8,13 +8,9 @@ class File extends Model {
 				path: Sequelize.STRING,
 				url: {
 					type: Sequelize.VIRTUAL,
-					get: function() {
-						return 'patrick';
+					get() {
+						return `${process.env.APP_URL}/files/${this.path}`;
 					},
-					// get: () => {
-					// 	console.log('mkmkmadsa');
-					// 	return `${process.env.APP_URL}/files/${this.path}`;
-					// },
 				},
 			},
 			{ sequelize }

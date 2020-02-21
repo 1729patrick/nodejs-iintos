@@ -15,7 +15,8 @@ class CreateUserService {
 		}
 
 		let { schoolId } = school;
-		if (!school.schoolId) {
+
+		if (!schoolId) {
 			const schoolExists = await School.findOne({
 				where: { name: school.name },
 			});
@@ -37,8 +38,9 @@ class CreateUserService {
 
 		const createdUser = await User.create({
 			...user,
-			password: randomPass,
+			password: user.password || randomPass,
 			roleId,
+			schoolId,
 		});
 
 		const { passwordHash, password, ...restUser } = createdUser.toJSON();

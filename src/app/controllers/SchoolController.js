@@ -3,10 +3,18 @@ import School from '../models/School';
 // Controller for the School routes
 class SchoolController {
 	// Get all the Schools
-	async index(_, res) {
-		const schools = await School.findAll({
-			where: { active: true },
-		});
+	async index(req, res) {
+		const { active } = req.query;
+
+		let where = {};
+		if (active) {
+			where = {
+				where: {
+					active,
+				},
+			};
+		}
+		const schools = await School.findAll(where);
 
 		return res.json(schools);
 	}
@@ -20,8 +28,6 @@ class SchoolController {
 
 	// Delete a Schools
 	async delete(req, res) {
-		console.log(req.query);
-
 		//Find from the route id and deletes the object
 		await School.destroy({ where: { id: req.params.id } });
 

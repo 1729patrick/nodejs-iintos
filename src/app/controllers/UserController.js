@@ -19,8 +19,6 @@ class UserController {
 			if (findedRole) where = { where: { roleId: findedRole.id } };
 		}
 
-		console.log(where);
-
 		const users = await User.findAll({
 			...where,
 			attributes: {
@@ -40,7 +38,6 @@ class UserController {
 				{
 					model: File,
 					as: 'certificate',
-					attributes: ['name', 'path', 'url', 'id'],
 				},
 			],
 			raw: true,
@@ -50,6 +47,9 @@ class UserController {
 		return res.json(
 			users.map(user => ({
 				...user,
+				certificate: user.certificate.path
+					? `${process.env.APP_URL}/files/${user.certificate.path}`
+					: null,
 				role: user.role.name,
 				school: user.school ? user.school.name : null,
 			}))
@@ -81,17 +81,26 @@ class UserController {
 
 	// Updates a user
 	async update(req, res) {
-		console.log(req.body);
+		const { id } = req.params;
+		const user = req.body;
 
 		//Find from the route id and updates the object
-		const user = await User.update(req.body, {
-			where: { id: req.params.id },
+		const createdUser = await User.update(user, {
+			where: { id },
 			returning: true,
 			plain: true,
+			raw: true,
 		});
 
+		const school = await School.findByPk(user.schoolId);
+
+		if (school && school.active !== user.active) {
+			await school.update({ ...school, active: user.active });
+		}
+
+		const { passwordHash, ...restUser } = createdUser[1];
 		//1 because of an null
-		return res.json(user[1]);
+		return res.json(restUser);
 	}
 }
 
