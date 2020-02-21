@@ -16,11 +16,11 @@ module.exports = {
 				primaryKey: true,
 				autoIncrement: true,
 			},
-			activityId: {
+			projectId: {
 				type: Sequelize.INTEGER,
 				allowNull: false,
 				references: {
-					model: 'Activies',
+					model: 'Projects',
 					key: 'id',
 				},
 				onUpdate: 'cascade',
@@ -55,7 +55,6 @@ module.exports = {
       Example:
       return queryInterface.dropTable('users');
     */
-	 return queryInterface.dropTable('SchoolProjects');
-
+		return queryInterface.dropTable('SchoolProjects');
 	},
 };

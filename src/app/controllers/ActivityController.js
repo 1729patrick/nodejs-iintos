@@ -19,8 +19,29 @@ class ActivityController {
 
 		return res.json(activities);
 	}
+	/**
+	 * Creates a new activty in the project
+	 *
+	 * @param {Requesta parameters} req
+	 * @param {*} res
+	 */
+	async create(req, res) {
+		const activity = await Activity.create(req.body);
 
-	
+		return res.json(activity);
+	}
+
+	/**
+	 * Deletes a activity given its id 
+	 * @param {*} req 
+	 * @param {*} res 
+	 */
+	async delete(req, res){
+
+		await Activity.destroy({ where: { id: req.params.id } });
+
+	}
+
 }
 
 export default new ActivityController();

@@ -15,6 +15,12 @@ class ProjectController {
 		return res.json(project);
 	}
 
+	async findOne(req, res) {
+		const project = await Project.findOne({ where: { id: req.params.id } });
+
+		return res.json(project);
+	}
+
 	// Updates a Project
 	async update(req, res) {
 		console.log(req.body);

@@ -43,12 +43,15 @@ router.post('/files', upload.single('file'), FileController.create);
 
 //Project area
 router.get('/projects', ProjectController.index);
+router.get('/projects/:id', ProjectController.findOne);
 router.post('/projects', ProjectController.create);
 router.delete('/projects/:id', ProjectController.delete);
 router.put('/projects/:id', ProjectController.update);
 
 //Activity Area
 router.get('/projects/:id/activities', ActivityController.index);
+router.post('/activities', ActivityController.create);
+router.delete('/activities/:id', ActivityController.delete);
 
 //Roles Area
 router.get('/roles', authMiddleware, RolesController.index);
