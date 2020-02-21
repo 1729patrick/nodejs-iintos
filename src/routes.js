@@ -14,6 +14,7 @@ import ProjectController from './app/controllers/ProjectController';
 import RolesController from './app/controllers/RolesController';
 import SchoolProjectController from './app/controllers/SchoolProjectController';
 import ActivityController from './app/controllers/ActivityController';
+import ProjectUser from './app/controllers/ProjectUserController';
 
 const router = Router();
 const upload = multer(multerConfig);
@@ -47,6 +48,9 @@ router.get('/projects/:id', ProjectController.findOne);
 router.post('/projects', ProjectController.create);
 router.delete('/projects/:id', ProjectController.delete);
 router.put('/projects/:id', ProjectController.update);
+
+//ProjectUser area
+router.get('/projects/:id/users', ProjectUser.index);
 
 //Activity Area
 router.get('/projects/:id/activities', ActivityController.index);

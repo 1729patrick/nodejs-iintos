@@ -11,9 +11,9 @@ class ProjectUser extends Model {
 		);
 	}
 	static associate(models) {
-		this.belongsTo(models.Activity, { foreignKey: 'projectId', as: 'project' });
+		this.belongsTo(models.Project, { foreignKey: 'projectId', as: 'project' });
 		this.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
 	}
 }
 
-export default ActivityUser;
+export default ProjectUser;

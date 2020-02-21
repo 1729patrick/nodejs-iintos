@@ -9,7 +9,7 @@ module.exports = {
       Example:
       return queryInterface.createTable('users', { id: Sequelize.INTEGER });
     */
-		return queryInterface.createTable('SchoolProjects', {
+		return queryInterface.createTable('ActivityUsers', {
 			id: {
 				type: Sequelize.INTEGER,
 				allowNull: false,
@@ -20,7 +20,7 @@ module.exports = {
 				type: Sequelize.INTEGER,
 				allowNull: false,
 				references: {
-					model: 'Activies',
+					model: 'Activities',
 					key: 'id',
 				},
 				onUpdate: 'cascade',
@@ -55,7 +55,6 @@ module.exports = {
       Example:
       return queryInterface.dropTable('users');
     */
-	 return queryInterface.dropTable('SchoolProjects');
-
+		return queryInterface.dropTable('ActivityUsers');
 	},
 };
