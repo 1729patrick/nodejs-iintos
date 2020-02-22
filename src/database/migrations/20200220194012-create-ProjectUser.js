@@ -9,18 +9,18 @@ module.exports = {
       Example:
       return queryInterface.createTable('users', { id: Sequelize.INTEGER });
     */
-		return queryInterface.createTable('ActivityUsers', {
+		return queryInterface.createTable('ProjectUsers', {
 			id: {
 				type: Sequelize.INTEGER,
 				allowNull: false,
 				primaryKey: true,
 				autoIncrement: true,
 			},
-			activityId: {
+			projectId: {
 				type: Sequelize.INTEGER,
 				allowNull: false,
 				references: {
-					model: 'Activities',
+					model: 'Projects',
 					key: 'id',
 				},
 				onUpdate: 'cascade',
@@ -28,7 +28,6 @@ module.exports = {
 			},
 			userId: {
 				type: Sequelize.INTEGER,
-				allowNull: false,
 				references: {
 					model: 'Users',
 					key: 'id',
@@ -36,7 +35,12 @@ module.exports = {
 				onUpdate: 'cascade',
 				onDelete: 'set null',
 			},
-			
+			studentName: {
+				type: Sequelize.STRING,
+			},
+			studentAge: {
+				type: Sequelize.INTEGER,
+			},
 			createdAt: {
 				type: Sequelize.DATE,
 				allowNull: false,
@@ -56,6 +60,6 @@ module.exports = {
       Example:
       return queryInterface.dropTable('users');
     */
-		return queryInterface.dropTable('ActivityUsers');
+		return queryInterface.dropTable('ProjectUsers');
 	},
 };

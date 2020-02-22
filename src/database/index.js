@@ -12,8 +12,11 @@ import Result from '../app/models/Result';
 import Role from '../app/models/Role';
 import School from '../app/models/School';
 import SchoolProject from '../app/models/SchoolProject';
-import Student from '../app/models/Student';
-import User from '../app/models/User';
+import Country from '../app/models/Country';
+import Activity from '../app/models/Activity';
+import Role from '../app/models/Role';
+import ProjectUser from '../app/models/ProjectUser';
+import ActivityUser from '../app/models/ActivityUser';
 
 
 const models = [
@@ -22,10 +25,11 @@ const models = [
 	File,
 	Project,
 	SchoolProject,
+	ProjectUser,
 	Country,
 	Activity,
-	Student,
 	Role,
+	ActivityUser,
 	ProjectFile,
 	Result
 ];

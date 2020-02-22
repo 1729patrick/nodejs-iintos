@@ -15,6 +15,7 @@ import RolesController from './app/controllers/RolesController';
 import SchoolProjectController from './app/controllers/SchoolProjectController';
 import ActivityController from './app/controllers/ActivityController';
 import ProjectUser from './app/controllers/ProjectUserController';
+import ProfessorController from './app/controllers/ProfessorController';
 import ResultController from './app/controllers/ResultController';
 
 const router = Router();
@@ -50,6 +51,8 @@ router.put('/projects/:id', ProjectController.update);
 
 //ProjectUser area
 router.get('/projects/:id/users', ProjectUser.index);
+router.post('/projectUser', ProjectUser.create);
+router.delete('/projectUser/:id', ProjectUser.delete);
 
 //Project Result area
 router.get('/projects/:id/results', ResultController.index);
@@ -65,6 +68,8 @@ router.put('/activities/:id', ActivityController.update);
 
 //Roles Area
 router.get('/roles', authMiddleware, RolesController.index);
+
+router.get('/professors', ProfessorController.index);
 
 //SchoolProject area
 router.post('/schoolProjects', SchoolProjectController.create);

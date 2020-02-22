@@ -5,14 +5,14 @@ class ActivityUser extends Model {
 		return super.init(
 			{
 				activityId: Sequelize.INTEGER,
-				userId: Sequelize.INTEGER,
+				projectUserId: Sequelize.INTEGER,
 			},
 			{ sequelize }
 		);
 	}
 	static associate(models) {
 		this.belongsTo(models.Activity, { foreignKey: 'activityId', as: 'activity' });
-		this.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+		this.belongsTo(models.ProjectUser, { foreignKey: 'projectUserId', as: 'projectUser' });
 	}
 }
 

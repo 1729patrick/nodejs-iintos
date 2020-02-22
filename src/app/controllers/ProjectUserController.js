@@ -13,10 +13,41 @@ class ProjectUserController {
 	async index(req, res) {
 		const projectId = req.params.id;
 		console.log(projectId);
+		const projectUser = await ProjectUser.findAll({
+			where: { projectId },
+			include: [
+				{
+					model: User,
+					as: 'professor',
+					attributes: { exclude: 'passwordHash' },
+				},
+			],
+		});
 
-		const project = await ProjectUser.findAll();
+		let students = [],
+			professors = [];
+		projectUser.forEach(user => {
+			if (user.professor) {
+				return professors.push(user);
+			}
 
-		res.json(project);
+			return students.push(user);
+		});
+
+		res.json({ students, professors });
+	}
+
+	async create(req, res) {
+		const projectUser = await ProjectUser.create(req.body);
+
+		res.json(projectUser);
+	}
+
+	async delete(req, res) {
+		const { id } = req.params;
+		const projectUser = await ProjectUser.destroy({ where: { id } });
+
+		res.json(projectUser);
 	}
 }
 export default new ProjectUserController();

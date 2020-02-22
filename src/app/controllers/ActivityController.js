@@ -1,4 +1,7 @@
 import Activity from '../models/Activity';
+import ActivityUser from '../models/ActivityUser';
+import ProjectUser from '../models/ProjectUser';
+import User from '../models/User';
 
 /**
  * Activity controller
@@ -15,6 +18,20 @@ class ActivityController {
 
 		const activities = await Activity.findAll({
 			where: { projectId },
+			include: [
+				{
+					model: ActivityUser,
+					as: 'activityUser',
+					include: {
+						model: ProjectUser,
+						as: 'projectUser',
+						include: {
+							model: User,
+							as: 'professor',
+						},
+					},
+				},
+			],
 		});
 
 		return res.json(activities);
