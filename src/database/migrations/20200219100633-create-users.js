@@ -57,6 +57,10 @@ module.exports = {
 				onUpdate: 'cascade',
 				onDelete: 'set null',
 			},
+			reasonInactive: {
+				type: Sequelize.STRING,
+				allowNull: true,
+			},
 			createdAt: {
 				type: Sequelize.DATE,
 				allowNull: false,
