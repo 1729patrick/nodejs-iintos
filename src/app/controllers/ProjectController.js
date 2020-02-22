@@ -5,6 +5,7 @@ class ProjectController {
 	//Returns all the projects
 	async index(req, res) {
 		const projects = await Project.findAll();
+
 		return res.json(projects);
 	}
 

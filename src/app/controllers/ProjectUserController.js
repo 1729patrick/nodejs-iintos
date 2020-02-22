@@ -12,6 +12,16 @@ class ProjectUserController {
 	 */
 	async index(req, res) {
 		const projectId = req.params.id;
+		const projectUser = await ProjectUser.findAll({
+			where: { projectId },
+			include: [
+				{
+					model: User,
+					as: 'professor',
+					attributes: { exclude: 'passwordHash' },
+				},
+			],
+		});
 
 		let students = [],
 			professors = [];

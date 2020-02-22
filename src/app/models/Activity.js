@@ -14,7 +14,10 @@ class Activity extends Model {
 	}
 	static associate(models) {
 		this.belongsTo(models.School, { foreignKey: 'projectId', as: 'project' });
-		this.hasMany(models.ActivityUser, { foreignKey: 'id', as: 'activityUser' });
+		this.hasMany(models.ActivityUser, {
+			foreignKey: 'activityId',
+			as: 'activityUser',
+		});
 	}
 }
 
