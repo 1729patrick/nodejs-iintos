@@ -71,8 +71,6 @@ class UserController {
 
 	// Delete a user
 	async delete(req, res) {
-		console.log(req.query);
-
 		//Find from the route id and deletes the object
 		await User.destroy({ where: { id: req.params.id } });
 

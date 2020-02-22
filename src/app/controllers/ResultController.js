@@ -14,8 +14,6 @@ class ResultController {
 	async index(req, res) {
 		const projectId = req.params.id;
 
-		console.log(projectId);
-
 		const results = await Result.findAll({
 			where: { projectId },
 		});

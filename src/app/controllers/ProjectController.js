@@ -5,8 +5,6 @@ class ProjectController {
 	//Returns all the projects
 	async index(req, res) {
 		const projects = await Project.findAll();
-		console.log(projects);
-
 		return res.json(projects);
 	}
 
@@ -56,7 +54,6 @@ class ProjectController {
 
 	// Delete a  Project
 	async delete(req, res) {
-
 		//Find from the route id and deletes the object
 		await Project.destroy({ where: { id: req.params.id } });
 
