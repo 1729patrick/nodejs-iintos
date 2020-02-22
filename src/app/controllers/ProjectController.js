@@ -16,7 +16,10 @@ class ProjectController {
 	}
 
 	async findOne(req, res) {
-		const project = await Project.findOne({ where: { id: req.params.id } });
+		const project = await Project.findOne({
+			 where: { id: req.params.id },
+			include: []
+		});
 
 		return res.json(project);
 	}

@@ -17,6 +17,7 @@ import ActivityController from './app/controllers/ActivityController';
 import ProjectUser from './app/controllers/ProjectUserController';
 import ProfessorController from './app/controllers/ProfessorController';
 import ResultController from './app/controllers/ResultController';
+import ResultFile from './app/controllers/ResultFileController';
 
 const router = Router();
 const upload = multer(multerConfig);
@@ -54,11 +55,14 @@ router.get('/projects/:id/users', ProjectUser.index);
 router.post('/projectUser', ProjectUser.create);
 router.delete('/projectUser/:id', ProjectUser.delete);
 
-//Project Result area
+//Result area
 router.get('/projects/:id/results', ResultController.index);
 router.post('/results', ResultController.create);
 router.delete('/results/:id', ResultController.delete);
 router.put('/results/:id', ResultController.update);
+
+//Result File area
+router.get('/result/:id/files', ResultFile.index);
 
 //Activity Area
 router.get('/projects/:id/activities', ActivityController.index);

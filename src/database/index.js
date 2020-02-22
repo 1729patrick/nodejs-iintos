@@ -8,7 +8,6 @@ import ActivityUser from '../app/models/ActivityUser';
 import Country from '../app/models/Country';
 import File from '../app/models/File';
 import Project from '../app/models/Project';
-import ProjectFile from '../app/models/ProjectFile';
 import Result from '../app/models/Result';
 import Role from '../app/models/Role';
 import School from '../app/models/School';
@@ -18,6 +17,7 @@ import Activity from '../app/models/Activity';
 import Role from '../app/models/Role';
 import ProjectUser from '../app/models/ProjectUser';
 import ActivityUser from '../app/models/ActivityUser';
+import ResultFile from '../app/models/ResultFile';
 
 const models = [
 	User,
@@ -30,7 +30,7 @@ const models = [
 	Activity,
 	Role,
 	ActivityUser,
-	ProjectFile,
+	ResultFile,
 	Result,
 ];
 
