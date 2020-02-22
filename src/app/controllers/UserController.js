@@ -85,7 +85,7 @@ class UserController {
 		const user = req.body;
 
 		//Find from the route id and updates the object
-		const createdUser = await User.update(user, {
+		const updatedUser = await User.update(user, {
 			where: { id },
 			returning: true,
 			plain: true,
@@ -98,7 +98,7 @@ class UserController {
 			await school.update({ ...school, active: user.active });
 		}
 
-		const { passwordHash, ...restUser } = createdUser[1];
+		const { passwordHash, ...restUser } = updatedUser[1];
 		//1 because of an null
 		return res.json(restUser);
 	}

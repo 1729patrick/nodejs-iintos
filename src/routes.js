@@ -54,6 +54,7 @@ router.get('/projects/:id/users', ProjectUser.index);
 router.get('/projects/:id/activities', ActivityController.index);
 router.post('/activities', ActivityController.create);
 router.delete('/activities/:id', ActivityController.delete);
+router.put('/activities/:id', ActivityController.update);
 
 //Roles Area
 router.get('/roles', authMiddleware, RolesController.index);

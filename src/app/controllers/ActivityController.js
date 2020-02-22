@@ -32,16 +32,33 @@ class ActivityController {
 	}
 
 	/**
-	 * Deletes a activity given its id 
-	 * @param {*} req 
-	 * @param {*} res 
+	 * Deletes a activity given its id
+	 * @param {*} req
+	 * @param {*} res
 	 */
-	async delete(req, res){
-
+	async delete(req, res) {
 		await Activity.destroy({ where: { id: req.params.id } });
 
+		return res.json();
 	}
 
+	async update(req, res) {
+		const { id } = req.params;
+		const { title, description } = req.body;
+
+		//Find from the route id and updates the object
+		const updatedActivity = await Activity.update(
+			{ title, description },
+			{
+				where: { id },
+				returning: true,
+				plain: true,
+				raw: true,
+			}
+		);
+
+		return res.json(updatedActivity);
+	}
 }
 
 export default new ActivityController();

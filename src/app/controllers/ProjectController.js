@@ -23,7 +23,6 @@ class ProjectController {
 
 	// Updates a Project
 	async update(req, res) {
-		console.log(req.body);
 		const {
 			global,
 			description,
