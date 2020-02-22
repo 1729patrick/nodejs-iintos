@@ -17,9 +17,9 @@ module.exports = {
 				},
 				{
 					name: 'British School',
-					phone: '+351 91118313',
-					country: 'Portugal',
-					city: 'Lisbon',
+					phone: '+351 94595186',
+					country: 'Ireland',
+					city: 'Dublin',
 					postalCode: '2121-578',
 					active: true,
 					createdAt: new Date(),
@@ -27,7 +27,7 @@ module.exports = {
 				},
 				{
 					name: 'Astoria International School',
-					phone: '+351 91118313',
+					phone: '+351 95665261',
 					country: 'Italy',
 					city: 'Rome',
 					postalCode: '9628-584',
