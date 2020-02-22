@@ -2,15 +2,19 @@ import Sequelize from 'sequelize';
 
 import sequelizeConfig from '../config/database';
 
-import User from '../app/models/User';
-import School from '../app/models/School';
+import Activity from '../app/models/Activity';
+import ActivityUser from '../app/models/ActivityUser';
+import Country from '../app/models/Country';
 import File from '../app/models/File';
 import Project from '../app/models/Project';
-import SchoolProject from '../app/models/SchoolProject';
-import Country from '../app/models/Country';
-import Activity from '../app/models/Activity';
-import Student from '../app/models/Student';
+import ProjectFile from '../app/models/ProjectFile';
+import Result from '../app/models/Result';
 import Role from '../app/models/Role';
+import School from '../app/models/School';
+import SchoolProject from '../app/models/SchoolProject';
+import Student from '../app/models/Student';
+import User from '../app/models/User';
+
 
 const models = [
 	User,
@@ -22,6 +26,8 @@ const models = [
 	Activity,
 	Student,
 	Role,
+	ProjectFile,
+	Result
 ];
 
 class Database {
