@@ -2,6 +2,7 @@ import Sequelize from 'sequelize';
 
 import sequelizeConfig from '../config/database';
 
+import User from '../app/models/User';
 import Activity from '../app/models/Activity';
 import ActivityUser from '../app/models/ActivityUser';
 import Country from '../app/models/Country';
@@ -18,7 +19,6 @@ import Role from '../app/models/Role';
 import ProjectUser from '../app/models/ProjectUser';
 import ActivityUser from '../app/models/ActivityUser';
 
-
 const models = [
 	User,
 	School,
@@ -31,7 +31,7 @@ const models = [
 	Role,
 	ActivityUser,
 	ProjectFile,
-	Result
+	Result,
 ];
 
 class Database {
