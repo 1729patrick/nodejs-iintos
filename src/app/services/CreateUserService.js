@@ -14,11 +14,11 @@ class CreateUserService {
 			throw new Error('User already exists');
 		}
 
-		let { schoolId } = school;
+		let { schoolId, name } = school;
 
-		if (!schoolId) {
+		if (!schoolId && name) {
 			const schoolExists = await School.findOne({
-				where: { name: school.name },
+				where: { name },
 			});
 
 			if (schoolExists) {
