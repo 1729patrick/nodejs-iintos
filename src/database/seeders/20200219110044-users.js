@@ -8,7 +8,7 @@ module.exports = {
 			[
 				{
 					name: 'Admin Zé',
-					email: 'iintosdev@hotmail.com',
+					email: 'admin@iintos.com',
 					passwordHash: bcrypt.hashSync('123456', 8),
 					active: true,
 					roleId: 1,
@@ -17,10 +17,19 @@ module.exports = {
 				},
 				{
 					name: 'Coordinator Zé',
-					email: 'iintosc@hotmail.com',
+					email: 'coodinator@iintos.com',
 					passwordHash: bcrypt.hashSync('123456', 8),
 					active: true,
 					roleId: 2,
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
+				{
+					name: 'Professor Zé',
+					email: 'professor@iintos.com',
+					passwordHash: bcrypt.hashSync('123456', 8),
+					active: false,
+					roleId: 3,
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},

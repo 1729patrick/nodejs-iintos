@@ -25,7 +25,7 @@ module.exports = {
 				allowNull: false,
 			},
 			description: {
-				type: Sequelize.STRING,
+				type: Sequelize.STRING(5000),
 				allowNull: false,
 			},
 			links: {
@@ -38,16 +38,14 @@ module.exports = {
 			},
 			type: {
 				type: Sequelize.STRING,
-				defaultValue: 'online',
+				defaultValue: 'Online',
 				allowNull: false,
 			},
 			startDate: {
 				type: Sequelize.DATE,
-				allowNull: false,
 			},
 			endDate: {
 				type: Sequelize.DATE,
-				allowNull: true,
 			},
 			createdAt: {
 				type: Sequelize.DATE,
