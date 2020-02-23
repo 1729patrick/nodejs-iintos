@@ -11,10 +11,21 @@ class Project extends Model {
 				targetAudience: Sequelize.STRING,
 				type: Sequelize.STRING,
 				startDate: Sequelize.DATE,
-				endDate: Sequelize.DATE
+				endDate: Sequelize.DATE,
 			},
 			{ sequelize }
 		);
+	}
+
+	static associate(models) {
+		this.hasMany(models.SchoolProject, {
+			foreignKey: 'projectId',
+			as: 'schoolProject',
+		});
+		this.hasMany(models.ProjectUser, {
+			foreignKey: 'projectId',
+			as: 'projectUser',
+		});
 	}
 }
 
