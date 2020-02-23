@@ -5,6 +5,7 @@ import multerConfig from './config/multer';
 
 import authMiddleware from './app/middlewares/auth'; // Need to be autentication
 import adminMiddleware from './app/middlewares/admin'; // Need to be Admin Autentication
+import publicMiddleware from './app/middlewares/public';
 
 import UserController from './app/controllers/UserController';
 import SchoolController from './app/controllers/SchoolController';
@@ -22,6 +23,8 @@ import ResultFile from './app/controllers/ResultFileController';
 const router = Router();
 const upload = multer(multerConfig);
 
+router.use(publicMiddleware);
+
 router.post('/sessions', SessionController.create);
 router.post('/signup', UserController.create);
 router.post('/files', upload.single('file'), FileController.create);
@@ -31,15 +34,15 @@ router.get('/schools', SchoolController.index);
 router.use(authMiddleware);
 
 //User area
-router.post('/users', adminMiddleware, UserController.create);
+router.post('/users', UserController.create);
 router.get('/users', UserController.index);
-router.put('/users/:id', adminMiddleware, UserController.update);
+router.put('/users/:id', UserController.update);
 router.delete('/users/:id', adminMiddleware, UserController.delete);
 
 // School area
 router.post('/schools', adminMiddleware, SchoolController.create);
 router.delete('/schools/:id', adminMiddleware, SchoolController.delete);
-router.put('/schools/:id', adminMiddleware, SchoolController.update);
+router.put('/schools/:id', SchoolController.update);
 
 //Autentication area
 

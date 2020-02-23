@@ -19,6 +19,9 @@ class UserController {
 			if (findedRole) where = { where: { roleId: findedRole.id } };
 		}
 
+		if (req.role === 'Coordinator' || req.role === 'Professor') {
+			where = { where: { ...where.where, schoolId: req.schoolId } };
+		}
 		const users = await User.findAll({
 			...where,
 			attributes: {
@@ -33,7 +36,7 @@ class UserController {
 				{
 					model: School,
 					as: 'school',
-					attributes: ['name'],
+					attributes: ['id', 'name'],
 				},
 				{
 					model: File,
