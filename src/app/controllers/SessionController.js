@@ -41,6 +41,13 @@ class SessionController {
 
 		const { id, name, role, active, school, certificate } = user;
 
+		if (
+			!user.school &&
+			(role.name === 'Coordinator' || role.name === 'Professor')
+		) {
+			return res.status(401).json({ error: "You'r school is invalid" });
+		}
+
 		const token = jwt.sign(
 			{
 				userId: id,
