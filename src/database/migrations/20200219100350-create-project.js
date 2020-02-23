@@ -30,7 +30,7 @@ module.exports = {
 			},
 			links: {
 				type: Sequelize.STRING,
-				allowNull: false,
+				allowNull: true,
 			},
 			targetAudience: {
 				type: Sequelize.STRING,
