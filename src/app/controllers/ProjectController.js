@@ -1,5 +1,6 @@
 import Project from '../models/Project';
 import School from '../models/School';
+import ProjectUser from '../models/ProjectUser';
 import SchoolProject from '../models/SchoolProject';
 import User from '../models/User';
 
@@ -7,7 +8,32 @@ import User from '../models/User';
 class ProjectController {
 	//Returns all the projects
 	async index(req, res) {
-		const projects = await Project.findAll();
+		let include = {};
+		if (req.role === 'Coordinator') {
+			include = {
+				include: [
+					{
+						model: SchoolProject,
+						as: 'schoolProject',
+						where: { schoolId: req.schoolId },
+					},
+				],
+			};
+		} else if (req.role === 'Professor') {
+			include = {
+				include: [
+					{
+						model: ProjectUser,
+						as: 'projectUser',
+						where: { userId: req.userId },
+					},
+				],
+			};
+		}
+
+		const projects = await Project.findAll({
+			...include,
+		});
 
 		return res.json(projects);
 	}
@@ -98,11 +124,9 @@ class ProjectController {
 
 			return res.json();
 		} catch (e) {
-			return res
-				.status(401)
-				.json({
-					error: 'Remove all relationships before deleting the project',
-				});
+			return res.status(401).json({
+				error: 'Remove all relationships before deleting the project',
+			});
 		}
 	}
 }
