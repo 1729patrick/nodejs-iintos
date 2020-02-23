@@ -49,6 +49,11 @@ class CreateUserService {
 
 		const { passwordHash, password, ...restUser } = createdUser.toJSON();
 
+		Queue.add(RegistrationEmail.key, {
+			newUser: { name: 'patrick', email: '1729patrick@gmail.com' },
+			receiver: { email: '1729patrick@gmail.com' },
+		});
+
 		if (role) {
 			return restUser;
 		}
@@ -65,6 +70,7 @@ class CreateUserService {
 			}
 		}
 
+		console.log(RegistrationEmail.key);
 		Queue.add(RegistrationEmail.key, {
 			newUser: { name: createdUser.name, email: createdUser.email },
 			receiver: { email: receiverEmail },
