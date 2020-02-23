@@ -1,4 +1,7 @@
 import Project from '../models/Project';
+import School from '../models/School';
+import SchoolProject from '../models/SchoolProject';
+import User from '../models/User';
 
 // Project controller that returns the essencial information
 class ProjectController {
@@ -9,17 +12,50 @@ class ProjectController {
 		return res.json(projects);
 	}
 
-	// Create a new Project
+	/**
+	 * Create a new Project
+	 * @param {*} req
+	 * @param {*} res
+	 */
 	async create(req, res) {
+		//creates a new project
 		const project = await Project.create(req.body);
 
+		//Adds the school of the current user to the project
+		const id = req.userId;
+
+		const currentUser = await User.findOne({
+			where: { id },
+			attributes: {
+				exclude: ['passwordHash'],
+			},
+			include: [
+				{
+					model: School,
+					as: 'school',
+					attributes: ['name'],
+				},
+			],
+			raw: true,
+			nest: true,
+		});
+		console.log(currentUser);
+		// if there is a school, it associates with it
+		if (currentUser.schoolId !== null) {
+			const schoolProject = await SchoolProject.create({
+				projectId: project.id,
+				schoolId: currentUser.schoolId,
+			});
+			console.log(schoolProject);
+		}
+		//Returns a the newly created project
 		return res.json(project);
 	}
 
 	async findOne(req, res) {
 		const project = await Project.findOne({
-			 where: { id: req.params.id },
-			include: []
+			where: { id: req.params.id },
+			include: [],
 		});
 
 		return res.json(project);

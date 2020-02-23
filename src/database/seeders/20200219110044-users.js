@@ -17,7 +17,7 @@ module.exports = {
 				},
 				{
 					name: 'Coordinator Gervásio',
-					email: 'coodinator@iintos.com',
+					email: 'coordinator@iintos.com',
 					passwordHash: bcrypt.hashSync('123456', 8),
 					active: true,
 					roleId: 2,
