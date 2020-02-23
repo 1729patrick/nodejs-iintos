@@ -14,20 +14,24 @@ class ProfessorController {
 			},
 		});
 
-		const formattedSchoolProject = schoolProject.map(({ id }) => id);
+		const formattedSchoolProject = schoolProject.map(
+			({ schoolId }) => schoolId
+		);
 
 		const projectUser = await ProjectUser.findAll({
 			where: { projectId, userId: { [Op.ne]: null } },
 		});
 
 		const professorsAlreadyProject = projectUser.map(({ userId }) => userId);
-
 		const role = await Role.findOne({ where: { name: 'Professor' } });
 		const users = await User.findAll({
 			where: {
 				roleId: role.id,
 				id: { [Op.notIn]: professorsAlreadyProject },
 				schoolId: { [Op.in]: formattedSchoolProject },
+			},
+			attributes: {
+				exclude: ['passwordHash'],
 			},
 		});
 

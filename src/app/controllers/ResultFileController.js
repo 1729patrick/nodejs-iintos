@@ -32,7 +32,6 @@ class ResultFileController {
 	 */
 	async create(req, res) {
 		const resultId = req.params.id;
-		console.log(req);
 
 		const { originalname: name, filename: path } = req.file;
 		const file = await File.create({ name, path });
