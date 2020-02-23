@@ -39,14 +39,12 @@ class ProjectController {
 			raw: true,
 			nest: true,
 		});
-		console.log(currentUser);
 		// if there is a school, it associates with it
 		if (currentUser.schoolId !== null) {
 			const schoolProject = await SchoolProject.create({
 				projectId: project.id,
 				schoolId: currentUser.schoolId,
 			});
-			console.log(schoolProject);
 		}
 		//Returns a the newly created project
 		return res.json(project);
@@ -94,10 +92,18 @@ class ProjectController {
 
 	// Delete a  Project
 	async delete(req, res) {
-		//Find from the route id and deletes the object
-		await Project.destroy({ where: { id: req.params.id } });
+		try {
+			//Find from the route id and deletes the object
+			await Project.destroy({ where: { id: req.params.id } });
 
-		return res.json();
+			return res.json();
+		} catch (e) {
+			return res
+				.status(401)
+				.json({
+					error: 'Remove all relationships before deleting the project',
+				});
+		}
 	}
 }
 

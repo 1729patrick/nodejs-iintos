@@ -32,7 +32,7 @@ class SchoolController {
 	 * Creates a Single Schools
 	 */
 	async create(req, res) {
-		const school = await School.create({ ...req.body, active: true });
+		const school = await School.create({ active: true, ...req.body });
 
 		return res.json(school);
 	}
@@ -43,10 +43,16 @@ class SchoolController {
 	 * @param {*} res
 	 */
 	async delete(req, res) {
-		//Find from the route id and deletes the object
-		await School.destroy({ where: { id: req.params.id } });
+		try {
+			//Find from the route id and deletes the object
+			await School.destroy({ where: { id: req.params.id } });
 
-		return res.json();
+			return res.json();
+		} catch (e) {
+			return res.status(401).json({
+				error: 'Remove all relationships before deleting the school',
+			});
+		}
 	}
 
 	/**

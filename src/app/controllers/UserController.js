@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import CreateUserService from '../services/CreateUserService';
 import User from '../models/User';
 import Role from '../models/Role';
@@ -11,19 +12,20 @@ class UserController {
 		const { role } = req.query;
 
 		let findedRole = {},
-			where = {};
+			where = { id: { [Op.ne]: req.userId } };
 
 		if (role) {
 			findedRole = await Role.findOne({ where: { name: role } });
 
-			if (findedRole) where = { where: { roleId: findedRole.id } };
+			if (findedRole) where = { ...where, roleId: findedRole.id };
 		}
 
 		if (req.role === 'Coordinator' || req.role === 'Professor') {
-			where = { where: { ...where.where, schoolId: req.schoolId } };
+			where = { ...where, schoolId: req.schoolId };
 		}
+
 		const users = await User.findAll({
-			...where,
+			where,
 			attributes: {
 				exclude: ['passwordHash'],
 			},
