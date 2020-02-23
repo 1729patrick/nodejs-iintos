@@ -14,6 +14,11 @@ class SchoolController {
 				},
 			};
 		}
+
+		if (req.role === 'Coordinator' || req.role === 'Professor') {
+			where = { where: { ...where.where, id: req.schoolId } };
+		}
+
 		const schools = await School.findAll(where);
 
 		return res.json(schools);

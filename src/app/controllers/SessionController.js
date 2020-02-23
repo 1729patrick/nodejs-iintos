@@ -17,7 +17,7 @@ class SessionController {
 				{
 					model: School,
 					as: 'school',
-					attributes: ['name', 'phone', 'country', 'city', 'postalCode'],
+					attributes: ['id', 'name', 'phone', 'country', 'city', 'postalCode'],
 				},
 				{
 					model: Role,
@@ -42,7 +42,12 @@ class SessionController {
 		const { id, name, role, active, school, certificate } = user;
 
 		const token = jwt.sign(
-			{ userId: id, role: role.name, active },
+			{
+				userId: id,
+				role: role.name,
+				active,
+				schoolId: school ? school.id : null,
+			},
 			authConfig.secret,
 			{
 				expiresIn: authConfig.expiresIn,
