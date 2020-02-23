@@ -12,6 +12,18 @@ module.exports = {
 					updatedAt: new Date(),
 				},
 				{
+					userId: 5,
+					projectId: 1,
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
+				{
+					userId: 2,
+					projectId: 1,
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
+				{
 					studentName: 'Patrick Battisti',
 					studentAge: 21,
 					projectId: 1,
@@ -46,7 +58,7 @@ module.exports = {
 					updatedAt: new Date(),
 				},
 				{
-					userId: 3,
+					userId: 8,
 					projectId: 3,
 					createdAt: new Date(),
 					updatedAt: new Date(),
