@@ -2,7 +2,11 @@ import School from '../models/School';
 
 // Controller for the School routes
 class SchoolController {
-	// Get all the Schools
+	/**
+	 * Get all the Schools
+	 *
+	 * */
+
 	async index(req, res) {
 		const { active } = req.query;
 
@@ -19,14 +23,20 @@ class SchoolController {
 		return res.json(schools);
 	}
 
-	// Creates a Single Schools
+	/**~
+	 * Creates a Single Schools
+	 */
 	async create(req, res) {
 		const school = await School.create({ ...req.body, active: true });
 
 		return res.json(school);
 	}
 
-	// Delete a Schools
+	/**
+	 * Delete a Schools
+	 * @param {*} req
+	 * @param {*} res
+	 */
 	async delete(req, res) {
 		//Find from the route id and deletes the object
 		await School.destroy({ where: { id: req.params.id } });
@@ -34,7 +44,11 @@ class SchoolController {
 		return res.json();
 	}
 
-	// Updates a School
+	/**
+	 * Updates a School
+	 * @param {*} req
+	 * @param {*} res
+	 */
 	async update(req, res) {
 		//Get the essential params
 		const { name, phone, country, city, active, postalCode } = req.body;

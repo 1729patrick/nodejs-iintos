@@ -31,10 +31,15 @@ class ResultFileController {
 	 * @param {*} res
 	 */
 	async create(req, res) {
+		const resultId = req.params.id;
+		console.log(req);
+
 		const { originalname: name, filename: path } = req.file;
 		const file = await File.create({ name, path });
 
-		return res.json(file);
+		const resultFile = await ResultFile.create({ fileId: file.id, resultId });
+
+		return res.json(resultFile);
 	}
 }
 

@@ -63,6 +63,8 @@ router.put('/results/:id', ResultController.update);
 
 //Result File area
 router.get('/result/:id/files', ResultFile.index);
+router.post('/result/:id/files', ResultFile.create);
+
 
 //Activity Area
 router.get('/projects/:id/activities', ActivityController.index);
