@@ -25,14 +25,12 @@ module.exports = {
 				},
 				{
 					studentName: 'Patrick Battisti',
-					studentAge: 21,
 					projectId: 1,
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
 				{
 					studentName: 'Antonio Pardo',
-					studentAge: 37,
 					projectId: 1,
 					createdAt: new Date(),
 					updatedAt: new Date(),
@@ -45,14 +43,12 @@ module.exports = {
 				},
 				{
 					studentName: 'Fernanda Creona',
-					studentAge: 17,
 					projectId: 2,
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
 				{
 					studentName: 'Luiza Pardal',
-					studentAge: 31,
 					projectId: 2,
 					createdAt: new Date(),
 					updatedAt: new Date(),
@@ -65,14 +61,12 @@ module.exports = {
 				},
 				{
 					studentName: 'Jack Ma',
-					studentAge: 55,
 					projectId: 3,
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
 				{
 					studentName: 'Elon Musk',
-					studentAge: 38,
 					projectId: 3,
 					createdAt: new Date(),
 					updatedAt: new Date(),

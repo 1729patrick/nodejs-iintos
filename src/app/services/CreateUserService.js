@@ -39,7 +39,8 @@ class CreateUserService {
 		}
 
 		const randomPass = (Math.random(1729) * 1000000).toFixed(0);
-
+		// Creates a new user, if the password doesn't exist, 
+		//	it's given an randon one
 		const createdUser = await User.create({
 			...user,
 			password: user.password || randomPass,

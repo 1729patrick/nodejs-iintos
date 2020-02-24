@@ -31,9 +31,6 @@ module.exports = {
 			studentName: {
 				type: Sequelize.STRING,
 			},
-			studentAge: {
-				type: Sequelize.INTEGER,
-			},
 			createdAt: {
 				type: Sequelize.DATE,
 				allowNull: false,

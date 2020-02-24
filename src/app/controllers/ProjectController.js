@@ -75,6 +75,7 @@ class ProjectController {
 	 */
 	async create(req, res) {
 		//creates a new project
+		console.log;
 		const project = await Project.create(req.body);
 
 		//Adds the school of the current user to the project
@@ -102,6 +103,18 @@ class ProjectController {
 				schoolId: currentUser.schoolId,
 			});
 		}
+
+		//Send the email
+		/*
+		Queue.add(NewProject.key, {
+			newProject: {
+				title: project.title,
+				goal: project.goal,
+				type: project.type,
+			},
+			receiver: { email: 'iceptalves@gmail.com' },
+		});
+*/
 		//Returns a the newly created project
 		return res.json(project);
 	}
@@ -121,7 +134,8 @@ class ProjectController {
 			global,
 			description,
 			links,
-			targetAudience,
+			ageRangeStart,
+			ageRangeEnd,
 			type,
 			title,
 		} = req.body;
@@ -130,7 +144,8 @@ class ProjectController {
 			global,
 			description,
 			links,
-			targetAudience,
+			ageRangeStart,
+			ageRangeEnd,
 			type,
 			title,
 		};

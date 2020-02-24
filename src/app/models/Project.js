@@ -8,7 +8,10 @@ class Project extends Model {
 				goal: Sequelize.STRING,
 				description: Sequelize.STRING,
 				links: Sequelize.STRING,
-				targetAudience: Sequelize.STRING,
+				//targetAudience: Sequelize.STRING,
+				ageRangeStart: Sequelize.INTEGER,
+				ageRangeEnd: Sequelize.INTEGER,
+
 				type: Sequelize.STRING,
 				startDate: Sequelize.DATE,
 				endDate: Sequelize.DATE,
