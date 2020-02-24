@@ -8,22 +8,23 @@ class SchoolController {
 	 * */
 
 	async index(req, res) {
-		const { active } = req.query;
+		const { active, all = false } = req.query;
 
 		let where = {};
 		if (active) {
 			where = {
-				where: {
-					active,
-				},
+				active,
 			};
 		}
 
-		if (req.role === 'Coordinator' || req.role === 'Professor') {
-			where = { where: { ...where.where, id: req.schoolId } };
+		if (
+			!JSON.parse(all) &&
+			(req.role === 'Coordinator' || req.role === 'Professor')
+		) {
+			where = { ...where, id: req.schoolId };
 		}
 
-		const schools = await School.findAll(where);
+		const schools = await School.findAll({ where });
 
 		return res.json(schools);
 	}
