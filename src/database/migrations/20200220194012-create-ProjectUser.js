@@ -28,6 +28,15 @@ module.exports = {
 				onUpdate: 'cascade',
 				onDelete: 'set null',
 			},
+			schoolId: {
+				type: Sequelize.INTEGER,
+				references: {
+					model: 'Schools',
+					key: 'id',
+				},
+				onUpdate: 'cascade',
+				onDelete: 'set null',
+			},
 			studentName: {
 				type: Sequelize.STRING,
 			},

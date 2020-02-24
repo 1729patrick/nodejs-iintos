@@ -26,12 +26,16 @@ module.exports = {
 				{
 					studentName: 'Patrick Battisti',
 					projectId: 1,
+					schoolId: 1,
+
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
 				{
 					studentName: 'Antonio Pardo',
 					projectId: 1,
+					schoolId: 1,
+
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
@@ -44,12 +48,14 @@ module.exports = {
 				{
 					studentName: 'Fernanda Creona',
 					projectId: 2,
+					schoolId: 1,
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
 				{
 					studentName: 'Luiza Pardal',
 					projectId: 2,
+					schoolId: 1,
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
@@ -62,12 +68,16 @@ module.exports = {
 				{
 					studentName: 'Jack Ma',
 					projectId: 3,
+					schoolId: 1,
+
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
 				{
 					studentName: 'Elon Musk',
 					projectId: 3,
+					schoolId: 1,
+
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},

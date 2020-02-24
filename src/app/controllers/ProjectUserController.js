@@ -18,6 +18,11 @@ class ProjectUserController {
 			where: { projectId },
 			include: [
 				{
+					model: School,
+					as: 'school',
+					attributes: ['name'],
+				},
+				{
 					model: User,
 					as: 'professor',
 					attributes: { exclude: 'passwordHash' },
@@ -50,10 +55,27 @@ class ProjectUserController {
 		//map the role and school of professor
 		professors = professors.map(({ professor }) => {
 			const { name, email, active, school = {}, role = {} } = professor;
-
-			return {professor: { name, email, active, school: school.name, role: role.name }}
+			return {
+				professor: {
+					name,
+					email,
+					active,
+					school: school.name,
+					role: role.name,
+				},
+			};
 		});
-		
+		//map the role and school of student
+		students = students.map(student => {
+			const { studentName, school = {} } = student;
+			console.log(studentName);
+			console.log(school);
+			return {
+				studentName,
+				school: school.name,
+			};
+		});
+
 		res.json({ students, professors });
 	}
 
