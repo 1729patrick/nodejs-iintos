@@ -3,22 +3,45 @@ import School from '../models/School';
 import ProjectUser from '../models/ProjectUser';
 import SchoolProject from '../models/SchoolProject';
 import User from '../models/User';
+import { fn, col, Op } from 'sequelize';
 
 // Project controller that returns the essencial information
 class ProjectController {
 	//Returns all the projects
 	async index(req, res) {
+		const { avaliable = false } = req.query;
+
 		let include = {};
 		if (req.role === 'Coordinator') {
-			include = {
-				include: [
-					{
-						model: SchoolProject,
-						as: 'schoolProject',
-						where: { schoolId: req.schoolId },
+			if (JSON.parse(avaliable)) {
+				include = {
+					attributes: {
+						include: [
+							[fn('COUNT', col('schoolProject.id')), 'schoolProjectCount'],
+						],
 					},
-				],
-			};
+					include: [
+						{
+							model: SchoolProject,
+							as: 'schoolProject',
+							where: {
+								schoolId: { [Op.ne]: req.schoolId },
+							},
+						},
+					],
+					group: ['schoolProject.id', 'Project.id'],
+				};
+			} else {
+				include = {
+					include: [
+						{
+							model: SchoolProject,
+							as: 'schoolProject',
+							where: { schoolId: req.schoolId },
+						},
+					],
+				};
+			}
 		} else if (req.role === 'Professor') {
 			include = {
 				include: [
@@ -31,9 +54,16 @@ class ProjectController {
 			};
 		}
 
-		const projects = await Project.findAll({
+		let projects = await Project.findAll({
 			...include,
 		});
+
+		if (JSON.parse(avaliable)) {
+			projects = projects.filter(project => {
+				const { schoolProjectCount } = project.toJSON();
+				return schoolProjectCount <= 1;
+			});
+		}
 
 		return res.json(projects);
 	}
