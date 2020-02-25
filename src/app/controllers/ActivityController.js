@@ -84,9 +84,10 @@ class ActivityController {
 					endDate,
 					students,
 					professors,
-					activityFile: activityFile.map(({ id, file }) => ({
-						activityFileId: id,
+					files: activityFile.map(({ id, file }) => ({
+						id,
 						url: file.url,
+						name: file.name,
 					})),
 					studentsStr: students.map(({ name }) => name).join(', '),
 					professorsStr: professors.map(({ name }) => name).join(', '),
@@ -103,7 +104,7 @@ class ActivityController {
 	 * @param {*} res
 	 */
 	async create(req, res) {
-		const { students, professors, ...activity } = req.body;
+		const { students, professors, files, ...activity } = req.body;
 		const creattedActivity = await Activity.create(activity);
 
 		const users = new Set([
@@ -111,14 +112,20 @@ class ActivityController {
 			...professors.map(v => +v),
 		]);
 
+		const activityId = creattedActivity.id;
+
 		const validUsers = [...users].filter(v => v);
 		const activitityUsers = await Promise.all(
 			validUsers.map(projectUserId => {
 				return ActivityUser.create({
-					activityId: creattedActivity.id,
+					activityId,
 					projectUserId,
 				});
 			})
+		);
+
+		await Promise.all(
+			files.map(fileId => ActivityFile.create({ fileId, activityId }))
 		);
 
 		const projectUsers = await Promise.all(
@@ -153,45 +160,42 @@ class ActivityController {
 	 * @param {*} res
 	 */
 	async delete(req, res) {
-		try {
-			const activityId = req.params.id;
+		const activityId = req.params.id;
 
-			const acitivityUsers = await ActivityUser.findAll({
-				where: { activityId },
-				include: [
-					{
-						model: ProjectUser,
-						as: 'projectUser',
-						include: [
-							{
-								model: User,
-								as: 'professor',
-							},
-						],
-					},
-				],
-			});
+		const acitivityUsers = await ActivityUser.findAll({
+			where: { activityId },
+			include: [
+				{
+					model: ProjectUser,
+					as: 'projectUser',
+					include: [
+						{
+							model: User,
+							as: 'professor',
+						},
+					],
+				},
+			],
+		});
 
-			await Promise.all(
-				acitivityUsers.map(acitivityUser => {
-					const event = {
-						googleEventId: acitivityUser.googleEventId,
-						email: acitivityUser.projectUser.professor.email,
-					};
+		await ActivityFile.destroy({ where: { activityId } });
 
-					Queue.add(DeleteEvent.key, event);
-					return acitivityUser.destroy();
-				})
-			);
+		await Promise.all(
+			acitivityUsers.map(acitivityUser => {
+				const { professor } = acitivityUser.projectUser;
+				const event = {
+					googleEventId: acitivityUser.googleEventId,
+					email: professor ? professor.email : '',
+				};
 
-			await Activity.destroy({ where: { id: activityId } });
+				Queue.add(DeleteEvent.key, event);
+				return acitivityUser.destroy();
+			})
+		);
 
-			return res.json(acitivityUsers);
-		} catch (e) {
-			return res.status(401).json({
-				error: 'You must remove all participants before removing',
-			});
-		}
+		await Activity.destroy({ where: { id: activityId } });
+
+		return res.json(acitivityUsers);
 	}
 
 	async update(req, res) {
@@ -215,9 +219,10 @@ class ActivityController {
 
 		await Promise.all(
 			acitivityUsers.map(acitivityUser => {
+				const { professor } = acitivityUser.projectUser;
 				const event = {
 					googleEventId: acitivityUser.googleEventId,
-					email: acitivityUser.projectUser.professor.email,
+					email: professor ? professor.email : '',
 				};
 
 				Queue.add(DeleteEvent.key, event);
@@ -226,6 +231,7 @@ class ActivityController {
 		);
 
 		const {
+			files,
 			students,
 			professors,
 			title,
@@ -239,6 +245,11 @@ class ActivityController {
 			{
 				where: { id: activityId },
 			}
+		);
+
+		await ActivityFile.destroy({ where: { activityId } });
+		await Promise.all(
+			files.map(fileId => ActivityFile.create({ fileId, activityId }))
 		);
 
 		const users = new Set([
@@ -272,7 +283,7 @@ class ActivityController {
 			);
 
 			return {
-				email: professor.email,
+				email: professor ? professor.email : '',
 				activityUserId: activity ? activity.id : null,
 			};
 		});

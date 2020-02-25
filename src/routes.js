@@ -72,22 +72,11 @@ router.post('/results', ResultController.create);
 router.delete('/results/:id', ResultController.delete);
 router.put('/results/:id', ResultController.update);
 
-//Result File area
-router.get('/result/:id/files', ResultFile.index);
-router.post('/result/:id/files', ResultFile.create);
-
 //Activity Area
 router.get('/projects/:id/activities', ActivityController.index);
 router.post('/activities', ActivityController.create);
 router.delete('/activities/:id', ActivityController.delete);
 router.put('/activities/:id', ActivityController.update);
-
-//Activity Area
-router.post('/activities/:activityId/files', ActivityFilesController.create);
-router.delete(
-	'/activities/:activityId/files/:activityFileId',
-	ActivityFilesController.delete
-);
 
 //Roles Area
 router.get('/roles', authMiddleware, RolesController.index);
