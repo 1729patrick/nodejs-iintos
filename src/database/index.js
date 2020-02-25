@@ -19,6 +19,7 @@ import ProjectUser from '../app/models/ProjectUser';
 import ActivityUser from '../app/models/ActivityUser';
 import ResultFile from '../app/models/ResultFile';
 import OutputResult from '../app/models/OutputResult';
+import ActivityFile from '../app/models/ActivityFile';
 
 const models = [
 	User,
@@ -34,6 +35,7 @@ const models = [
 	ResultFile,
 	Result,
 	OutputResult,
+	ActivityFile,
 ];
 
 class Database {

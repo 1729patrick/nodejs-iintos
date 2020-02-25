@@ -2,26 +2,27 @@
 
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		return queryInterface.createTable('Results', {
+		return queryInterface.createTable('ActivityFiles', {
 			id: {
 				type: Sequelize.INTEGER,
 				allowNull: false,
 				primaryKey: true,
 				autoIncrement: true,
 			},
-			title: {
-				type: Sequelize.STRING,
-				allowNull: false,
-			},
-			description: {
-				type: Sequelize.STRING(5000),
-				allowNull: false,
-			},
-			projectId: {
+			activityId: {
 				type: Sequelize.INTEGER,
 				allowNull: false,
 				references: {
-					model: 'Projects',
+					model: 'Activities',
+					key: 'id',
+				},
+				onUpdate: 'cascade',
+				onDelete: 'set null',
+			},
+			fileId: {
+				type: Sequelize.INTEGER,
+				references: {
+					model: 'Files',
 					key: 'id',
 				},
 				onUpdate: 'cascade',
@@ -38,14 +39,7 @@ module.exports = {
 		});
 	},
 
-	down: (queryInterface, Sequelize) => {
-		/*
-      Add reverting commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.dropTable('users');
-    */
-		return queryInterface.dropTable('Results');
+	down: queryInterface => {
+		return queryInterface.dropTable('ActivityFiles');
 	},
 };

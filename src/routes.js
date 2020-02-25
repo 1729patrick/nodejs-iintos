@@ -20,6 +20,7 @@ import ProfessorController from './app/controllers/ProfessorController';
 import ResultController from './app/controllers/ResultController';
 import ResultFile from './app/controllers/ResultFileController';
 import OutputResultController from './app/controllers/OutputResultController';
+import ActivityFilesController from './app/controllers/ActivityFilesController';
 
 const router = Router();
 const upload = multer(multerConfig);
@@ -80,6 +81,13 @@ router.get('/projects/:id/activities', ActivityController.index);
 router.post('/activities', ActivityController.create);
 router.delete('/activities/:id', ActivityController.delete);
 router.put('/activities/:id', ActivityController.update);
+
+//Activity Area
+router.post('/activities/:activityId/files', ActivityFilesController.create);
+router.delete(
+	'/activities/:activityId/files/:activityFileId',
+	ActivityFilesController.delete
+);
 
 //Roles Area
 router.get('/roles', authMiddleware, RolesController.index);
