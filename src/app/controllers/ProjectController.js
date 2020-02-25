@@ -15,21 +15,12 @@ class ProjectController {
 		if (req.role === 'Coordinator') {
 			if (JSON.parse(avaliable)) {
 				include = {
-					attributes: {
-						include: [
-							[fn('COUNT', col('schoolProject.id')), 'schoolProjectCount'],
-						],
-					},
 					include: [
 						{
 							model: SchoolProject,
 							as: 'schoolProject',
-							where: {
-								schoolId: { [Op.ne]: req.schoolId },
-							},
 						},
 					],
-					group: ['schoolProject.id', 'Project.id'],
 				};
 			} else {
 				include = {
@@ -60,8 +51,11 @@ class ProjectController {
 
 		if (JSON.parse(avaliable)) {
 			projects = projects.filter(project => {
-				const { schoolProjectCount } = project.toJSON();
-				return schoolProjectCount <= 1;
+				project = project.toJSON();
+
+				return !project.schoolProject.find(
+					project => project.schoolId === req.schoolId
+				);
 			});
 		}
 
@@ -77,31 +71,25 @@ class ProjectController {
 		//creates a new project
 		const project = await Project.create(req.body);
 
-		//Adds the school of the current user to the project
-		const id = req.userId;
-
-		const currentUser = await User.findOne({
-			where: { id },
-			attributes: {
-				exclude: ['passwordHash'],
-			},
-			include: [
-				{
-					model: School,
-					as: 'school',
-					attributes: ['name'],
-				},
-			],
-			raw: true,
-			nest: true,
-		});
 		// if there is a school, it associates with it
-		if (currentUser.schoolId !== null) {
-			const schoolProject = await SchoolProject.create({
+		if (req.schoolId !== null) {
+			await SchoolProject.create({
 				projectId: project.id,
-				schoolId: currentUser.schoolId,
+				schoolId: req.schoolId,
 			});
 		}
+
+		//Send the email
+		/*
+		Queue.add(NewProject.key, {
+			newProject: {
+				title: project.title,
+				goal: project.goal,
+				type: project.type,
+			},
+			receiver: { email: 'iceptalves@gmail.com' },
+		});
+*/
 		//Returns a the newly created project
 		return res.json(project);
 	}
@@ -121,18 +109,24 @@ class ProjectController {
 			global,
 			description,
 			links,
-			targetAudience,
+			ageRangeStart,
+			ageRangeEnd,
 			type,
 			title,
+			endDate,
+			startDate,
 		} = req.body;
 
 		const updatedProject = {
 			global,
 			description,
 			links,
-			targetAudience,
+			ageRangeStart,
+			ageRangeEnd,
 			type,
 			title,
+			endDate,
+			startDate,
 		};
 
 		//Find from the route id and updates the object

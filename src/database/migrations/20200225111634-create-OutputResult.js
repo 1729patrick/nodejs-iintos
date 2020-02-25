@@ -2,46 +2,24 @@
 
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		/*
-      Add altering commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.createTable('users', { id: Sequelize.INTEGER });
-    */
-
-		return queryInterface.createTable('Activities', {
+		return queryInterface.createTable('OutputResults', {
 			id: {
 				type: Sequelize.INTEGER,
 				allowNull: false,
 				primaryKey: true,
 				autoIncrement: true,
 			},
+			//costum
 			title: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
 			description: {
-				type: Sequelize.STRING,
+				type: Sequelize.STRING(5000),
 				allowNull: false,
 			},
-			projectId: {
-				type: Sequelize.INTEGER,
-				allowNull: false,
-				references: {
-					model: 'Projects',
-					key: 'id',
-				},
-				onUpdate: 'cascade',
-				onDelete: 'set null',
-			},
-			startDate: {
-				type: Sequelize.DATE,
-				defaultValue: Sequelize.NOW,
-			},
-			endDate: {
-				type: Sequelize.DATE,
-			},
+
+			//Standart
 			createdAt: {
 				type: Sequelize.DATE,
 				allowNull: false,
@@ -61,6 +39,6 @@ module.exports = {
       Example:
       return queryInterface.dropTable('users');
     */
-		return queryInterface.dropTable('Activities');
+		return queryInterface.dropTable('OutputResults');
 	},
 };

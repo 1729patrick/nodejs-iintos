@@ -32,8 +32,12 @@ module.exports = {
 				type: Sequelize.STRING,
 				allowNull: true,
 			},
-			targetAudience: {
-				type: Sequelize.STRING,
+			ageRangeStart: {
+				type: Sequelize.INTEGER,
+				allowNull: false,
+			},	
+			ageRangeEnd: {
+				type: Sequelize.INTEGER,
 				allowNull: false,
 			},
 			type: {
@@ -43,6 +47,7 @@ module.exports = {
 			},
 			startDate: {
 				type: Sequelize.DATE,
+				defaultValue: Sequelize.NOW
 			},
 			endDate: {
 				type: Sequelize.DATE,

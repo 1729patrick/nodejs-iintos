@@ -21,11 +21,6 @@ module.exports = {
 					updatedAt: new Date(),
 				},
 				{
-					name: 'Guest-Professor',
-					createdAt: new Date(),
-					updatedAt: new Date(),
-				},
-				{
 					name: 'IINTOS-Admin',
 					createdAt: new Date(),
 					updatedAt: new Date(),

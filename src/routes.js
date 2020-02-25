@@ -18,7 +18,7 @@ import ActivityController from './app/controllers/ActivityController';
 import ProjectUser from './app/controllers/ProjectUserController';
 import ProfessorController from './app/controllers/ProfessorController';
 import ResultController from './app/controllers/ResultController';
-import ResultFile from './app/controllers/ResultFileController';
+import OutputResultController from './app/controllers/OutputResultController';
 
 const router = Router();
 const upload = multer(multerConfig);
@@ -30,8 +30,14 @@ router.post('/signup', UserController.create);
 router.post('/files', upload.single('file'), FileController.create);
 router.get('/schools', SchoolController.index);
 
+router.get('/outputResults', OutputResultController.index);
+
 //----- After this point, the user needs autentication -----
 router.use(authMiddleware);
+
+router.post('/outputResults', OutputResultController.create);
+router.delete('/outputResults/:id', OutputResultController.delete);
+router.put('/outputResults/:id', OutputResultController.update);
 
 //User area
 router.post('/users', UserController.create);
@@ -63,11 +69,6 @@ router.get('/projects/:id/results', ResultController.index);
 router.post('/results', ResultController.create);
 router.delete('/results/:id', ResultController.delete);
 router.put('/results/:id', ResultController.update);
-
-//Result File area
-router.get('/result/:id/files', ResultFile.index);
-router.post('/result/:id/files', ResultFile.create);
-
 
 //Activity Area
 router.get('/projects/:id/activities', ActivityController.index);

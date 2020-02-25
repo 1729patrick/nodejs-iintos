@@ -6,13 +6,20 @@ class ActivityUser extends Model {
 			{
 				activityId: Sequelize.INTEGER,
 				projectUserId: Sequelize.INTEGER,
+				googleEventId: Sequelize.STRING,
 			},
 			{ sequelize }
 		);
 	}
 	static associate(models) {
-		this.belongsTo(models.Activity, { foreignKey: 'activityId', as: 'activity' });
-		this.belongsTo(models.ProjectUser, { foreignKey: 'projectUserId', as: 'projectUser' });
+		this.belongsTo(models.Activity, {
+			foreignKey: 'activityId',
+			as: 'activity',
+		});
+		this.belongsTo(models.ProjectUser, {
+			foreignKey: 'projectUserId',
+			as: 'projectUser',
+		});
 	}
 }
 

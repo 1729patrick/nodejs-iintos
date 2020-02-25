@@ -18,6 +18,10 @@ class Activity extends Model {
 			foreignKey: 'activityId',
 			as: 'activityUser',
 		});
+		this.hasMany(models.ActivityFile, {
+			foreignKey: 'activityId',
+			as: 'activityFile',
+		});
 	}
 }
 

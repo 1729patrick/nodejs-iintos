@@ -1,6 +1,6 @@
 import Sequelize, { Model } from 'sequelize';
 
-class Result extends Model {
+class OutputResult extends Model {
 	static init(sequelize) {
 		return super.init(
 			{
@@ -10,12 +10,13 @@ class Result extends Model {
 			{ sequelize }
 		);
 	}
+	/*
 	static associate(models) {
-		this.belongsTo(models.Project, { foreignKey: 'projectId', as: 'project' });
-		this.hasMany(models.ResultFile, {
-			foreignKey: 'resultId',
-			as: 'resultFile',
+		this.belongsTo(models.File, {
+			foreignKey: 'fileVerificationId',
+			as: 'output',
 		});
 	}
+	*/
 }
-export default Result;
+export default OutputResult;
