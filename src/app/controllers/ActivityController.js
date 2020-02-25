@@ -1,5 +1,7 @@
 import Activity from '../models/Activity';
 import ActivityUser from '../models/ActivityUser';
+import ActivityFile from '../models/ActivityFile';
+import File from '../models/File';
 import ProjectUser from '../models/ProjectUser';
 import User from '../models/User';
 import Queue from '../../lib/Queue';
@@ -34,11 +36,29 @@ class ActivityController {
 						},
 					},
 				},
+				{
+					model: ActivityFile,
+					as: 'activityFile',
+					include: [
+						{
+							model: File,
+							as: 'file',
+						},
+					],
+				},
 			],
 		});
 
 		const formattedAcitivities = activities.map(
-			({ activityUser, id, title, description, startDate, endDate }) => {
+			({
+				activityUser,
+				id,
+				title,
+				description,
+				startDate,
+				endDate,
+				activityFile,
+			}) => {
 				let professors = [],
 					students = [];
 				activityUser.forEach(({ projectUser, ...user }) => {
@@ -64,6 +84,10 @@ class ActivityController {
 					endDate,
 					students,
 					professors,
+					activityFile: activityFile.map(({ id, file }) => ({
+						activityFileId: id,
+						url: file.url,
+					})),
 					studentsStr: students.map(({ name }) => name).join(', '),
 					professorsStr: professors.map(({ name }) => name).join(', '),
 				};

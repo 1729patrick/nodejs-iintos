@@ -18,6 +18,7 @@ import Role from '../app/models/Role';
 import ProjectUser from '../app/models/ProjectUser';
 import ActivityUser from '../app/models/ActivityUser';
 import ResultFile from '../app/models/ResultFile';
+import ActivityFile from '../app/models/ActivityFile';
 
 const models = [
 	User,
@@ -32,6 +33,7 @@ const models = [
 	ActivityUser,
 	ResultFile,
 	Result,
+	ActivityFile,
 ];
 
 class Database {
