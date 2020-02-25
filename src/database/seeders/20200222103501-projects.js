@@ -14,6 +14,10 @@ module.exports = {
 					ageRangeStart: 10,
 					ageRangeEnd: 15,
 					type: 'Online',
+					startDate: new Date(),
+					endDate: new Date(
+						'Mon Feb 24 2020 17:55:25 GMT+0000 (Western European Standard Time)'
+					),
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
@@ -28,6 +32,10 @@ module.exports = {
 					ageRangeStart: 10,
 					ageRangeEnd: 15,
 					type: 'Online',
+					startDate: new Date(),
+					endDate: new Date(
+						'Mon Feb 24 2020 17:55:25 GMT+0000 (Western European Standard Time)'
+					),
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
@@ -40,6 +48,10 @@ module.exports = {
 					ageRangeStart: 10,
 					ageRangeEnd: 15,
 					type: 'Online',
+					startDate: new Date(),
+					endDate: new Date(
+						'Mon Feb 24 2020 17:55:25 GMT+0000 (Western European Standard Time)'
+					),
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},

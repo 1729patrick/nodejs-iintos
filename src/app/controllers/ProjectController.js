@@ -15,21 +15,12 @@ class ProjectController {
 		if (req.role === 'Coordinator') {
 			if (JSON.parse(avaliable)) {
 				include = {
-					attributes: {
-						include: [
-							[fn('COUNT', col('schoolProject.id')), 'schoolProjectCount'],
-						],
-					},
 					include: [
 						{
 							model: SchoolProject,
 							as: 'schoolProject',
-							where: {
-								schoolId: { [Op.ne]: req.schoolId },
-							},
 						},
 					],
-					group: ['schoolProject.id', 'Project.id'],
 				};
 			} else {
 				include = {
@@ -60,8 +51,11 @@ class ProjectController {
 
 		if (JSON.parse(avaliable)) {
 			projects = projects.filter(project => {
-				const { schoolProjectCount } = project.toJSON();
-				return schoolProjectCount <= 1;
+				project = project.toJSON();
+
+				return !project.schoolProject.find(
+					project => project.schoolId === req.schoolId
+				);
 			});
 		}
 
@@ -75,32 +69,16 @@ class ProjectController {
 	 */
 	async create(req, res) {
 		//creates a new project
-		console.log;
-		const project = await Project.create(req.body);
-
-		//Adds the school of the current user to the project
-		const id = req.userId;
-
-		const currentUser = await User.findOne({
-			where: { id },
-			attributes: {
-				exclude: ['passwordHash'],
-			},
-			include: [
-				{
-					model: School,
-					as: 'school',
-					attributes: ['name'],
-				},
-			],
-			raw: true,
-			nest: true,
+		const project = await Project.create({
+			...req.body,
+			startDate: new Date(),
 		});
+
 		// if there is a school, it associates with it
-		if (currentUser.schoolId !== null) {
-			const schoolProject = await SchoolProject.create({
+		if (req.schoolId !== null) {
+			await SchoolProject.create({
 				projectId: project.id,
-				schoolId: currentUser.schoolId,
+				schoolId: req.schoolId,
 			});
 		}
 
@@ -138,6 +116,7 @@ class ProjectController {
 			ageRangeEnd,
 			type,
 			title,
+			endDate,
 		} = req.body;
 
 		const updatedProject = {
@@ -148,6 +127,7 @@ class ProjectController {
 			ageRangeEnd,
 			type,
 			title,
+			endDate,
 		};
 
 		//Find from the route id and updates the object
