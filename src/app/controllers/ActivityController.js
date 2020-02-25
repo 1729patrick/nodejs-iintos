@@ -2,7 +2,9 @@ import Activity from '../models/Activity';
 import ActivityUser from '../models/ActivityUser';
 import ProjectUser from '../models/ProjectUser';
 import User from '../models/User';
+import Queue from '../../lib/Queue';
 
+import CreateEvent from '../jobs/CreateEvent';
 /**
  * Activity controller
  */
@@ -93,6 +95,20 @@ class ActivityController {
 			})
 		);
 
+		const projectUsers = await Promise.all(
+			professors.map(professorId =>
+				ProjectUser.findByPk(professorId, {
+					include: [{ model: User, as: 'professor' }],
+				})
+			)
+		);
+
+		const professorsEmails = projectUsers.map(
+			({ professor }) => professor.email
+		);
+
+		Queue.add(CreateEvent.key, { emails: professorsEmails, ...activity });
+
 		return res.json(creattedActivity);
 	}
 
@@ -125,7 +141,7 @@ class ActivityController {
 		} = req.body;
 
 		//Find from the route id and updates the object
-		await Activity.update(
+		const activity = await Activity.update(
 			{ title, description, startDate, endDate },
 			{
 				where: { id },
@@ -151,7 +167,7 @@ class ActivityController {
 			})
 		);
 
-		return res.json(req.body);
+		return res.json(activity);
 	}
 }
 
