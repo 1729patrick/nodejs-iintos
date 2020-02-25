@@ -37,6 +37,7 @@ module.exports = {
 			},
 			startDate: {
 				type: Sequelize.DATE,
+				defaultValue: Sequelize.NOW
 			},
 			endDate: {
 				type: Sequelize.DATE,

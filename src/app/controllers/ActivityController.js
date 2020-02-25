@@ -115,11 +115,18 @@ class ActivityController {
 
 	async update(req, res) {
 		const { id } = req.params;
-		const { title, description, students, professors } = req.body;
+		const {
+			title,
+			description,
+			students,
+			professors,
+			startDate,
+			endDate,
+		} = req.body;
 
 		//Find from the route id and updates the object
 		await Activity.update(
-			{ title, description },
+			{ title, description, startDate, endDate },
 			{
 				where: { id },
 				returning: true,

@@ -69,10 +69,7 @@ class ProjectController {
 	 */
 	async create(req, res) {
 		//creates a new project
-		const project = await Project.create({
-			...req.body,
-			startDate: new Date(),
-		});
+		const project = await Project.create(req.body);
 
 		// if there is a school, it associates with it
 		if (req.schoolId !== null) {
@@ -117,6 +114,7 @@ class ProjectController {
 			type,
 			title,
 			endDate,
+			startDate,
 		} = req.body;
 
 		const updatedProject = {
@@ -128,6 +126,7 @@ class ProjectController {
 			type,
 			title,
 			endDate,
+			startDate,
 		};
 
 		//Find from the route id and updates the object
