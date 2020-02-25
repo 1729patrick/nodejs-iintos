@@ -18,9 +18,7 @@ import ActivityController from './app/controllers/ActivityController';
 import ProjectUser from './app/controllers/ProjectUserController';
 import ProfessorController from './app/controllers/ProfessorController';
 import ResultController from './app/controllers/ResultController';
-import ResultFile from './app/controllers/ResultFileController';
 import OutputResultController from './app/controllers/OutputResultController';
-import ActivityFilesController from './app/controllers/ActivityFilesController';
 
 const router = Router();
 const upload = multer(multerConfig);
