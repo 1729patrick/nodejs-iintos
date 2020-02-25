@@ -41,6 +41,9 @@ module.exports = {
 			studentAge: {
 				type: Sequelize.INTEGER,
 			},
+			googleEventId: {
+				type: Sequelize.STRING,
+			},
 			createdAt: {
 				type: Sequelize.DATE,
 				allowNull: false,

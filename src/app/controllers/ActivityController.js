@@ -5,6 +5,7 @@ import User from '../models/User';
 import Queue from '../../lib/Queue';
 
 import CreateEvent from '../jobs/CreateEvent';
+import DeleteEvent from '../jobs/DeleteEvent';
 /**
  * Activity controller
  */
@@ -85,8 +86,9 @@ class ActivityController {
 			...students.map(v => +v),
 			...professors.map(v => +v),
 		]);
+
 		const validUsers = [...users].filter(v => v);
-		await Promise.all(
+		const activitityUsers = await Promise.all(
 			validUsers.map(projectUserId => {
 				return ActivityUser.create({
 					activityId: creattedActivity.id,
@@ -96,18 +98,27 @@ class ActivityController {
 		);
 
 		const projectUsers = await Promise.all(
-			professors.map(professorId =>
-				ProjectUser.findByPk(professorId, {
-					include: [{ model: User, as: 'professor' }],
-				})
-			)
+			professors
+				.filter(p => p)
+				.map(professorId =>
+					ProjectUser.findByPk(professorId, {
+						include: [{ model: User, as: 'professor' }],
+					})
+				)
 		);
 
-		const professorsEmails = projectUsers.map(
-			({ professor }) => professor.email
-		);
+		const professorsEmails = projectUsers.map(({ id, professor }) => {
+			const activity = activitityUsers.find(
+				({ projectUserId }) => projectUserId === id
+			);
 
-		Queue.add(CreateEvent.key, { emails: professorsEmails, ...activity });
+			return {
+				email: professor.email,
+				activityUserId: activity ? activity.id : null,
+			};
+		});
+
+		Queue.add(CreateEvent.key, { participants: professorsEmails, ...activity });
 
 		return res.json(creattedActivity);
 	}
@@ -119,9 +130,39 @@ class ActivityController {
 	 */
 	async delete(req, res) {
 		try {
-			await Activity.destroy({ where: { id: req.params.id } });
+			const activityId = req.params.id;
 
-			return res.json();
+			const acitivityUsers = await ActivityUser.findAll({
+				where: { activityId },
+				include: [
+					{
+						model: ProjectUser,
+						as: 'projectUser',
+						include: [
+							{
+								model: User,
+								as: 'professor',
+							},
+						],
+					},
+				],
+			});
+
+			await Promise.all(
+				acitivityUsers.map(acitivityUser => {
+					const event = {
+						googleEventId: acitivityUser.googleEventId,
+						email: acitivityUser.projectUser.professor.email,
+					};
+
+					Queue.add(DeleteEvent.key, event);
+					return acitivityUser.destroy();
+				})
+			);
+
+			await Activity.destroy({ where: { id: activityId } });
+
+			return res.json(acitivityUsers);
 		} catch (e) {
 			return res.status(401).json({
 				error: 'You must remove all participants before removing',
@@ -130,44 +171,97 @@ class ActivityController {
 	}
 
 	async update(req, res) {
-		const { id } = req.params;
+		const activityId = req.params.id;
+
+		const acitivityUsers = await ActivityUser.findAll({
+			where: { activityId },
+			include: [
+				{
+					model: ProjectUser,
+					as: 'projectUser',
+					include: [
+						{
+							model: User,
+							as: 'professor',
+						},
+					],
+				},
+			],
+		});
+
+		await Promise.all(
+			acitivityUsers.map(acitivityUser => {
+				const event = {
+					googleEventId: acitivityUser.googleEventId,
+					email: acitivityUser.projectUser.professor.email,
+				};
+
+				Queue.add(DeleteEvent.key, event);
+				return acitivityUser.destroy();
+			})
+		);
+
 		const {
-			title,
-			description,
 			students,
 			professors,
+			title,
+			description,
 			startDate,
 			endDate,
 		} = req.body;
 
-		//Find from the route id and updates the object
-		const activity = await Activity.update(
+		await Activity.update(
 			{ title, description, startDate, endDate },
 			{
-				where: { id },
-				returning: true,
-				plain: true,
-				raw: true,
+				where: { id: activityId },
 			}
 		);
 
-		await ActivityUser.destroy({ where: { activityId: id } });
 		const users = new Set([
 			...students.map(v => +v),
 			...professors.map(v => +v),
 		]);
-		const validUsers = [...users].filter(v => v);
 
-		await Promise.all(
+		const validUsers = [...users].filter(v => v);
+		const activitityUsers = await Promise.all(
 			validUsers.map(projectUserId => {
 				return ActivityUser.create({
-					activityId: id,
+					activityId,
 					projectUserId,
 				});
 			})
 		);
 
-		return res.json(activity);
+		const projectUsers = await Promise.all(
+			professors
+				.filter(p => p)
+				.map(professorId =>
+					ProjectUser.findByPk(professorId, {
+						include: [{ model: User, as: 'professor' }],
+					})
+				)
+		);
+
+		const professorsEmails = projectUsers.map(({ id, professor }) => {
+			const activity = activitityUsers.find(
+				({ projectUserId }) => projectUserId === id
+			);
+
+			return {
+				email: professor.email,
+				activityUserId: activity ? activity.id : null,
+			};
+		});
+
+		Queue.add(CreateEvent.key, {
+			participants: professorsEmails,
+			title,
+			description,
+			startDate,
+			endDate,
+		});
+
+		return res.json(professorsEmails);
 	}
 }
 
