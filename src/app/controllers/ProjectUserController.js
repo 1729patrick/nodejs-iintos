@@ -53,10 +53,11 @@ class ProjectUserController {
 		});
 
 		//map the role and school of professor
-		professors = professors.map(({ professor }) => {
+		professors = professors.map(({ id, professor }) => {
 			const { name, email, active, school = {}, role = {} } = professor;
 			return {
 				professor: {
+					id,
 					name,
 					email,
 					active,
@@ -67,10 +68,9 @@ class ProjectUserController {
 		});
 		//map the role and school of student
 		students = students.map(student => {
-			const { studentName, school = {} } = student;
-			console.log(studentName);
-			console.log(school);
+			const { id, studentName, school = {} } = student;
 			return {
+				id,
 				studentName,
 				school: school.name,
 			};
