@@ -1,15 +1,13 @@
 import Project from '../models/Project';
-import School from '../models/School';
 import ProjectUser from '../models/ProjectUser';
 import SchoolProject from '../models/SchoolProject';
-import User from '../models/User';
-import { fn, col, Op } from 'sequelize';
+import { Op } from 'sequelize';
 
 // Project controller that returns the essencial information
 class ProjectController {
 	//Returns all the projects
 	async index(req, res) {
-		const { avaliable = false } = req.query;
+		const { avaliable = false, destination = 'MOBILITY' } = req.query;
 
 		let include = {};
 		if (req.role === 'Coordinator') {
@@ -45,8 +43,14 @@ class ProjectController {
 			};
 		}
 
+		const where =
+			destination === 'IINTOS'
+				? { where: { type: 'Output' } }
+				: { where: { type: { [Op.ne]: 'Output' } } };
+
 		let projects = await Project.findAll({
 			...include,
+			...where,
 		});
 
 		if (JSON.parse(avaliable)) {

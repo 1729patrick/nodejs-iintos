@@ -22,7 +22,6 @@ module.exports = {
 			},
 			goal: {
 				type: Sequelize.STRING,
-				allowNull: false,
 			},
 			description: {
 				type: Sequelize.STRING(5000),
@@ -30,15 +29,12 @@ module.exports = {
 			},
 			links: {
 				type: Sequelize.STRING,
-				allowNull: true,
 			},
 			ageRangeStart: {
 				type: Sequelize.INTEGER,
-				allowNull: false,
 			},	
 			ageRangeEnd: {
 				type: Sequelize.INTEGER,
-				allowNull: false,
 			},
 			type: {
 				type: Sequelize.STRING,
