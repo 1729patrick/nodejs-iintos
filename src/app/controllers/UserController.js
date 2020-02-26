@@ -26,6 +26,10 @@ class UserController {
 			where = { ...where, schoolId: req.schoolId };
 		}
 
+		if (req.role === 'IINTOS-Admin' || req.role === 'IINTOS-Partner') {
+			where = { ...where, roleId: { [Op.or]: [4, 5] } };
+		}
+
 		const users = await User.findAll({
 			where,
 			attributes: {
