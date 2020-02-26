@@ -2,18 +2,7 @@
 
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		/*
-      Add altering commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.bulkInsert('People', [{
-        name: 'John Doe',
-        isBetaMember: false
-      }], {});
-    */
-
-		return queryInterface.bulkInsert('OutputResults', [
+		return queryInterface.bulkInsert('Projects', [
 			{
 				title: 'Curricula analysis and comparison',
 				description:
@@ -26,6 +15,7 @@ module.exports = {
 					'This tool will be the basis, for every teacher, to set up a lesson or a project, that do correspond to his own curriculum objectives, and additionally that do correspond with the curriculum objectives in STEM subjects of his European partner.' +
 					'This will make every teacher also able to organize an international exchange project with another school, in his teaching subject (STEM).' +
 					"The product will be this analysis and comparative curricula tool (STEM subjects) and its associate user's guide.",
+				type: 'Output',
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
@@ -64,6 +54,7 @@ module.exports = {
 					'- Newsletters' +
 					'- Workflows' +
 					'- Documents',
+				type: 'Output',
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
@@ -82,6 +73,7 @@ module.exports = {
 					'- Analysis and conclusions of the process and obtained results.' +
 					'During the process of data collection for the e-book video testimonials of the participants will be gathered for further dissemination and motivation tool.' +
 					'The product will be permanently available on the project platform and partners online repositories.',
+				type: 'Output',
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},
@@ -95,6 +87,7 @@ module.exports = {
 					'4. Video/audio tutorials (number to be defined) on every aspect of the implementation and execution process of an international office by peer.' +
 					'The guide will be published in multiple media and made available on the project platform and the tutorials on platforms such as youtube.' +
 					'Since the project aim is the successful implementation of international offices in schools the guide will be only available in English. Nevertheless, selected related material collected during the guide construction, will be made available and kept in the original language as a safe keep for translation losses.',
+				type: 'Output',
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			},

@@ -11,18 +11,7 @@ module.exports = {
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
-				{
-					userId: 5,
-					projectId: 1,
-					createdAt: new Date(),
-					updatedAt: new Date(),
-				},
-				{
-					userId: 2,
-					projectId: 1,
-					createdAt: new Date(),
-					updatedAt: new Date(),
-				},
+
 				{
 					studentName: 'Patrick Battisti',
 					projectId: 1,
@@ -64,7 +53,6 @@ module.exports = {
 					projectId: 3,
 					createdAt: new Date(),
 					updatedAt: new Date(),
-					
 				},
 				{
 					studentName: 'Jack Ma',

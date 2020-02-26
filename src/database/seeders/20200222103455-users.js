@@ -16,7 +16,7 @@ module.exports = {
 					updatedAt: new Date(),
 				},
 				{
-					name: 'Coordinator Gervásio',
+					name: 'Coordinator Gertudres',
 					email: 'coordinator@iintos.com',
 					passwordHash: bcrypt.hashSync('123456', 8),
 					active: true,

@@ -1,15 +1,16 @@
 import Project from '../models/Project';
-import School from '../models/School';
 import ProjectUser from '../models/ProjectUser';
 import SchoolProject from '../models/SchoolProject';
 import User from '../models/User';
 import { fn, col, Op } from 'sequelize';
+import Queue from '../../lib/Queue';
+import NewProjectEmail from '../jobs/NewProjectEmail';
 
 // Project controller that returns the essencial information
 class ProjectController {
 	//Returns all the projects
 	async index(req, res) {
-		const { avaliable = false } = req.query;
+		const { avaliable = false, destination = 'MOBILITY' } = req.query;
 
 		let include = {};
 		if (req.role === 'Coordinator') {
@@ -45,8 +46,14 @@ class ProjectController {
 			};
 		}
 
+		const where =
+			destination === 'IINTOS'
+				? { where: { type: 'Output' } }
+				: { where: { type: { [Op.ne]: 'Output' } } };
+
 		let projects = await Project.findAll({
 			...include,
+			...where,
 		});
 
 		if (JSON.parse(avaliable)) {
@@ -79,17 +86,28 @@ class ProjectController {
 			});
 		}
 
-		//Send the email
-		/*
-		Queue.add(NewProject.key, {
-			newProject: {
-				title: project.title,
-				goal: project.goal,
-				type: project.type,
-			},
-			receiver: { email: 'iceptalves@gmail.com' },
+		//================ Send the email ================
+
+		let userList = await User.findAll({
+			attributes: ['email'],
+			where: { roleId: 2, active: true }, // 2 Coordinator because of id in the db
 		});
-*/
+		userList = userList.map(({ email }) => email);
+		// Send email to every coordiantor about the new project
+		console.log('EMAILS');
+		console.log(userList);
+		userList.forEach(email =>
+			Queue.add(NewProjectEmail.key, {
+				newProject: {
+					id: project.id,
+					title: project.title,
+					goal: project.goal,
+					type: project.type,
+				},
+				receiver: { email: email },
+			})
+		);
+
 		//Returns a the newly created project
 		return res.json(project);
 	}

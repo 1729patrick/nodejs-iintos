@@ -24,6 +24,10 @@ class SchoolController {
 			where = { ...where, id: req.schoolId };
 		}
 
+		if (req.role === 'IINTOS-Admin' || req.role === 'IINTOS-Partner') {
+			return res.json([]);
+		}
+
 		const schools = await School.findAll({ where });
 
 		return res.json(schools);

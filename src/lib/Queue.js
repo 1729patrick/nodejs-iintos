@@ -1,12 +1,27 @@
 import Bee from 'bee-queue';
 import RegistrationEmail from '../app/jobs/RegistrationEmail';
+import UserCreationEmail from '../app/jobs/UserCreationEmail';
+import NewProjectEmail from '../app/jobs/NewProjectEmail';
+import NewActivityEmail from '../app/jobs/NewActivityEmail';
+import ActivationEmail from '../app/jobs/ActivationEmail';
+import NewSchoolInProjectEmail from '../app/jobs/NewSchoolInProjectEmail';
+
 import CreateEvent from '../app/jobs/CreateEvent';
 import DeleteEvent from '../app/jobs/DeleteEvent';
 import redisConfig from '../config/redis';
 
 import '../database';
 
-const jobs = [RegistrationEmail, CreateEvent, DeleteEvent];
+const jobs = [
+	RegistrationEmail,
+	CreateEvent,
+	DeleteEvent,
+	UserCreationEmail,
+	NewProjectEmail,
+	NewActivityEmail,
+	ActivationEmail,
+	NewSchoolInProjectEmail,
+];
 
 class Queue {
 	constructor() {

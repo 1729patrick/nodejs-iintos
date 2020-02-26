@@ -10,13 +10,12 @@ class OutputResult extends Model {
 			{ sequelize }
 		);
 	}
-	/*
+
 	static associate(models) {
-		this.belongsTo(models.File, {
-			foreignKey: 'fileVerificationId',
-			as: 'output',
+		this.hasMany(models.OutputResultFile, {
+			foreignKey: 'outputResultId',
+			as: 'outputResultFile',
 		});
 	}
-	*/
 }
 export default OutputResult;

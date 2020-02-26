@@ -5,6 +5,7 @@ import Role from '../models/Role';
 import Queue from '../../lib/Queue';
 
 import RegistrationEmail from '../jobs/RegistrationEmail';
+import UserCreationEmail from '../jobs/UserCreationEmail';
 
 class CreateUserService {
 	async run({ user, school, role }) {
@@ -50,31 +51,63 @@ class CreateUserService {
 
 		const { passwordHash, password, ...restUser } = createdUser.toJSON();
 
-		Queue.add(RegistrationEmail.key, {
-			newUser: { name: 'patrick', email: '1729patrick@gmail.com' },
-			receiver: { email: '1729patrick@gmail.com' },
+		console.log(createdUser);
+		// Send email to the user
+		Queue.add(UserCreationEmail.key, {
+			newUser: {
+				name: createdUser.name,
+				email: createdUser.email,
+				password: password,
+			},
+			receiver: { email: createdUser.email },
 		});
+		console.log('0');
 
 		if (role) {
 			return restUser;
 		}
 
-		let receiverEmail = process.env.ADMIN_EMAIL;
+		console.log('1');
+		let receiverEmailList = process.env.ADMIN_EMAIL;
+
+		// If the user isn't a coordinator, it is a professor.
 		if (!user.coordinator) {
-			const coordinator = await User.findOne({
+			const coordinator = await User.findAll({
 				attributes: ['email'],
-				where: { schoolId, roleId: 1, active: true },
+				where: { schoolId, roleId: 2, active: true }, // 2 Coordinator because of id in the db
 			});
 
 			if (coordinator) {
-				receiverEmail = coordinator.email;
+				receiverEmailList = coordinator.map(({ email }) => email);
+			}
+			// if it is a coordiantor, will send email to the platform admin
+		} else {
+			const admin = await User.findAll({
+				attributes: ['email'],
+				where: { roleId: 1 }, // 1 Admin
+			});
+
+			if (admin) {
+				receiverEmailList = admin.map(({ email }) => email);
 			}
 		}
 
+		console.log('Email List');
+		console.log(receiverEmailList);
+		// Send email to coordinators or admins
+		receiverEmailList.forEach(email =>
+			Queue.add(RegistrationEmail.key, {
+				newUser: { name: createdUser.name, email: createdUser.email },
+				receiver: { email: email },
+			})
+		);
+
+		/*
 		Queue.add(RegistrationEmail.key, {
 			newUser: { name: createdUser.name, email: createdUser.email },
 			receiver: { email: receiverEmail },
 		});
+		*/
 
 		return restUser;
 	}

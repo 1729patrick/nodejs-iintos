@@ -7,6 +7,12 @@ class RolesController {
 			where = { where: { name: { [Op.in]: ['Coordinator', 'Professor'] } } };
 		}
 
+		if (req.role === 'IINTOS-Admin' || req.role === 'IINTOS-Partner') {
+			where = {
+				where: { name: { [Op.in]: ['IINTOS-Admin', 'IINTOS-Partner'] } },
+			};
+		}
+
 		const roles = await Role.findAll(where);
 
 		return res.json(roles);
