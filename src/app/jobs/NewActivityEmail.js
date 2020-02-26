@@ -3,19 +3,19 @@ import Mail from '../../lib/Mail';
 /**
  * Email sent when a new project is created
  */
-class NewProjectEmail {
+class NewActivityEmail {
 	get key() {
-		return 'NewProjectEmail';
+		return 'NewActivityEmail';
 	}
 
 	async handle({ data }) {
-		// Recives a new project to send some of it's details
-		const { newProject, receiver } = data;
+		// Recives a new activity to send some of it's details
+		const { newActivity, receiver } = data;
 
 		await Mail.sendMail({
 			to: `${receiver.email}`,
 			from: '"IINTOS" <foo@iintos.com>',
-			subject: '[IINTOS] New Project Created',
+			subject: '[IINTOS] New Activity Created',
 			html: `
 			<div style="
 			width: 500px;
@@ -31,10 +31,9 @@ class NewProjectEmail {
 			font-weight: 600;
 			margin: 0 0 15px;
 			">
-			<b>New Project created in IINTOS</b></p>
-			<p><span style="font-weight: 600">Title:</span> ${newProject.title}</p>
-			<p><span style="font-weight: 600">Goal: </span>${newProject.goal}</p>
-			<p><span style="font-weight: 600">Type: </span>${newProject.type}</p>
+			<b>New Activity Created!</b></p>
+			<p><span style="font-weight: 600">Title:</span> ${newActivity.title}</p>
+			<p><span style="font-weight: 600">Description:</span> ${newActivity.description}</p>
 
 			
 			 <a style="   
@@ -53,11 +52,11 @@ class NewProjectEmail {
 			 line-height: 50px;
 			 text-align: center;
 			 ustify-content: center;
-			 text-decoration: none;" href="https://iintos.netlify.com/projects/details/${newProject.id}">Go to IIntos check it out!</a>
+			 text-decoration: none;" href="https://iintos.netlify.com/projects/details/${newActivity.projectId}/activities">Go to IIntos check it out!</a>
 			 </div>
 			 `,
 		});
 	}
 }
 
-export default new NewProjectEmail();
+export default new NewActivityEmail();

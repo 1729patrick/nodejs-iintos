@@ -4,6 +4,8 @@ import User from '../models/User';
 import Role from '../models/Role';
 import School from '../models/School';
 import File from '../models/File';
+import Queue from '../../lib/Queue';
+import ActivationEmail from '../jobs/ActivationEmail';
 
 // Controller of all users, includes the cruds
 class UserController {
@@ -87,6 +89,8 @@ class UserController {
 		const { id } = req.params;
 		const user = req.body;
 
+		const ogUser = await User.findOne({ where: { id: req.params.id } });
+
 		//Find from the route id and updates the object
 		const updatedUser = await User.update(user, {
 			where: { id },
@@ -94,6 +98,22 @@ class UserController {
 			plain: true,
 			raw: true,
 		});
+
+		console.log('params');
+		console.log(updatedUser);
+
+		// if it's active send a email for the activation
+		if (ogUser.active !== updatedUser[1].active) {
+			Queue.add(ActivationEmail.key, {
+				newUser: {
+					name: updatedUser[1].name,
+					email: updatedUser[1].email,
+					active: updatedUser[1].active,
+					reasonInactive: user.reasonInactive,
+				},
+				receiver: { email: updatedUser[1].email },
+			});
+		}
 
 		const school = await School.findByPk(user.schoolId);
 

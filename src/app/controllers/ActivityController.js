@@ -6,6 +6,8 @@ import ProjectUser from '../models/ProjectUser';
 import User from '../models/User';
 import Queue from '../../lib/Queue';
 
+import NewActivitiyEmail from '../jobs/NewActivityEmail';
+
 import CreateEvent from '../jobs/CreateEvent';
 import DeleteEvent from '../jobs/DeleteEvent';
 /**
@@ -149,6 +151,23 @@ class ActivityController {
 			};
 		});
 
+		//================ Send the email ================
+
+		// Send email to every professor about the new activity
+		console.log('EMAILS');
+		console.log(professorsEmails);
+		professorsEmails.forEach(email =>
+			Queue.add(NewActivitiyEmail.key, {
+				newActivity: {
+					title: creattedActivity.title,
+					description: creattedActivity.description,
+					projectId: creattedActivity.projectId,
+				},
+				receiver: { email: email.email },
+			})
+		);
+
+		// Add event to the calendar
 		Queue.add(CreateEvent.key, { participants: professorsEmails, ...activity });
 
 		return res.json(creattedActivity);

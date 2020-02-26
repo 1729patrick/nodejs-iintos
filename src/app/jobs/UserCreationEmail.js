@@ -8,16 +8,17 @@ class UserCreationEmail {
 		return 'UserCreationEmail';
 	}
 	/**
-	 *	
+	 *
 	 * @param {*} param0
 	 */
 	async handle({ data }) {
 		const { newUser, receiver } = data;
+		console.log(newUser);
 
 		await Mail.sendMail({
 			to: `${receiver.email}`,
 			from: '"IINTOS" <foo@iintos.com>',
-			subject: '[IINTOS] New Registration',
+			subject: '[IINTOS] Welcome to IINTOS',
 			html: `
 			<div style="
 			width: 500px;
@@ -33,11 +34,10 @@ class UserCreationEmail {
 			font-weight: 600;
 			margin: 0 0 15px;
 			">
-			<b>New Registration</b></p>
+			<b>Welcome to IINTOS</b></p>
 			<p><span style="font-weight: 600">Name:</span> ${newUser.name}</p>
-			<p><span style="font-weight: 600">E-mail:</span> <a href="${newUser.email}" style="text-decoration: none; color: #000">${newUser.email}</a></p>
-			<p><span style="font-weight: 600">Password:</span> <a href="${newUser.password}" style="text-decoration: none; color: #000">${newUser.password}</a></p>
-			<p><span style="font-weight: 600">Role:</span> <a href="${newUser.role}" style="text-decoration: none; color: #000">${newUser.role}</a></p>
+			<p><span style="font-weight: 600">E-mail:</span> ${newUser.email}</p>
+			<p><span style="font-weight: 600">Password:</span> ${newUser.password}</p>
 
 
 			 <a style="   
@@ -56,7 +56,7 @@ class UserCreationEmail {
 			 line-height: 50px;
 			 text-align: center;
 			 ustify-content: center;
-			 text-decoration: none;" href="https://iintos.netlify.com/users/approve">Go to IIntos</a>
+			 text-decoration: none;" href="https://iintos.netlify.com/h">Go to IIntos and Explore</a>
 			 </div>
 			 `,
 		});
