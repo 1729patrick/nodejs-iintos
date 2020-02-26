@@ -15,12 +15,37 @@ class SchoolProjectController {
 
 		const schoolProject = await SchoolProjects.create({ projectId, schoolId });
 
+		//get the school list of this project
+		let schoolList = await SchoolProjects.findAll({
+			where: { projectId },
+			attributes: ['id', 'schoolId'],
+			include: [
+				{
+					model: School,
+					as: 'school',
+					attributes: ['name', 'phone', 'country', 'city', 'postalCode'],
+				},
+			],
+		});
+		//map to only get it's ids
+		schoolList = schoolList.map(({ schoolId }) => schoolId);
+
 		//================ Send the email ================
 		const school = await School.findOne({ where: { id: schoolId } });
 		const project = await Project.findOne({ where: { id: projectId } });
+		let coordinatorList = await User.findAll({
+			attributes: ['email', 'schoolId'],
+			where: { roleId: 2, active: true }, // 2 Coordinator because of id in the db
+		});
 
-		console.log('project');
-		console.log(project);
+		//Filter out the coordinators that arent in the project
+		coordinatorList = coordinatorList.filter(({ schoolId }) => {
+			return schoolList.includes(schoolId);
+		});
+		//map to get only the emails
+		coordinatorList = coordinatorList.map(({ email }) => email);
+
+		//get all the professors emails
 		const professorsEmails = await ProjectUser.findAll({
 			where: { projectId },
 			include: [
@@ -30,6 +55,7 @@ class SchoolProjectController {
 				},
 			],
 		});
+		//filters out the students
 		const professors = [];
 		professorsEmails.forEach(user => {
 			if (user.professor) {
@@ -39,11 +65,18 @@ class SchoolProjectController {
 		const emailList = professors.map(({ professor }) => professor.email);
 
 		// Send email to every professor about the new activity
-		console.log('EMAILS');
-		console.log(emailList);
-		console.log(project.title);
-		console.log(school.name);
 		emailList.forEach(email =>
+			Queue.add(NewSchoolInProjectEmail.key, {
+				newProjectSchool: {
+					school: school.name,
+					project: project.title,
+					projectId: projectId,
+				},
+				receiver: { email: email },
+			})
+		);
+		//send email to the coordinators
+		coordinatorList.forEach(email =>
 			Queue.add(NewSchoolInProjectEmail.key, {
 				newProjectSchool: {
 					school: school.name,
