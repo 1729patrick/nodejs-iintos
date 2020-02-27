@@ -61,7 +61,7 @@ class ProjectUserController {
 					name,
 					email,
 					active,
-					school: school.name,
+					school: school ? school.name : '',
 					role: role.name,
 				},
 			};
