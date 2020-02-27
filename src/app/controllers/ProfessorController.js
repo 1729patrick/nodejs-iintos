@@ -8,9 +8,21 @@ class ProfessorController {
 	async index(req, res) {
 		const { projectId, destination } = req.query;
 
+		const projectUser = await ProjectUser.findAll({
+			where: { projectId, userId: { [Op.ne]: null } },
+		});
+
+		const professorsAlreadyProject = projectUser.map(({ userId }) => userId);
+		console.log(professorsAlreadyProject);
 		if (destination === 'IINTOS') {
 			const users = await User.findAll({
-				where: { roleId: { [Op.or]: [4, 5], active: true } },
+				where: {
+					roleId: {
+						[Op.or]: [4, 5],
+					},
+					active: true,
+					id: { [Op.notIn]: professorsAlreadyProject },
+				},
 				attributes: {
 					exclude: ['passwordHash'],
 				},
@@ -29,11 +41,6 @@ class ProfessorController {
 			({ schoolId }) => schoolId
 		);
 
-		const projectUser = await ProjectUser.findAll({
-			where: { projectId, userId: { [Op.ne]: null } },
-		});
-
-		const professorsAlreadyProject = projectUser.map(({ userId }) => userId);
 		const role = await Role.findOne({ where: { name: 'Professor' } });
 		const users = await User.findAll({
 			where: {
