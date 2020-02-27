@@ -44,7 +44,6 @@ router.post('/users', UserController.create);
 router.get('/users', UserController.index);
 router.put('/users/:id', UserController.update);
 router.delete('/users/:id', adminMiddleware, UserController.delete);
-router.put('/updateUser', UserController.updateUser);
 
 // School area
 router.post('/schools', adminMiddleware, SchoolController.create);

@@ -13,8 +13,6 @@ class ActivationEmail {
 	 */
 	async handle({ data }) {
 		const { newUser, receiver } = data;
-		console.log('--------- EMAIL --------');
-		console.log(newUser);
 		var body = '';
 		if (newUser.active) {
 			body = `

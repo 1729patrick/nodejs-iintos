@@ -88,63 +88,35 @@ class UserController {
 		return res.json();
 	}
 
-	// Updates your user
-	async updateUser(req, res) {
-		const { name, email, password, oldPassword } = req.body;
-		const user = await User.findOne({
-			where: { email },
-			include: [
-				{
-					model: Role,
-					as: 'role',
-					attributes: ['name'],
-				},
-			],
-		});
-
-		if (!user) {
-			return res.status(401).json({ error: 'User not found' });
-		}
-
-		if (!(await user.checkPassword(oldPassword))) {
-			return res.status(401).json({ error: "Password don't match" });
-		}
-
-		user.update({ name, password, email });
-		console.log('Updated User');
-		console.log(user);
-
-		return res.json({ ...user, role: { name: user.role } });
-	}
-
 	// Updates a user
 	async update(req, res) {
-		const { id } = req.params;
-		const user = req.body;
+		let { password, oldPassword, ...user } = req.body;
+		let id = oldPassword ? req.userId : req.params.id;
 
-		const ogUser = await User.findOne({ where: { id: req.params.id } });
+		const ogUser = await User.findOne({ where: { id } });
+
+		if (oldPassword) {
+			if (!(await ogUser.checkPassword(oldPassword))) {
+				return res.status(401).json({ error: "Password don't match" });
+			}
+
+			user = { ...user, password };
+		}
 
 		//Find from the route id and updates the object
-		const updatedUser = await User.update(user, {
-			where: { id },
-			returning: true,
-			plain: true,
-			raw: true,
-		});
-
-		console.log('params');
-		console.log(updatedUser);
+		ogUser.update(user);
+		ogUser.save();
 
 		// if it's active send a email for the activation
-		if (ogUser.active !== updatedUser[1].active) {
+		if (ogUser.active !== user.active) {
 			Queue.add(ActivationEmail.key, {
 				newUser: {
-					name: updatedUser[1].name,
-					email: updatedUser[1].email,
-					active: updatedUser[1].active,
+					name: user.name,
+					email: user.email,
+					active: user.active,
 					reasonInactive: user.reasonInactive,
 				},
-				receiver: { email: updatedUser[1].email },
+				receiver: { email: user.email },
 			});
 		}
 
@@ -154,15 +126,9 @@ class UserController {
 			await school.update({ ...school, active: user.active });
 		}
 
-		const { passwordHash, ...restUser } = updatedUser[1];
+		const { passwordHash, password: _, ...restUser } = user;
 		//1 because of an null
 		return res.json(restUser);
-	}
-
-	async findMyUser(req, res) {
-		const userId = req.user.id;
-
-		User.findOne({ where: { id: userId } });
 	}
 }
 

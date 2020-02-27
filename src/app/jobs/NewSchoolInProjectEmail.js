@@ -12,8 +12,6 @@ class NewSchoolInProjectEmail {
 		// Recives a new activity to send some of it's details
 		const { newProjectSchool, receiver } = data;
 
-		console.log('--------------');
-		console.log(newProjectSchool);
 		await Mail.sendMail({
 			to: `${receiver.email}`,
 			from: '"IINTOS" <foo@iintos.com>',

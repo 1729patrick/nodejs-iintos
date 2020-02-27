@@ -17,6 +17,10 @@ class User extends Model {
 					beforeCreate: async user => {
 						user.passwordHash = await bcrypt.hash(user.password, 8);
 					},
+					beforeUpdate: async user => {
+						if (user.password)
+							user.passwordHash = await bcrypt.hash(user.password, 8);
+					},
 				},
 				sequelize,
 			}
@@ -33,6 +37,10 @@ class User extends Model {
 		this.belongsTo(models.File, {
 			foreignKey: 'fileVerificationId',
 			as: 'certificate',
+		});
+		this.belongsTo(models.File, {
+			foreignKey: 'avatarId',
+			as: 'avatar',
 		});
 	}
 }

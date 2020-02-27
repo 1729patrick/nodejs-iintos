@@ -154,8 +154,6 @@ class ActivityController {
 		//================ Send the email ================
 
 		// Send email to every professor about the new activity
-		console.log('EMAILS');
-		console.log(professorsEmails);
 		professorsEmails.forEach(email =>
 			Queue.add(NewActivitiyEmail.key, {
 				newActivity: {
