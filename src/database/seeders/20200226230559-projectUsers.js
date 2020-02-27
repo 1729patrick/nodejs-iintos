@@ -70,6 +70,30 @@ module.exports = {
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
+				{
+					userId: 10,
+					projectId: 8,
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
+				{
+					userId: 10,
+					projectId: 9,
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
+				{
+					userId: 10,
+					projectId: 10,
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
+				{
+					userId: 10,
+					projectId: 11,
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
 			],
 			{}
 		);
