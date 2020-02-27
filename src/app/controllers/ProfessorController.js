@@ -13,7 +13,6 @@ class ProfessorController {
 		});
 
 		const professorsAlreadyProject = projectUser.map(({ userId }) => userId);
-		console.log(professorsAlreadyProject);
 		if (destination === 'IINTOS') {
 			const users = await User.findAll({
 				where: {
