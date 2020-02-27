@@ -49,7 +49,7 @@ module.exports = {
 					updatedAt: new Date(),
 				},
 				{
-					userId: 8,
+					userId: 11,
 					projectId: 3,
 					createdAt: new Date(),
 					updatedAt: new Date(),
