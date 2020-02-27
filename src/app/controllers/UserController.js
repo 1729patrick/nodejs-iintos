@@ -88,6 +88,35 @@ class UserController {
 		return res.json();
 	}
 
+	// Updates your user
+	async updateUser(req, res) {
+		const { name, email, password, oldPassword } = req.body;
+		const user = await User.findOne({
+			where: { email },
+			include: [
+				{
+					model: Role,
+					as: 'role',
+					attributes: ['name'],
+				},
+			],
+		});
+
+		if (!user) {
+			return res.status(401).json({ error: 'User not found' });
+		}
+
+		if (!(await user.checkPassword(oldPassword))) {
+			return res.status(401).json({ error: "Password don't match" });
+		}
+
+		user.update({ name, password, email });
+		console.log('Updated User');
+		console.log(user);
+
+		return res.json({ ...user, role: { name: user.role } });
+	}
+
 	// Updates a user
 	async update(req, res) {
 		const { id } = req.params;
@@ -128,6 +157,12 @@ class UserController {
 		const { passwordHash, ...restUser } = updatedUser[1];
 		//1 because of an null
 		return res.json(restUser);
+	}
+
+	async findMyUser(req, res) {
+		const userId = req.user.id;
+
+		User.findOne({ where: { id: userId } });
 	}
 }
 
