@@ -103,6 +103,16 @@ module.exports = {
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
+				{
+					name: 'Professor Liborio',
+					email: 'liborio@iintos.com',
+					passwordHash: bcrypt.hashSync('123456', 8),
+					active: true,
+					schoolId: 3,
+					roleId: 3,
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
 			],
 			{}
 		);
