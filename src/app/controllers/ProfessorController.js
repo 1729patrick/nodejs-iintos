@@ -6,7 +6,18 @@ import Role from '../models/Role';
 
 class ProfessorController {
 	async index(req, res) {
-		const { projectId } = req.query;
+		const { projectId, destination } = req.query;
+
+		if (destination === 'IINTOS') {
+			const users = await User.findAll({
+				where: { roleId: { [Op.or]: [4, 5], active: true } },
+				attributes: {
+					exclude: ['passwordHash'],
+				},
+			});
+
+			return res.json(users);
+		}
 
 		const schoolProject = await SchoolProject.findAll({
 			where: {
@@ -29,6 +40,7 @@ class ProfessorController {
 				roleId: role.id,
 				id: { [Op.notIn]: professorsAlreadyProject },
 				schoolId: { [Op.in]: formattedSchoolProject },
+				active: true,
 			},
 			attributes: {
 				exclude: ['passwordHash'],
