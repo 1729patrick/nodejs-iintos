@@ -317,6 +317,46 @@ class ActivityController {
 
 		return res.json(professorsEmails);
 	}
+
+	async list(req, res) {
+		const userId = req.userId;
+		const activities = await Activity.findAll({
+			include: [
+				{
+					model: ActivityUser,
+					as: 'activityUser',
+					include: [
+						{
+							model: ProjectUser,
+							as: 'projectUser',
+							include: [
+								{
+									model: User,
+									as: 'professor',
+									where: { id: req.userId },
+								},
+							],
+						},
+					],
+				},
+			],
+		});
+
+		const acitivtiesFiltered = activities.filter(activity => {
+			return activity.activityUser.find(
+				user => user.projectUser && user.projectUser.professor.id === userId
+			);
+		});
+
+		return res.json(
+			acitivtiesFiltered.map(({ id, title, description, projectId }) => ({
+				id,
+				title,
+				description,
+				projectId,
+			}))
+		);
+	}
 }
 
 export default new ActivityController();
