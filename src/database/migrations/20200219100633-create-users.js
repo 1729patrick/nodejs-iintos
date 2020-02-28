@@ -47,6 +47,16 @@ module.exports = {
 				onUpdate: 'cascade',
 				onDelete: 'set null',
 			},
+			avatarId: {
+				type: Sequelize.INTEGER,
+				allowNull: true,
+				references: {
+					model: 'Files',
+					key: 'id',
+				},
+				onUpdate: 'cascade',
+				onDelete: 'set null',
+			},
 			fileVerificationId: {
 				type: Sequelize.INTEGER,
 				allowNull: true,

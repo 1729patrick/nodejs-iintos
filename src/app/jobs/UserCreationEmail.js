@@ -13,7 +13,6 @@ class UserCreationEmail {
 	 */
 	async handle({ data }) {
 		const { newUser, receiver } = data;
-		console.log(newUser);
 
 		await Mail.sendMail({
 			to: `${receiver.email}`,

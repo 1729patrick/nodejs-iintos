@@ -2,7 +2,12 @@ import Project from '../models/Project';
 import ProjectUser from '../models/ProjectUser';
 import SchoolProject from '../models/SchoolProject';
 import User from '../models/User';
-import { fn, col, Op } from 'sequelize';
+import Activity from '../models/Activity';
+import Result from '../models/Result';
+import ActivityFile from '../models/ActivityFile';
+import ResultFile from '../models/ResultFile';
+import ActivityUser from '../models/ActivityUser';
+import { Op } from 'sequelize';
 import Queue from '../../lib/Queue';
 import NewProjectEmail from '../jobs/NewProjectEmail';
 
@@ -94,8 +99,6 @@ class ProjectController {
 		});
 		userList = userList.map(({ email }) => email);
 		// Send email to every coordiantor about the new project
-		console.log('EMAILS');
-		console.log(userList);
 		userList.forEach(email =>
 			Queue.add(NewProjectEmail.key, {
 				newProject: {
@@ -161,13 +164,43 @@ class ProjectController {
 	// Delete a  Project
 	async delete(req, res) {
 		try {
+			const projectId = req.params.id;
 			//Find from the route id and deletes the object
-			await Project.destroy({ where: { id: req.params.id } });
+			await ProjectUser.destroy({ where: { projectId } });
+
+			const results = await Result.findAll({ where: { projectId } });
+
+			await Promise.all(
+				results.map(({ id: resultId }) =>
+					ResultFile.destroy({ where: { resultId } })
+				)
+			);
+
+			await Result.destroy({ where: { projectId } });
+
+			await SchoolProject.destroy({ where: { projectId } });
+
+			// const activitites = await Activity.findAll({ where: { projectId } });
+
+			// await Promise.all(
+			// 	activitites.map(({ id: activityId }) => {
+			// 		ActivityUser.destroy({ where: { activityId } });
+			// 	})
+			// );
+
+			// await Promise.all(
+			// 	activitites.map(({ id: activityId }) => {
+			// 		ActivityFile.destroy({ where: { activityId } });
+			// 	})
+			// );
+
+			// await Activity.destroy({ where: { projectId } });
+			await Project.destroy({ where: { id: projectId } });
 
 			return res.json();
 		} catch (e) {
 			return res.status(401).json({
-				error: 'Remove all relationships before deleting the project',
+				error: 'Remove all activities before deleting the project',
 			});
 		}
 	}

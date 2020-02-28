@@ -51,7 +51,6 @@ class CreateUserService {
 
 		const { passwordHash, password, ...restUser } = createdUser.toJSON();
 
-		console.log(createdUser);
 		// Send email to the user
 		Queue.add(UserCreationEmail.key, {
 			newUser: {
@@ -61,13 +60,11 @@ class CreateUserService {
 			},
 			receiver: { email: createdUser.email },
 		});
-		console.log('0');
 
 		if (role) {
 			return restUser;
 		}
 
-		console.log('1');
 		let receiverEmailList = process.env.ADMIN_EMAIL;
 
 		// If the user isn't a coordinator, it is a professor.
@@ -92,8 +89,6 @@ class CreateUserService {
 			}
 		}
 
-		console.log('Email List');
-		console.log(receiverEmailList);
 		// Send email to coordinators or admins
 		receiverEmailList.forEach(email =>
 			Queue.add(RegistrationEmail.key, {

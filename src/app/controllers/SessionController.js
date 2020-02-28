@@ -28,6 +28,10 @@ class SessionController {
 					model: File,
 					as: 'certificate',
 				},
+				{
+					model: File,
+					as: 'avatar',
+				},
 			],
 		});
 
@@ -39,7 +43,7 @@ class SessionController {
 			return res.status(401).json({ error: "Password don't match" });
 		}
 
-		const { id, name, role, active, school, certificate } = user;
+		const { id, name, role, active, school, certificate, avatar } = user;
 
 		if (
 			!user.school &&
@@ -63,11 +67,13 @@ class SessionController {
 
 		return res.json({
 			user: {
+				id,
 				name,
 				email,
 				active,
 				certificate: certificate ? certificate.url : null,
 				role: role.name,
+				avatar: avatar ? avatar.url : null,
 			},
 			school,
 			token,
