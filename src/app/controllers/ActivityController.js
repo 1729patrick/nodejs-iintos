@@ -199,7 +199,9 @@ class ActivityController {
 
 		await Promise.all(
 			acitivityUsers.map(acitivityUser => {
-				const { professor } = acitivityUser.projectUser;
+				const { professor } = acitivityUser.projectUser
+					? acitivityUser.projectUser
+					: {};
 				const event = {
 					googleEventId: acitivityUser.googleEventId,
 					email: professor ? professor.email : '',
@@ -236,7 +238,9 @@ class ActivityController {
 
 		await Promise.all(
 			acitivityUsers.map(acitivityUser => {
-				const { professor } = acitivityUser.projectUser;
+				const { professor } = acitivityUser.projectUser
+					? acitivityUser.projectUser
+					: {};
 				const event = {
 					googleEventId: acitivityUser.googleEventId,
 					email: professor ? professor.email : '',
