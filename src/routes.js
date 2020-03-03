@@ -19,6 +19,7 @@ import ProjectUser from './app/controllers/ProjectUserController';
 import ProfessorController from './app/controllers/ProfessorController';
 import ResultController from './app/controllers/ResultController';
 import OutputResultController from './app/controllers/OutputResultController';
+import HelpController from './app/controllers/HelpController';
 
 const router = Router();
 const upload = multer(multerConfig);
@@ -31,6 +32,7 @@ router.post('/files', upload.single('file'), FileController.create);
 router.get('/schools', SchoolController.index);
 
 router.get('/outputResults', OutputResultController.index);
+router.post('/helpEmail', HelpController.create);
 
 //----- After this point, the user needs autentication -----
 router.use(authMiddleware);
