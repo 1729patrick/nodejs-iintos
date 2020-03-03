@@ -20,6 +20,7 @@ import ProfessorController from './app/controllers/ProfessorController';
 import ResultController from './app/controllers/ResultController';
 import OutputResultController from './app/controllers/OutputResultController';
 import HelpController from './app/controllers/HelpController';
+import NewsController from './app/controllers/NewsController';
 
 const router = Router();
 const upload = multer(multerConfig);
@@ -33,6 +34,7 @@ router.get('/schools', SchoolController.index);
 
 router.get('/outputResults', OutputResultController.index);
 router.post('/helpEmail', HelpController.create);
+router.get('/news', NewsController.index);
 
 //----- After this point, the user needs autentication -----
 router.use(authMiddleware);
@@ -40,6 +42,11 @@ router.use(authMiddleware);
 router.post('/outputResults', OutputResultController.create);
 router.delete('/outputResults/:id', OutputResultController.delete);
 router.put('/outputResults/:id', OutputResultController.update);
+
+//News Area
+router.post('/news', NewsController.create);
+router.delete('/news/:id', NewsController.delete);
+router.put('/news/:id', NewsController.update);
 
 //User area
 router.post('/users', UserController.create);
