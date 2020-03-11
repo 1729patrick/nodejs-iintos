@@ -43,7 +43,16 @@ class SessionController {
 			return res.status(401).json({ error: "Password don't match" });
 		}
 
-		const { id, name, role, active, school, certificate, avatar } = user;
+		const {
+			id,
+			name,
+			role,
+			active,
+			isPrivacy,
+			school,
+			certificate,
+			avatar,
+		} = user;
 
 		if (
 			!user.school &&

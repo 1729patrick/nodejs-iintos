@@ -103,6 +103,7 @@ class UserController {
 			user = { ...user, password };
 		}
 
+		console.log(user);
 		//Find from the route id and updates the object
 		ogUser.update(user);
 		ogUser.save();

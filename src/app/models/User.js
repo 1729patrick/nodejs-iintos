@@ -11,6 +11,7 @@ class User extends Model {
 				passwordHash: Sequelize.STRING,
 				reasonInactive: Sequelize.STRING,
 				active: Sequelize.BOOLEAN,
+				isPrivacy: Sequelize.BOOLEAN,
 			},
 			{
 				hooks: {

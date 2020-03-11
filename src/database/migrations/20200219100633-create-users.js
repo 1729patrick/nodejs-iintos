@@ -9,6 +9,7 @@ module.exports = {
 				primaryKey: true,
 				autoIncrement: true,
 			},
+			//
 			name: {
 				type: Sequelize.STRING,
 				allowNull: false,
@@ -37,6 +38,12 @@ module.exports = {
 				defaultValue: false,
 				allowNull: false,
 			},
+			isPrivacy: {
+				type: Sequelize.BOOLEAN,
+				defaultValue: false,
+				allowNull: false,
+			},
+			//FK's
 			schoolId: {
 				type: Sequelize.INTEGER,
 				allowNull: true,
