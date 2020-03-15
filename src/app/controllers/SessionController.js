@@ -80,6 +80,7 @@ class SessionController {
 				name,
 				email,
 				active,
+				isPrivacy,
 				certificate: certificate ? certificate.url : null,
 				role: role.name,
 				avatar: avatar ? avatar.url : null,
