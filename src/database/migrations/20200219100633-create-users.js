@@ -41,7 +41,6 @@ module.exports = {
 			isPrivacy: {
 				type: Sequelize.BOOLEAN,
 				defaultValue: false,
-				allowNull: false,
 			},
 			//FK's
 			schoolId: {

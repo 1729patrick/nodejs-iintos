@@ -21,6 +21,7 @@ import ResultController from './app/controllers/ResultController';
 import OutputResultController from './app/controllers/OutputResultController';
 import HelpController from './app/controllers/HelpController';
 import NewsController from './app/controllers/NewsController';
+import StemController from './app/controllers/StemController';
 
 const router = Router();
 const upload = multer(multerConfig);
@@ -36,12 +37,20 @@ router.get('/outputResults', OutputResultController.index);
 router.post('/helpEmail', HelpController.create);
 router.get('/news', NewsController.index);
 
+router.get('/stem', StemController.index);
+
 //----- After this point, the user needs autentication -----
 router.use(authMiddleware);
 
+//Output Admin area
 router.post('/outputResults', OutputResultController.create);
 router.delete('/outputResults/:id', OutputResultController.delete);
 router.put('/outputResults/:id', OutputResultController.update);
+
+// Stem Admin area
+router.post('/stem', StemController.create);
+router.delete('/stem/:id', StemController.delete);
+router.put('/stem/:id', StemController.update);
 
 //News Area
 router.post('/news', NewsController.create);
