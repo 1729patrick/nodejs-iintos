@@ -6,6 +6,7 @@ import multerConfig from './config/multer';
 import authMiddleware from './app/middlewares/auth'; // Need to be autentication
 import adminMiddleware from './app/middlewares/admin'; // Need to be Admin Autentication
 import publicMiddleware from './app/middlewares/public';
+import loggerMiddleware from './app/middlewares/logger';
 
 import UserController from './app/controllers/UserController';
 import SchoolController from './app/controllers/SchoolController';
@@ -22,11 +23,14 @@ import OutputResultController from './app/controllers/OutputResultController';
 import HelpController from './app/controllers/HelpController';
 import NewsController from './app/controllers/NewsController';
 import StemController from './app/controllers/StemController';
+import LoggerController from './app/controllers/LoggerController';
 
 const router = Router();
 const upload = multer(multerConfig);
 
 router.use(publicMiddleware);
+//Middleware to record the logs
+router.use(loggerMiddleware);
 
 router.post('/sessions', SessionController.create);
 router.post('/signup', UserController.create);
@@ -46,6 +50,8 @@ router.use(authMiddleware);
 router.post('/outputResults', OutputResultController.create);
 router.delete('/outputResults/:id', OutputResultController.delete);
 router.put('/outputResults/:id', OutputResultController.update);
+
+router.get('/log', adminMiddleware, LoggerController.index);
 
 // Stem Admin area
 router.post('/stem', StemController.create);

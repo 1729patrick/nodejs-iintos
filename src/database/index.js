@@ -23,6 +23,7 @@ import ActivityFile from '../app/models/ActivityFile';
 import OutputResultFile from '../app/models/OutputResultFile';
 import News from '../app/models/News';
 import Stem from '../app/models/Stem';
+import Log from '../app/models/Log';
 
 const models = [
 	User,
@@ -42,6 +43,7 @@ const models = [
 	OutputResultFile,
 	News,
 	Stem,
+	Log,
 ];
 
 class Database {
