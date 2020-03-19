@@ -30,7 +30,7 @@ class LoggerController {
 					path,
 					body,
 					params,
-					username: user.name,
+					username: user ? user.name : 'public area',
 					createdAt,
 				};
 			}
