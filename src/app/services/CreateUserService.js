@@ -1,3 +1,4 @@
+import database from '../../database';
 import School from '../models/School';
 import User from '../models/User';
 import Role from '../models/Role';
@@ -9,6 +10,8 @@ import UserCreationEmail from '../jobs/UserCreationEmail';
 
 class CreateUserService {
 	async run({ user, school, role }) {
+		const transaction = await database.connection.transaction();
+
 		const userExists = await User.findOne({ where: { email: user.email } });
 
 		if (userExists) {
@@ -26,7 +29,7 @@ class CreateUserService {
 				throw new Error('School already exists');
 			}
 
-			({ id: schoolId } = await School.create(school));
+			({ id: schoolId } = await School.create(school, { transaction }));
 		}
 
 		let { roleId } = user;
@@ -42,12 +45,15 @@ class CreateUserService {
 		const randomPass = (Math.random(1729) * 1000000).toFixed(0);
 		// Creates a new user, if the password doesn't exist,
 		//	it's given an randon one
-		const createdUser = await User.create({
-			...user,
-			password: user.password || randomPass,
-			roleId,
-			schoolId,
-		});
+		const createdUser = await User.create(
+			{
+				...user,
+				password: user.password || randomPass,
+				roleId,
+				schoolId,
+			},
+			{ transaction }
+		);
 
 		const { passwordHash, password, ...restUser } = createdUser.toJSON();
 
@@ -97,13 +103,7 @@ class CreateUserService {
 			})
 		);
 
-		/*
-		Queue.add(RegistrationEmail.key, {
-			newUser: { name: createdUser.name, email: createdUser.email },
-			receiver: { email: receiverEmail },
-		});
-		*/
-
+		await transaction.commit();
 		return restUser;
 	}
 }
