@@ -38,10 +38,7 @@ module.exports = {
 				defaultValue: false,
 				allowNull: false,
 			},
-			isPrivacy: {
-				type: Sequelize.BOOLEAN,
-				defaultValue: false,
-			},
+
 			//FK's
 			schoolId: {
 				type: Sequelize.INTEGER,
