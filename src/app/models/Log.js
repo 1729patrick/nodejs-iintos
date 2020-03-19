@@ -6,13 +6,16 @@ class Log extends Model {
 		return super.init(
 			{
 				method: Sequelize.STRING,
-				path: Sequelize.STRING,//url
+				path: Sequelize.STRING, //url
 				body: Sequelize.STRING,
 				params: Sequelize.STRING,
 				userId: Sequelize.STRING,
 			},
 			{ sequelize }
 		);
+	}
+	static associate(models) {
+		this.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
 	}
 }
 
