@@ -11,7 +11,6 @@ class StemController {
 	 */
 	async index(req, res) {
 		const results = await Stem.findAll({});
-		console.log(results);
 		return res.json(results);
 	}
 
