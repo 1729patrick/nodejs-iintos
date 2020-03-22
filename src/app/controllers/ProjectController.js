@@ -97,7 +97,10 @@ class ProjectController {
 			attributes: ['email'],
 			where: { roleId: 2, active: true }, // 2 Coordinator because of id in the db
 		});
+		console.log(userList);
+
 		userList = userList.map(({ email }) => email);
+
 		// Send email to every coordiantor about the new project
 		userList.forEach(email =>
 			Queue.add(NewProjectEmail.key, {

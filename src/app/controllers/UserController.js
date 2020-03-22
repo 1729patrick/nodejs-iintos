@@ -103,13 +103,17 @@ class UserController {
 			user = { ...user, password };
 		}
 
-		console.log(user);
+		const ogActive = ogUser.active;
+
 		//Find from the route id and updates the object
 		ogUser.update(user);
 		ogUser.save();
 
-		// if it's active send a email for the activation
-		if (ogUser.active !== user.active) {
+		//If the original is diferente form the updated or if both are false
+		if (
+			ogActive !== user.active ||
+			(ogActive === false && user.active === false)
+		) {
 			Queue.add(ActivationEmail.key, {
 				newUser: {
 					name: user.name,

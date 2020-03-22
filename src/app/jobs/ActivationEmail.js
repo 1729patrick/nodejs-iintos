@@ -14,6 +14,7 @@ class ActivationEmail {
 	async handle({ data }) {
 		const { newUser, receiver } = data;
 		var body = '';
+		console.log("EMAIL");
 		if (newUser.active) {
 			body = `
 			<div style="

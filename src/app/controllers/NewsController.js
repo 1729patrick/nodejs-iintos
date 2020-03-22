@@ -19,7 +19,6 @@ class NewsController {
 				},
 			],
 		});
-		console.log(results);
 		return res.json(results);
 	}
 

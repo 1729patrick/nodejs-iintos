@@ -6,10 +6,6 @@ const logger = async (req, res, next) => {
 		const { headers, body, userId, originalUrl, method, params } = req;
 		const { authorization } = headers;
 
-		console.log('------------');
-		//	console.log(req);
-
-		console.log({ body, userId, originalUrl, method, params });
 
 		const bodyString = JSON.stringify(body);
 		const paramsString = JSON.stringify(params);
@@ -24,8 +20,7 @@ const logger = async (req, res, next) => {
 
 		const createdResult = await Log.create(log);
 
-		console.log('Created Log');
-		console.log(createdResult);
+	
 	} catch (e) {
 		console.log(e);
 	}
