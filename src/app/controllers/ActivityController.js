@@ -99,10 +99,18 @@ class ActivityController {
 
 		return res.json(formattedAcitivities);
 	}
+
+	async createsAll(req, res) {
+		const activities = req.body;
+		const results = Activity.bulkCreate(activities);
+
+		return res.json(results);
+	}
+
 	/**
 	 * Creates a new activty in the project
 	 *
-	 * @param {Requesta parameters} req
+	 * @param {Request parameters} req
 	 * @param {*} res
 	 */
 	async create(req, res) {

@@ -100,6 +100,7 @@ router.post('/activities', ActivityController.create);
 router.delete('/activities/:id', ActivityController.delete);
 router.put('/activities/:id', ActivityController.update);
 router.get('/activities', ActivityController.list);
+router.post('/allActivities', ActivityController.createsAll);
 
 //Roles Area
 router.get('/roles', authMiddleware, RolesController.index);
