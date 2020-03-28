@@ -68,6 +68,8 @@ class CreateUserService {
 		});
 
 		if (role) {
+
+			transaction.commit();
 			return restUser;
 		}
 
@@ -94,6 +96,7 @@ class CreateUserService {
 				receiverEmailList = admin.map(({ email }) => email);
 			}
 		}
+		console.log('dsadasdasdasd');
 
 		// Send email to coordinators or admins
 		receiverEmailList.forEach(email =>
@@ -102,7 +105,7 @@ class CreateUserService {
 				receiver: { email: email },
 			})
 		);
-
+		console.log('dsadasdasdasd');
 		await transaction.commit();
 		return restUser;
 	}
