@@ -24,16 +24,18 @@ import HelpController from './app/controllers/HelpController';
 import NewsController from './app/controllers/NewsController';
 import StemController from './app/controllers/StemController';
 import LoggerController from './app/controllers/LoggerController';
+import EmailController from './app/controllers/EmailController';
 
 const router = Router();
 const upload = multer(multerConfig);
 
 router.use(publicMiddleware);
 //Middleware to record the logs
+router.post('/signup', UserController.create);
+
 router.use(loggerMiddleware);
 
 router.post('/sessions', SessionController.create);
-router.post('/signup', UserController.create);
 router.post('/files', upload.single('file'), FileController.create);
 router.get('/schools', SchoolController.index);
 
@@ -111,5 +113,8 @@ router.get('/professors', ProfessorController.index);
 router.post('/schoolProjects', SchoolProjectController.create);
 router.get('/projects/:id/schools', SchoolProjectController.index);
 router.delete('/schoolProjects/:id', SchoolProjectController.delete);
+
+//Emails area
+router.post('/sendEmail', EmailController.send);
 
 export default router;
