@@ -53,7 +53,7 @@ class ProjectUserController {
 		});
 
 		//map the role and school of professor
-		professors = professors.map(({ id, professor }) => {
+		professors = professors.map(({ id, coordinator, professor }) => {
 			const { name, email, active, school = {}, role = {} } = professor;
 			return {
 				professor: {
@@ -61,6 +61,7 @@ class ProjectUserController {
 					name,
 					email,
 					active,
+					coordinator,
 					school: school ? school.name : '',
 					role: role.name,
 				},
@@ -90,6 +91,16 @@ class ProjectUserController {
 		const projectUser = await ProjectUser.destroy({ where: { id } });
 
 		res.json(projectUser);
+	}
+
+	async canEdit(req, res) {
+		const { projectId } = req.params;
+
+		const projectUser = await ProjectUser.findOne({
+			where: { projectId, userId: req.userId },
+		});
+
+		res.json({ canEdit: projectUser?.coordinator });
 	}
 }
 export default new ProjectUserController();
