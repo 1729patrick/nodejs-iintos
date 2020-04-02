@@ -30,12 +30,15 @@ const router = Router();
 const upload = multer(multerConfig);
 
 router.use(publicMiddleware);
+
+router.post('/signup', UserController.create); //create user
+router.post('/sessions', SessionController.create); //Log in
+router.post('/users', authMiddleware, UserController.create); //User created by the admin
+
 //Middleware to record the logs
-router.post('/signup', UserController.create);
 
 router.use(loggerMiddleware);
 
-router.post('/sessions', SessionController.create);
 router.post('/files', upload.single('file'), FileController.create);
 router.get('/schools', SchoolController.index);
 
@@ -66,7 +69,6 @@ router.delete('/news/:id', NewsController.delete);
 router.put('/news/:id', NewsController.update);
 
 //User area
-router.post('/users', UserController.create);
 router.get('/users', UserController.index);
 router.put('/users/:id', UserController.update);
 router.delete('/users/:id', adminMiddleware, UserController.delete);
