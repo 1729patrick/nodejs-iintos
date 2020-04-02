@@ -24,16 +24,21 @@ import HelpController from './app/controllers/HelpController';
 import NewsController from './app/controllers/NewsController';
 import StemController from './app/controllers/StemController';
 import LoggerController from './app/controllers/LoggerController';
+import EmailController from './app/controllers/EmailController';
 
 const router = Router();
 const upload = multer(multerConfig);
 
 router.use(publicMiddleware);
+
+router.post('/signup', UserController.create); //create user
+router.post('/sessions', SessionController.create); //Log in
+router.post('/users', authMiddleware, UserController.create); //User created by the admin
+
 //Middleware to record the logs
+
 router.use(loggerMiddleware);
 
-router.post('/sessions', SessionController.create);
-router.post('/signup', UserController.create);
 router.post('/files', upload.single('file'), FileController.create);
 router.get('/schools', SchoolController.index);
 
@@ -64,7 +69,6 @@ router.delete('/news/:id', NewsController.delete);
 router.put('/news/:id', NewsController.update);
 
 //User area
-router.post('/users', UserController.create);
 router.get('/users', UserController.index);
 router.put('/users/:id', UserController.update);
 router.delete('/users/:id', adminMiddleware, UserController.delete);
@@ -112,5 +116,8 @@ router.get('/professors', ProfessorController.index);
 router.post('/schoolProjects', SchoolProjectController.create);
 router.get('/projects/:id/schools', SchoolProjectController.index);
 router.delete('/schoolProjects/:id', SchoolProjectController.delete);
+
+//Emails area
+router.post('/sendEmail', EmailController.send);
 
 export default router;

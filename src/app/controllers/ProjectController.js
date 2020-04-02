@@ -34,21 +34,32 @@ class ProjectController {
 						{
 							model: SchoolProject,
 							as: 'schoolProject',
-							where: { schoolId: req.schoolId },
+							// where: { schoolId: req.schoolId },
 						},
 					],
 				};
 			}
 		} else if (req.role === 'Professor') {
-			include = {
-				include: [
-					{
-						model: ProjectUser,
-						as: 'projectUser',
-						where: { userId: req.userId },
-					},
-				],
-			};
+			if (JSON.parse(avaliable)) {
+				include = {
+					include: [
+						{
+							model: SchoolProject,
+							as: 'schoolProject',
+						},
+					],
+				};
+			} else {
+				include = {
+					include: [
+						{
+							model: ProjectUser,
+							as: 'projectUser',
+							where: { userId: req.userId },
+						},
+					],
+				};
+			}
 		}
 
 		const where =
@@ -62,6 +73,14 @@ class ProjectController {
 		});
 
 		if (JSON.parse(avaliable)) {
+			projects = projects.filter(project => {
+				project = project.toJSON();
+
+				return project.schoolProject.find(
+					project => project.schoolId === req.schoolId
+				);
+			});
+		} else if (req.role === 'Coordinator') {
 			projects = projects.filter(project => {
 				project = project.toJSON();
 
