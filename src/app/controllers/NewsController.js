@@ -50,13 +50,14 @@ class NewsController {
 	 */
 	async update(req, res) {
 		// get from the body the consts
-		const { title, description } = req.body;
+		const { title, description, imageId } = req.body;
 		const newsId = req.params.id;
 
 		// create a object
 		const updatedResult = {
 			title,
 			description,
+			imageId,
 		};
 
 		//Find from the route id and updates the object
