@@ -8,6 +8,7 @@ class ProjectUser extends Model {
 				userId: Sequelize.INTEGER,
 				studentName: Sequelize.STRING,
 				schoolId: Sequelize.INTEGER,
+				coordinator: Sequelize.BOOLEAN,
 			},
 			{ sequelize }
 		);

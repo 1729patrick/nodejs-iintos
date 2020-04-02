@@ -90,6 +90,7 @@ router.put('/projects/:id', ProjectController.update);
 //ProjectUser area
 router.get('/projects/:id/users', ProjectUser.index);
 router.post('/projectUser', ProjectUser.create);
+router.get('/projectUser/:projectId/permissions/edit', ProjectUser.canEdit);
 router.delete('/projectUser/:id', ProjectUser.delete);
 
 //Result area
