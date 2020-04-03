@@ -6,6 +6,7 @@ class Activity extends Model {
 			{
 				title: Sequelize.STRING,
 				description: Sequelize.STRING,
+				done: Sequelize.BOOLEAN,
 				startDate: Sequelize.DATE,
 				endDate: Sequelize.DATE,
 			},
