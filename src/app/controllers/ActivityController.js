@@ -50,12 +50,13 @@ class ActivityController {
 				},
 			],
 		});
-
+		console.log(activities);
 		const formattedAcitivities = activities.map(
 			({
 				activityUser,
 				id,
 				title,
+				done,
 				description,
 				startDate,
 				endDate,
@@ -81,6 +82,7 @@ class ActivityController {
 				return {
 					id,
 					title,
+					done,
 					description,
 					startDate,
 					endDate,
@@ -96,7 +98,6 @@ class ActivityController {
 				};
 			}
 		);
-
 		return res.json(formattedAcitivities);
 	}
 
@@ -160,7 +161,8 @@ class ActivityController {
 		});
 
 		//================ Send the email ================
-
+		console.log('emails');
+		console.log(professorsEmails);
 		// Send email to every professor about the new activity
 		professorsEmails.forEach(email =>
 			Queue.add(NewActivitiyEmail.key, {
@@ -263,6 +265,7 @@ class ActivityController {
 			files,
 			students,
 			professors,
+			done,
 			title,
 			description,
 			startDate,
@@ -270,7 +273,7 @@ class ActivityController {
 		} = req.body;
 
 		await Activity.update(
-			{ title, description, startDate, endDate },
+			{ title, description, done, startDate, endDate },
 			{
 				where: { id: activityId },
 			}
@@ -324,6 +327,23 @@ class ActivityController {
 			startDate,
 			endDate,
 		});
+
+		console.log('emaisl');
+
+		if (done) {
+			console.log(professorsEmails);
+			professorsEmails.forEach(email =>
+				Queue.add(NewActivitiyEmail.key, {
+					newActivity: {
+						title: creattedActivity.title,
+						done: done,
+						description: creattedActivity.description,
+						projectId: creattedActivity.projectId,
+					},
+					receiver: { email: email.email },
+				})
+			);
+		}
 
 		return res.json(professorsEmails);
 	}

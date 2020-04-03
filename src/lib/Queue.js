@@ -7,6 +7,7 @@ import ActivationEmail from '../app/jobs/ActivationEmail';
 import NewSchoolInProjectEmail from '../app/jobs/NewSchoolInProjectEmail';
 import HelpEmail from '../app/jobs/HelpEmail';
 import UserToUserEmail from '../app/jobs/UserToUserEmail';
+import ActivityDoneEmail from '../app/jobs/ActivityDoneEmail';
 
 import CreateEvent from '../app/jobs/CreateEvent';
 import DeleteEvent from '../app/jobs/DeleteEvent';
@@ -25,6 +26,7 @@ const jobs = [
 	NewSchoolInProjectEmail,
 	HelpEmail,
 	UserToUserEmail,
+	ActivityDoneEmail,
 ];
 
 class Queue {
