@@ -2,11 +2,8 @@ import Project from '../models/Project';
 import ProjectUser from '../models/ProjectUser';
 import SchoolProject from '../models/SchoolProject';
 import User from '../models/User';
-import Activity from '../models/Activity';
 import Result from '../models/Result';
-import ActivityFile from '../models/ActivityFile';
 import ResultFile from '../models/ResultFile';
-import ActivityUser from '../models/ActivityUser';
 import { Op } from 'sequelize';
 import Queue from '../../lib/Queue';
 import NewProjectEmail from '../jobs/NewProjectEmail';
@@ -19,75 +16,75 @@ class ProjectController {
 
 		let include = {};
 		if (req.role === 'Coordinator') {
-			if (JSON.parse(avaliable)) {
-				include = {
-					include: [
-						{
-							model: SchoolProject,
-							as: 'schoolProject',
-						},
-					],
-				};
-			} else {
-				include = {
-					include: [
-						{
-							model: SchoolProject,
-							as: 'schoolProject',
-							// where: { schoolId: req.schoolId },
-						},
-					],
-				};
-			}
+			include = {
+				include: [
+					{
+						model: SchoolProject,
+						as: 'schoolProject',
+					},
+				],
+			};
 		} else if (req.role === 'Professor') {
-			if (JSON.parse(avaliable)) {
-				include = {
-					include: [
-						{
-							model: SchoolProject,
-							as: 'schoolProject',
-						},
-					],
-				};
-			} else {
-				include = {
-					include: [
-						{
-							model: ProjectUser,
-							as: 'projectUser',
-							where: { userId: req.userId },
-						},
-					],
-				};
-			}
+			include = {
+				include: [
+					{
+						model: ProjectUser,
+						as: 'projectUser',
+					},
+				],
+			};
 		}
 
-		const where =
-			destination === 'IINTOS'
-				? { where: { type: 'Output' } }
-				: { where: { type: { [Op.ne]: 'Output' } } };
+		let where = {};
+		if (destination === 'IINTOS') {
+			where = { where: { type: 'Output' } };
+		} else if (JSON.parse(avaliable)) {
+			where = { where: { type: { [Op.ne]: 'Output' }, campaing: true } };
+		} else {
+			where = { where: { type: { [Op.ne]: 'Output' } } };
+		}
 
 		let projects = await Project.findAll({
 			...include,
 			...where,
 		});
 
-		if (JSON.parse(avaliable)) {
-			projects = projects.filter(project => {
-				project = project.toJSON();
+		if (req.role === 'Professor') {
+			if (JSON.parse(avaliable)) {
+				projects = projects.filter(project => {
+					project = project.toJSON();
 
-				return project.schoolProject.find(
-					project => project.schoolId === req.schoolId
-				);
-			});
-		} else if (req.role === 'Coordinator') {
-			projects = projects.filter(project => {
-				project = project.toJSON();
+					return !project.projectUser.find(
+						project => project.userId === req.userId
+					);
+				});
+			} else {
+				projects = projects.filter(project => {
+					project = project.toJSON();
 
-				return !project.schoolProject.find(
-					project => project.schoolId === req.schoolId
-				);
-			});
+					return project.projectUser.find(
+						project => project.userId === req.userId
+					);
+				});
+			}
+		} else {
+			if (JSON.parse(avaliable)) {
+				projects = projects.filter(project => {
+					project = project.toJSON();
+
+					return !project.schoolProject.find(
+						project => project.schoolId === req.schoolId
+					);
+				});
+			} else {
+				projects = projects.filter(project => {
+					project = project.toJSON();
+
+					return project.schoolProject.find(
+						project => project.schoolId === req.schoolId
+					);
+				});
+			}
 		}
 
 		return res.json(projects);
@@ -156,6 +153,7 @@ class ProjectController {
 			ageRangeEnd,
 			type,
 			title,
+			campaing,
 			endDate,
 			startDate,
 		} = req.body;
@@ -170,6 +168,7 @@ class ProjectController {
 			title,
 			endDate,
 			startDate,
+			campaing,
 		};
 
 		//Find from the route id and updates the object
