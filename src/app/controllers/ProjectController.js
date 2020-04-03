@@ -67,7 +67,7 @@ class ProjectController {
 					);
 				});
 			}
-		} else {
+		} else if (req.role === 'Coordinator') {
 			if (JSON.parse(avaliable)) {
 				projects = projects.filter(project => {
 					project = project.toJSON();
