@@ -54,7 +54,7 @@ class ProjectController {
 				projects = projects.filter(project => {
 					project = project.toJSON();
 
-					return !project.projectUser.find(
+					return !(project.projectUser || []).find(
 						project => project.userId === req.userId
 					);
 				});
@@ -62,17 +62,17 @@ class ProjectController {
 				projects = projects.filter(project => {
 					project = project.toJSON();
 
-					return project.projectUser.find(
+					return (project.projectUser || []).find(
 						project => project.userId === req.userId
 					);
 				});
 			}
-		} else {
+		} else if (req.role === 'Coordinator') {
 			if (JSON.parse(avaliable)) {
 				projects = projects.filter(project => {
 					project = project.toJSON();
 
-					return !project.schoolProject.find(
+					return !(project.schoolProject || []).find(
 						project => project.schoolId === req.schoolId
 					);
 				});
@@ -80,7 +80,7 @@ class ProjectController {
 				projects = projects.filter(project => {
 					project = project.toJSON();
 
-					return project.schoolProject.find(
+					return (project.schoolProject || []).find(
 						project => project.schoolId === req.schoolId
 					);
 				});
