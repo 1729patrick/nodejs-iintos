@@ -50,7 +50,6 @@ class ActivityController {
 				},
 			],
 		});
-		console.log(activities);
 		const formattedAcitivities = activities.map(
 			({
 				activityUser,
@@ -161,8 +160,7 @@ class ActivityController {
 		});
 
 		//================ Send the email ================
-		console.log('emails');
-		console.log(professorsEmails);
+
 		// Send email to every professor about the new activity
 		professorsEmails.forEach(email =>
 			Queue.add(NewActivitiyEmail.key, {
@@ -229,7 +227,7 @@ class ActivityController {
 
 	async update(req, res) {
 		const activityId = req.params.id;
-
+		//get all user linked to activity
 		const acitivityUsers = await ActivityUser.findAll({
 			where: { activityId },
 			include: [
@@ -261,6 +259,7 @@ class ActivityController {
 			})
 		);
 
+		//get the body request
 		const {
 			files,
 			students,
@@ -270,9 +269,11 @@ class ActivityController {
 			description,
 			startDate,
 			endDate,
+			projectId,
 		} = req.body;
 
-		await Activity.update(
+		//Updates the activity
+		const creattedActivity = await Activity.update(
 			{ title, description, done, startDate, endDate },
 			{
 				where: { id: activityId },
@@ -328,11 +329,28 @@ class ActivityController {
 			endDate,
 		});
 
-		console.log('emaisl');
+		//Sends email if it's done
 
 		if (done) {
-			console.log(professorsEmails);
-			professorsEmails.forEach(email =>
+			const professorList = await ProjectUser.findAll({
+				where: { projectId },
+				include: [
+					{
+						model: User,
+						as: 'professor',
+					},
+				],
+			});
+			console.log('lista');
+
+			const x = professorList.map(aux => {
+				return aux.professor;
+			});
+			console.log(x);
+
+			x.forEach(email => {
+				console.log(email);
+
 				Queue.add(NewActivitiyEmail.key, {
 					newActivity: {
 						title: creattedActivity.title,
@@ -340,9 +358,9 @@ class ActivityController {
 						description: creattedActivity.description,
 						projectId: creattedActivity.projectId,
 					},
-					receiver: { email: email.email },
-				})
-			);
+					receiver: { email: email },
+				});
+			});
 		}
 
 		return res.json(professorsEmails);
