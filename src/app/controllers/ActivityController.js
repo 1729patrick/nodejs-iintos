@@ -50,7 +50,6 @@ class ActivityController {
 				},
 			],
 		});
-		console.log(activities);
 		const formattedAcitivities = activities.map(
 			({
 				activityUser,
@@ -138,7 +137,6 @@ class ActivityController {
 		await Promise.all(
 			files.map(fileId => ActivityFile.create({ fileId, activityId }))
 		);
-
 		const projectUsers = await Promise.all(
 			professors
 				.filter(p => p)
@@ -161,8 +159,7 @@ class ActivityController {
 		});
 
 		//================ Send the email ================
-		console.log('emails');
-		console.log(professorsEmails);
+
 		// Send email to every professor about the new activity
 		professorsEmails.forEach(email =>
 			Queue.add(NewActivitiyEmail.key, {
@@ -229,7 +226,7 @@ class ActivityController {
 
 	async update(req, res) {
 		const activityId = req.params.id;
-
+		//get all user linked to activity
 		const acitivityUsers = await ActivityUser.findAll({
 			where: { activityId },
 			include: [
@@ -261,6 +258,7 @@ class ActivityController {
 			})
 		);
 
+		//get the body request
 		const {
 			files,
 			students,
@@ -270,15 +268,20 @@ class ActivityController {
 			description,
 			startDate,
 			endDate,
+			projectId,
 		} = req.body;
-
-		await Activity.update(
+		console.log(req.body);
+		//Updates the activity
+		const creattedActivity = await Activity.update(
 			{ title, description, done, startDate, endDate },
 			{
 				where: { id: activityId },
 			}
 		);
-
+		console.log('Updated activity');
+		console.log(creattedActivity);
+		
+		
 		await ActivityFile.destroy({ where: { activityId } });
 		await Promise.all(
 			files.map(fileId => ActivityFile.create({ fileId, activityId }))
@@ -290,6 +293,8 @@ class ActivityController {
 		]);
 
 		const validUsers = [...users].filter(v => v);
+
+		//Creates the link of the user and the activity
 		const activitityUsers = await Promise.all(
 			validUsers.map(projectUserId => {
 				return ActivityUser.create({
@@ -298,17 +303,24 @@ class ActivityController {
 				});
 			})
 		);
+		/*
+		console.log('asdasd');
+		console.log(professors);
+		console.log(await ProjectUser.findAll());
 
+		//get the users project
 		const projectUsers = await Promise.all(
 			professors
 				.filter(p => p)
-				.map(professorId =>
+				.map(professorId => {
+					console.log(professorId);
 					ProjectUser.findByPk(professorId, {
 						include: [{ model: User, as: 'professor' }],
-					})
-				)
+					});
+				})
 		);
-
+		console.log('AQUI');
+		console.log(projectUsers);
 		const professorsEmails = projectUsers.map(({ id, professor }) => {
 			const activity = activitityUsers.find(
 				({ projectUserId }) => projectUserId === id
@@ -319,6 +331,7 @@ class ActivityController {
 				activityUserId: activity ? activity.id : null,
 			};
 		});
+		console.log('AQUI34');
 
 		Queue.add(CreateEvent.key, {
 			participants: professorsEmails,
@@ -328,11 +341,23 @@ class ActivityController {
 			endDate,
 		});
 
-		console.log('emaisl');
-
+		//Sends email if it's done
 		if (done) {
-			console.log(professorsEmails);
-			professorsEmails.forEach(email =>
+			const professorList = await ProjectUser.findAll({
+				where: { projectId },
+				include: [
+					{
+						model: User,
+						as: 'professor',
+					},
+				],
+			});
+
+			const x = professorList.map(aux => {
+				return aux.professor;
+			});
+
+			x.forEach(email => {
 				Queue.add(NewActivitiyEmail.key, {
 					newActivity: {
 						title: creattedActivity.title,
@@ -340,12 +365,12 @@ class ActivityController {
 						description: creattedActivity.description,
 						projectId: creattedActivity.projectId,
 					},
-					receiver: { email: email.email },
-				})
-			);
+					receiver: { email: email },
+				});
+			});
 		}
-
-		return res.json(professorsEmails);
+*/
+		return res.json(activitityUsers);
 	}
 
 	async list(req, res) {
