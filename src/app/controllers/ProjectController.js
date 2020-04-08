@@ -43,7 +43,6 @@ class ProjectController {
 		} else {
 			where = { where: { type: { [Op.ne]: 'Output' } } };
 		}
-
 		let projects = await Project.findAll({
 			...include,
 			...where,

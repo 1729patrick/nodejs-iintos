@@ -137,7 +137,6 @@ class ActivityController {
 		await Promise.all(
 			files.map(fileId => ActivityFile.create({ fileId, activityId }))
 		);
-
 		const projectUsers = await Promise.all(
 			professors
 				.filter(p => p)
@@ -271,7 +270,7 @@ class ActivityController {
 			endDate,
 			projectId,
 		} = req.body;
-
+		console.log(req.body);
 		//Updates the activity
 		const creattedActivity = await Activity.update(
 			{ title, description, done, startDate, endDate },
@@ -279,7 +278,10 @@ class ActivityController {
 				where: { id: activityId },
 			}
 		);
-
+		console.log('Updated activity');
+		console.log(creattedActivity);
+		
+		
 		await ActivityFile.destroy({ where: { activityId } });
 		await Promise.all(
 			files.map(fileId => ActivityFile.create({ fileId, activityId }))
@@ -291,6 +293,8 @@ class ActivityController {
 		]);
 
 		const validUsers = [...users].filter(v => v);
+
+		//Creates the link of the user and the activity
 		const activitityUsers = await Promise.all(
 			validUsers.map(projectUserId => {
 				return ActivityUser.create({
@@ -299,17 +303,24 @@ class ActivityController {
 				});
 			})
 		);
+		/*
+		console.log('asdasd');
+		console.log(professors);
+		console.log(await ProjectUser.findAll());
 
+		//get the users project
 		const projectUsers = await Promise.all(
 			professors
 				.filter(p => p)
-				.map(professorId =>
+				.map(professorId => {
+					console.log(professorId);
 					ProjectUser.findByPk(professorId, {
 						include: [{ model: User, as: 'professor' }],
-					})
-				)
+					});
+				})
 		);
-
+		console.log('AQUI');
+		console.log(projectUsers);
 		const professorsEmails = projectUsers.map(({ id, professor }) => {
 			const activity = activitityUsers.find(
 				({ projectUserId }) => projectUserId === id
@@ -320,6 +331,7 @@ class ActivityController {
 				activityUserId: activity ? activity.id : null,
 			};
 		});
+		console.log('AQUI34');
 
 		Queue.add(CreateEvent.key, {
 			participants: professorsEmails,
@@ -330,7 +342,6 @@ class ActivityController {
 		});
 
 		//Sends email if it's done
-
 		if (done) {
 			const professorList = await ProjectUser.findAll({
 				where: { projectId },
@@ -341,16 +352,12 @@ class ActivityController {
 					},
 				],
 			});
-			console.log('lista');
 
 			const x = professorList.map(aux => {
 				return aux.professor;
 			});
-			console.log(x);
 
 			x.forEach(email => {
-				console.log(email);
-
 				Queue.add(NewActivitiyEmail.key, {
 					newActivity: {
 						title: creattedActivity.title,
@@ -362,8 +369,8 @@ class ActivityController {
 				});
 			});
 		}
-
-		return res.json(professorsEmails);
+*/
+		return res.json(activitityUsers);
 	}
 
 	async list(req, res) {
