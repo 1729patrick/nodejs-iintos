@@ -8,10 +8,14 @@ class ProfessorController {
 	async index(req, res) {
 		const { projectId, destination } = req.query;
 
+		const currentUser = await User.findOne({ where: { id: req.userId } });
+		console.log(currentUser);
+		//gets all the users in the project
 		const projectUser = await ProjectUser.findAll({
 			where: { projectId, userId: { [Op.ne]: null } },
 		});
 
+		//removes all the
 		const professorsAlreadyProject = projectUser.map(({ userId }) => userId);
 		if (destination === 'IINTOS') {
 			const users = await User.findAll({
