@@ -9,7 +9,7 @@ class ProfessorController {
 		const { projectId, destination } = req.query;
 
 		const currentUser = await User.findOne({ where: { id: req.userId } });
-		console.log(currentUser);
+
 		//gets all the users in the project
 		const projectUser = await ProjectUser.findAll({
 			where: { projectId, userId: { [Op.ne]: null } },
@@ -17,6 +17,7 @@ class ProfessorController {
 
 		//removes all the
 		const professorsAlreadyProject = projectUser.map(({ userId }) => userId);
+
 		if (destination === 'IINTOS') {
 			const users = await User.findAll({
 				where: {
@@ -33,21 +34,36 @@ class ProfessorController {
 
 			return res.json(users);
 		}
-
-		const schoolProject = await SchoolProject.findAll({
-			where: {
-				projectId,
-			},
-		});
-
+		let schoolProject;
+		// if it's the admin the school id is null
+		// so 
+		if (currentUser.schoolId === null) {
+			schoolProject = await SchoolProject.findAll({
+				where: {
+					projectId,
+				},
+			});
+		} else {
+			schoolProject = await SchoolProject.findAll({
+				where: {
+					projectId,
+					schoolId: currentUser.schoolId,
+				},
+			});
+		}
 		const formattedSchoolProject = schoolProject.map(
 			({ schoolId }) => schoolId
 		);
 
-		const role = await Role.findOne({ where: { name: 'Professor' } });
+		let role = await Role.findAll({
+			where: { name: { [Op.in]: ['Professor', 'Coordinator'] } },
+		});
+
+		role = role.map(({ id }) => id);
+
 		const users = await User.findAll({
 			where: {
-				roleId: role.id,
+				roleId: { [Op.in]: role },
 				id: { [Op.notIn]: professorsAlreadyProject },
 				schoolId: { [Op.in]: formattedSchoolProject },
 				active: true,

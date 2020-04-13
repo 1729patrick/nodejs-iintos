@@ -1,4 +1,5 @@
 import News from '../models/News';
+import User from '../models/User';
 //import OutputResultFile from '../models/OutputResultFile';
 import File from '../models/File';
 /**
@@ -16,6 +17,10 @@ class NewsController {
 				{
 					model: File,
 					as: 'image',
+				},
+				{
+					model: User,
+					as: 'author',
 				},
 			],
 		});

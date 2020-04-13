@@ -12,6 +12,8 @@ class News extends Model {
 	}
 
 	static associate(models) {
+		this.belongsTo(models.User, { foreignKey: 'userId', as: 'author' });
+
 		this.belongsTo(models.File, {
 			foreignKey: 'imageId',
 			as: 'image',
