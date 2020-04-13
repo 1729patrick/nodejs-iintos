@@ -14,6 +14,7 @@ class Project extends Model {
 				startDate: Sequelize.DATE,
 				endDate: Sequelize.DATE,
 				campaing: Sequelize.BOOLEAN,
+				referenceEmail: Sequelize.STRING,
 			},
 			{ sequelize }
 		);

@@ -153,6 +153,7 @@ class ProjectController {
 			title,
 			campaing,
 			endDate,
+			referenceEmail,
 			startDate,
 		} = req.body;
 
@@ -166,6 +167,7 @@ class ProjectController {
 			title,
 			endDate,
 			startDate,
+			referenceEmail,
 			campaing,
 		};
 
