@@ -226,6 +226,7 @@ class ActivityController {
 
 	async update(req, res) {
 		const activityId = req.params.id;
+
 		//get all user linked to activity
 		const acitivityUsers = await ActivityUser.findAll({
 			where: { activityId },
@@ -242,7 +243,8 @@ class ActivityController {
 				},
 			],
 		});
-
+		//Deletes the link
+		/*
 		await Promise.all(
 			acitivityUsers.map(acitivityUser => {
 				const { professor } = acitivityUser.projectUser
@@ -257,7 +259,7 @@ class ActivityController {
 				return acitivityUser.destroy();
 			})
 		);
-
+	 */
 		//get the body request
 		const {
 			files,
@@ -280,8 +282,7 @@ class ActivityController {
 		);
 		console.log('Updated activity');
 		console.log(creattedActivity);
-		
-		
+
 		await ActivityFile.destroy({ where: { activityId } });
 		await Promise.all(
 			files.map(fileId => ActivityFile.create({ fileId, activityId }))
@@ -293,7 +294,7 @@ class ActivityController {
 		]);
 
 		const validUsers = [...users].filter(v => v);
-
+		/*
 		//Creates the link of the user and the activity
 		const activitityUsers = await Promise.all(
 			validUsers.map(projectUserId => {
@@ -302,7 +303,7 @@ class ActivityController {
 					projectUserId,
 				});
 			})
-		);
+		);*/
 		/*
 		console.log('asdasd');
 		console.log(professors);
@@ -370,7 +371,7 @@ class ActivityController {
 			});
 		}
 */
-		return res.json(activitityUsers);
+		return res.json(creattedActivity);
 	}
 
 	async list(req, res) {
