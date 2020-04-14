@@ -294,7 +294,7 @@ class ActivityController {
 		]);
 
 		const validUsers = [...users].filter(v => v);
-		/*
+		
 		//Creates the link of the user and the activity
 		const activitityUsers = await Promise.all(
 			validUsers.map(projectUserId => {
@@ -303,7 +303,7 @@ class ActivityController {
 					projectUserId,
 				});
 			})
-		);*/
+		);
 		/*
 		console.log('asdasd');
 		console.log(professors);

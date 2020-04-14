@@ -1,5 +1,6 @@
 import News from '../models/News';
 import User from '../models/User';
+import Project from '../models/Project';
 //import OutputResultFile from '../models/OutputResultFile';
 import File from '../models/File';
 /**
@@ -37,6 +38,26 @@ class NewsController {
 
 		return res.json(createdResult);
 	}
+	/**
+	 * Creates a news from a result with the project name
+	 * @param {} req
+	 * @param {*} res
+	 */
+	async createFromResults(req, res) {
+		const { title, description, userId, projectId } = req.body;
+
+		//gets the project associated to the result
+		const project = await Project.findOne({ where: { id: projectId } });
+
+		// Create a new News
+		const newTitle = 'Result: ' + project.title + ' - ' + title;
+		const newNews = { title: newTitle, description, userId };
+
+		const createdResult = await News.create(newNews);
+
+		return res.json(createdResult);
+	}
+
 	/**
 	 * Delete an output result given it's id by params
 	 * @param {*} req
