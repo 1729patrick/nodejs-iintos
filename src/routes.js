@@ -67,6 +67,7 @@ router.put('/stem/:id', StemController.update);
 router.post('/news', NewsController.create);
 router.delete('/news/:id', NewsController.delete);
 router.put('/news/:id', NewsController.update);
+router.post('/resultNews', NewsController.createFromResults);
 
 //User area
 router.get('/users', UserController.index);
