@@ -9,12 +9,16 @@ import authConfig from '../../config/auth';
 
 class SessionController {
 	async create(req, res) {
-		const { email, password } = req.body;
+		const {
+			email,
+			password
+		} = req.body;
 
 		const user = await User.findOne({
-			where: { email },
-			include: [
-				{
+			where: {
+				email
+			},
+			include: [{
 					model: School,
 					as: 'school',
 					attributes: ['id', 'name', 'phone', 'country', 'city', 'postalCode'],
@@ -36,14 +40,18 @@ class SessionController {
 		});
 
 		if (!user) {
-			return res.status(401).json({ error: 'User not found' });
+			return res.status(401).json({
+				error: 'User not found'
+			});
 		}
 
 		if (!(await user.checkPassword(password))) {
-			return res.status(401).json({ error: "Password don't match" });
+			return res.status(401).json({
+				error: "Password don't match"
+			});
 		}
 
-		const {
+		let {
 			id,
 			name,
 			role,
@@ -58,18 +66,22 @@ class SessionController {
 			!user.school &&
 			(role.name === 'Coordinator' || role.name === 'Professor')
 		) {
-			return res.status(401).json({ error: "You'r school is invalid" });
+			return res.status(401).json({
+				error: "You'r school is invalid"
+			});
+		}
+		//the old switchero
+		if (role.name === 'Professor') {
+			role.name = 'Teacher';
 		}
 
-		const token = jwt.sign(
-			{
+		const token = jwt.sign({
 				userId: id,
 				role: role.name,
 				active,
 				schoolId: school ? school.id : null,
 			},
-			authConfig.secret,
-			{
+			authConfig.secret, {
 				expiresIn: authConfig.expiresIn,
 			}
 		);

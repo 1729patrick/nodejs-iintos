@@ -13,7 +13,13 @@ class RolesController {
 			};
 		}
 
-		const roles = await Role.findAll(where);
+		let roles = await Role.findAll(where);
+
+		roles.forEach((role) => {
+			if (role.name === 'Professor') {
+				role.name = 'Teacher';
+			}
+		});
 
 		return res.json(roles);
 	}
