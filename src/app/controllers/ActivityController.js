@@ -24,9 +24,10 @@ class ActivityController {
 		const projectId = req.params.id;
 
 		const activities = await Activity.findAll({
-			where: { projectId },
-			include: [
-				{
+			where: {
+				projectId
+			},
+			include: [{
 					model: ActivityUser,
 					as: 'activityUser',
 					include: {
@@ -41,12 +42,10 @@ class ActivityController {
 				{
 					model: ActivityFile,
 					as: 'activityFile',
-					include: [
-						{
-							model: File,
-							as: 'file',
-						},
-					],
+					include: [{
+						model: File,
+						as: 'file',
+					}, ],
 				},
 			],
 		});
@@ -63,7 +62,10 @@ class ActivityController {
 			}) => {
 				let professors = [],
 					students = [];
-				activityUser.forEach(({ projectUser, ...user }) => {
+				activityUser.forEach(({
+					projectUser,
+					...user
+				}) => {
 					if (!projectUser) return;
 					if (projectUser.professor) {
 						return professors.push({
@@ -87,13 +89,20 @@ class ActivityController {
 					endDate,
 					students,
 					professors,
-					files: activityFile.map(({ id, file }) => ({
+					files: activityFile.map(({
+						id,
+						file
+					}) => ({
 						id,
 						url: file.url,
 						name: file.name,
 					})),
-					studentsStr: students.map(({ name }) => name).join(', '),
-					professorsStr: professors.map(({ name }) => name).join(', '),
+					studentsStr: students.map(({
+						name
+					}) => name).join(', '),
+					professorsStr: professors.map(({
+						name
+					}) => name).join(', '),
 				};
 			}
 		);
@@ -114,7 +123,12 @@ class ActivityController {
 	 * @param {*} res
 	 */
 	async create(req, res) {
-		const { students, professors, files, ...activity } = req.body;
+		const {
+			students,
+			professors,
+			files,
+			...activity
+		} = req.body;
 		const creattedActivity = await Activity.create(activity);
 
 		const users = new Set([
@@ -135,21 +149,32 @@ class ActivityController {
 		);
 
 		await Promise.all(
-			files.map(fileId => ActivityFile.create({ fileId, activityId }))
+			files.map(fileId => ActivityFile.create({
+				fileId,
+				activityId
+			}))
 		);
 		const projectUsers = await Promise.all(
 			professors
-				.filter(p => p)
-				.map(professorId =>
-					ProjectUser.findByPk(professorId, {
-						include: [{ model: User, as: 'professor' }],
-					})
-				)
+			.filter(p => p)
+			.map(professorId =>
+				ProjectUser.findByPk(professorId, {
+					include: [{
+						model: User,
+						as: 'professor'
+					}],
+				})
+			)
 		);
 
-		const professorsEmails = projectUsers.map(({ id, professor }) => {
+		const professorsEmails = projectUsers.map(({
+			id,
+			professor
+		}) => {
 			const activity = activitityUsers.find(
-				({ projectUserId }) => projectUserId === id
+				({
+					projectUserId
+				}) => projectUserId === id
 			);
 
 			return {
@@ -168,12 +193,17 @@ class ActivityController {
 					description: creattedActivity.description,
 					projectId: creattedActivity.projectId,
 				},
-				receiver: { email: email.email },
+				receiver: {
+					email: email.email
+				},
 			})
 		);
 
 		// Add event to the calendar
-		Queue.add(CreateEvent.key, { participants: professorsEmails, ...activity });
+		Queue.add(CreateEvent.key, {
+			participants: professorsEmails,
+			...activity
+		});
 
 		return res.json(creattedActivity);
 	}
@@ -187,28 +217,31 @@ class ActivityController {
 		const activityId = req.params.id;
 
 		const acitivityUsers = await ActivityUser.findAll({
-			where: { activityId },
-			include: [
-				{
-					model: ProjectUser,
-					as: 'projectUser',
-					include: [
-						{
-							model: User,
-							as: 'professor',
-						},
-					],
-				},
-			],
+			where: {
+				activityId
+			},
+			include: [{
+				model: ProjectUser,
+				as: 'projectUser',
+				include: [{
+					model: User,
+					as: 'professor',
+				}, ],
+			}, ],
 		});
 
-		await ActivityFile.destroy({ where: { activityId } });
+		await ActivityFile.destroy({
+			where: {
+				activityId
+			}
+		});
 
 		await Promise.all(
 			acitivityUsers.map(acitivityUser => {
-				const { professor } = acitivityUser.projectUser
-					? acitivityUser.projectUser
-					: {};
+				const {
+					professor
+				} = acitivityUser.projectUser ?
+					acitivityUser.projectUser : {};
 				const event = {
 					googleEventId: acitivityUser.googleEventId,
 					email: professor ? professor.email : '',
@@ -219,7 +252,11 @@ class ActivityController {
 			})
 		);
 
-		await Activity.destroy({ where: { id: activityId } });
+		await Activity.destroy({
+			where: {
+				id: activityId
+			}
+		});
 
 		return res.json(acitivityUsers);
 	}
@@ -229,27 +266,26 @@ class ActivityController {
 
 		//get all user linked to activity
 		const acitivityUsers = await ActivityUser.findAll({
-			where: { activityId },
-			include: [
-				{
-					model: ProjectUser,
-					as: 'projectUser',
-					include: [
-						{
-							model: User,
-							as: 'professor',
-						},
-					],
-				},
-			],
+			where: {
+				activityId
+			},
+			include: [{
+				model: ProjectUser,
+				as: 'projectUser',
+				include: [{
+					model: User,
+					as: 'professor',
+				}, ],
+			}, ],
 		});
 		//Deletes the link
-		/*
+
 		await Promise.all(
 			acitivityUsers.map(acitivityUser => {
-				const { professor } = acitivityUser.projectUser
-					? acitivityUser.projectUser
-					: {};
+				const {
+					professor
+				} = acitivityUser.projectUser ?
+					acitivityUser.projectUser : {};
 				const event = {
 					googleEventId: acitivityUser.googleEventId,
 					email: professor ? professor.email : '',
@@ -259,7 +295,7 @@ class ActivityController {
 				return acitivityUser.destroy();
 			})
 		);
-	 */
+
 		//get the body request
 		const {
 			files,
@@ -273,19 +309,31 @@ class ActivityController {
 			projectId,
 		} = req.body;
 		console.log(req.body);
-		//Updates the activity
-		const creattedActivity = await Activity.update(
-			{ title, description, done, startDate, endDate },
-			{
-				where: { id: activityId },
-			}
-		);
-		console.log('Updated activity');
-		console.log(creattedActivity);
 
-		await ActivityFile.destroy({ where: { activityId } });
+		console.log(req.body);
+		//Updates the activity
+		const creattedActivity = await Activity.update({
+			title,
+			description,
+			done,
+			startDate,
+			endDate
+		}, {
+			where: {
+				id: activityId
+			},
+		});
+
+		await ActivityFile.destroy({
+			where: {
+				activityId
+			}
+		});
 		await Promise.all(
-			files.map(fileId => ActivityFile.create({ fileId, activityId }))
+			files.map(fileId => ActivityFile.create({
+				fileId,
+				activityId
+			}))
 		);
 
 		const users = new Set([
@@ -294,32 +342,36 @@ class ActivityController {
 		]);
 
 		const validUsers = [...users].filter(v => v);
-		
+
+		console.log('Valid');
+		console.log([...users]);
+		console.log(professors)
 		//Creates the link of the user and the activity
 		const activitityUsers = await Promise.all(
-			validUsers.map(projectUserId => {
+			professors.map(projectUserId => {
 				return ActivityUser.create({
 					activityId,
-					projectUserId,
+					projectUserId: projectUserId,
+				});
+			})
+		);
+/*
+		console.log(professors);
+		//get the users project
+		const projectUsers = await Promise.all(
+			professors
+			.filter(p => p)
+			.map(professorId => {
+				console.log(professorId);
+				ProjectUser.findByPk(professorId.id, {
+					include: [{
+						model: User,
+						as: 'professor'
+					}],
 				});
 			})
 		);
 		/*
-		console.log('asdasd');
-		console.log(professors);
-		console.log(await ProjectUser.findAll());
-
-		//get the users project
-		const projectUsers = await Promise.all(
-			professors
-				.filter(p => p)
-				.map(professorId => {
-					console.log(professorId);
-					ProjectUser.findByPk(professorId, {
-						include: [{ model: User, as: 'professor' }],
-					});
-				})
-		);
 		console.log('AQUI');
 		console.log(projectUsers);
 		const professorsEmails = projectUsers.map(({ id, professor }) => {
@@ -370,32 +422,29 @@ class ActivityController {
 				});
 			});
 		}
-*/
+		*/
+
 		return res.json(creattedActivity);
 	}
 
 	async list(req, res) {
 		const userId = req.userId;
 		const activities = await Activity.findAll({
-			include: [
-				{
-					model: ActivityUser,
-					as: 'activityUser',
-					include: [
-						{
-							model: ProjectUser,
-							as: 'projectUser',
-							include: [
-								{
-									model: User,
-									as: 'professor',
-									where: { id: req.userId },
-								},
-							],
+			include: [{
+				model: ActivityUser,
+				as: 'activityUser',
+				include: [{
+					model: ProjectUser,
+					as: 'projectUser',
+					include: [{
+						model: User,
+						as: 'professor',
+						where: {
+							id: req.userId
 						},
-					],
-				},
-			],
+					}, ],
+				}, ],
+			}, ],
 		});
 
 		const acitivtiesFiltered = activities.filter(activity => {
@@ -405,7 +454,12 @@ class ActivityController {
 		});
 
 		return res.json(
-			acitivtiesFiltered.map(({ id, title, description, projectId }) => ({
+			acitivtiesFiltered.map(({
+				id,
+				title,
+				description,
+				projectId
+			}) => ({
 				id,
 				title,
 				description,
