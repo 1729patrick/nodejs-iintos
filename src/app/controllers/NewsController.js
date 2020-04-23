@@ -14,8 +14,7 @@ class NewsController {
 	 */
 	async index(req, res) {
 		const results = await News.findAll({
-			include: [
-				{
+			include: [{
 					model: File,
 					as: 'image',
 				},
@@ -34,7 +33,26 @@ class NewsController {
 	 * @param {*} res
 	 */
 	async create(req, res) {
-		const createdResult = await News.create(req.body);
+
+		if (req.body.youtube) {
+			let video_id = req.body.youtube.split('v=')[1];
+			var ampersandPosition = video_id.indexOf('&');
+			if (ampersandPosition != -1) {
+				video_id = video_id.substring(0, ampersandPosition);
+			}
+		}
+
+		const newNews = {
+			title: req.body.title,
+			description: req.body.description,
+			link: req.body.link,
+			youtube: req.body.youtube ? video_id : req.body.youtube,
+			imageId: req.body.imageId,
+			userId: req.body.userId
+		}
+		console.log(newNews)
+
+		const createdResult = await News.create(newNews);
 
 		return res.json(createdResult);
 	}
@@ -44,14 +62,27 @@ class NewsController {
 	 * @param {*} res
 	 */
 	async createFromResults(req, res) {
-		const { title, description, userId, projectId } = req.body;
-
+		const {
+			title,
+			description,
+			userId,
+			projectId
+		} = req.body;
+		console.log(req.body);
 		//gets the project associated to the result
-		const project = await Project.findOne({ where: { id: projectId } });
+		const project = await Project.findOne({
+			where: {
+				id: projectId
+			}
+		});
 
 		// Create a new News
 		const newTitle = 'Result: ' + project.title + ' - ' + title;
-		const newNews = { title: newTitle, description, userId };
+		const newNews = {
+			title: newTitle,
+			description,
+			userId
+		};
 
 		const createdResult = await News.create(newNews);
 
@@ -65,7 +96,11 @@ class NewsController {
 	 */
 	async delete(req, res) {
 		const newsId = req.params.id;
-		await News.destroy({ where: { id: newsId } });
+		await News.destroy({
+			where: {
+				id: newsId
+			}
+		});
 
 		return res.json();
 	}
@@ -76,7 +111,11 @@ class NewsController {
 	 */
 	async update(req, res) {
 		// get from the body the consts
-		const { title, description, imageId } = req.body;
+		const {
+			title,
+			description,
+			imageId
+		} = req.body;
 		const newsId = req.params.id;
 
 		// create a object
@@ -88,7 +127,9 @@ class NewsController {
 
 		//Find from the route id and updates the object
 		const result = await News.update(updatedResult, {
-			where: { id: newsId },
+			where: {
+				id: newsId
+			},
 			returning: true,
 			plain: true,
 		});

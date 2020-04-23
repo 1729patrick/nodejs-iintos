@@ -308,9 +308,7 @@ class ActivityController {
 			endDate,
 			projectId,
 		} = req.body;
-		console.log(req.body);
 
-		console.log(req.body);
 		//Updates the activity
 		const creattedActivity = await Activity.update({
 			title,
@@ -343,9 +341,7 @@ class ActivityController {
 
 		const validUsers = [...users].filter(v => v);
 
-		console.log('Valid');
-		console.log([...users]);
-		console.log(professors)
+		
 		//Creates the link of the user and the activity
 		const activitityUsers = await Promise.all(
 			professors.map(projectUserId => {
