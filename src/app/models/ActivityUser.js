@@ -11,6 +11,7 @@ class ActivityUser extends Model {
 			{ sequelize }
 		);
 	}
+
 	static associate(models) {
 		this.belongsTo(models.Activity, {
 			foreignKey: 'activityId',

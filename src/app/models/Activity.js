@@ -13,6 +13,7 @@ class Activity extends Model {
 			{ sequelize }
 		);
 	}
+
 	static associate(models) {
 		this.belongsTo(models.School, { foreignKey: 'projectId', as: 'project' });
 		this.hasMany(models.ActivityUser, {

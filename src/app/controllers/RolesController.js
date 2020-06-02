@@ -13,9 +13,9 @@ class RolesController {
 			};
 		}
 
-		let roles = await Role.findAll(where);
+		const roles = await Role.findAll(where);
 
-		roles.forEach((role) => {
+		roles.forEach(role => {
 			if (role.name === 'Professor') {
 				role.name = 'Teacher';
 			}

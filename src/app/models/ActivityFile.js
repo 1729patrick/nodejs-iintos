@@ -4,6 +4,7 @@ class ActivityFile extends Model {
 	static init(sequelize) {
 		return super.init({}, { sequelize });
 	}
+
 	static associate(models) {
 		this.belongsTo(models.File, {
 			foreignKey: 'fileId',
