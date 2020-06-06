@@ -9,7 +9,7 @@ module.exports = {
       Example:
       return queryInterface.createTable('users', { id: Sequelize.INTEGER });
     */
-		return queryInterface.createTable('EventReports', {
+		return queryInterface.createTable('EventSessions', {
 			id: {
 				type: Sequelize.INTEGER,
 				allowNull: false,
@@ -25,15 +25,15 @@ module.exports = {
 				type: Sequelize.STRING,
 				allowNull: true,
 			},
-			videoUrl: {
-				type: Sequelize.STRING,
-				allowNull: true,
+			date: {
+				type: Sequelize.DATE,
+				allowNull: false,
 			},
 
 			// FK
 			eventId: {
 				type: Sequelize.INTEGER,
-				allowNull: true,
+				allowNull: false,
 				references: {
 					model: 'Events',
 					key: 'id',

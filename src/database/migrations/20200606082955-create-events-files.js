@@ -9,33 +9,39 @@ module.exports = {
       Example:
       return queryInterface.createTable('users', { id: Sequelize.INTEGER });
     */
-		return queryInterface.createTable('EventVideos', {
+		return queryInterface.createTable('EventFiles', {
 			id: {
 				type: Sequelize.INTEGER,
 				allowNull: false,
 				primaryKey: true,
 				autoIncrement: true,
 			},
-			// costum
-			title: {
-				type: Sequelize.STRING,
-				allowNull: false,
-			},
-			description: {
-				type: Sequelize.STRING,
-				allowNull: true,
-			},
-			videoUrl: {
-				type: Sequelize.STRING,
-				allowNull: true,
-			},
-
 			// FK
-			enventId: {
+			eventId: {
 				type: Sequelize.INTEGER,
 				allowNull: true,
 				references: {
 					model: 'Events',
+					key: 'id',
+				},
+				onUpdate: 'cascade',
+				onDelete: 'set null',
+			},
+			eventSessionId: {
+				type: Sequelize.INTEGER,
+				allowNull: true,
+				references: {
+					model: 'EventSessions',
+					key: 'id',
+				},
+				onUpdate: 'cascade',
+				onDelete: 'set null',
+			},
+			fileId: {
+				type: Sequelize.INTEGER,
+				allowNull: false,
+				references: {
+					model: 'Files',
 					key: 'id',
 				},
 				onUpdate: 'cascade',

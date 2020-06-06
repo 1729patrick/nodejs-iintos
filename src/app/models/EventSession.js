@@ -6,6 +6,7 @@ class EventSession extends Model {
 			{
 				title: Sequelize.STRING,
 				description: Sequelize.STRING,
+				date: Sequelize.DATE,
 			},
 			{ sequelize }
 		);
@@ -15,6 +16,10 @@ class EventSession extends Model {
 		this.belongsTo(models.Event, {
 			foreignKey: 'eventId',
 			as: 'event',
+		});
+		this.hasMany(models.EventFile, {
+			foreignKey: 'eventSessionId',
+			as: 'files',
 		});
 	}
 }

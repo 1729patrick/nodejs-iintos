@@ -1,5 +1,4 @@
 import Sequelize, { Model } from 'sequelize';
-import EventVideo from './EventVideo';
 
 class Event extends Model {
 	static init(sequelize) {
@@ -17,23 +16,12 @@ class Event extends Model {
 	static associate(models) {
 		this.hasMany(models.EventSession, {
 			foreignKey: 'eventId',
-			as: 'session',
+			as: 'sessions',
 		});
-		this.hasMany(models.EventProgram, {
+		this.hasMany(models.EventFile, {
 			foreignKey: 'eventId',
-			as: 'program',
+			as: 'files',
 		});
-
-		this.hasMany(models.EventReport, {
-			foreignKey: 'eventId',
-			as: 'report',
-		});
-		/*
-		this.hasMany(models.EventVideo, {
-			foreignKey: 'eventId',
-			as: 'video',
-		}); 
-		*/
 	}
 }
 

@@ -1,8 +1,8 @@
 import Event from '../models/Event';
-import EventProgram from '../models/EventProgram';
-import EventReport from '../models/EventReport';
 import EventSession from '../models/EventSession';
-import EventVideo from '../models/EventVideo';
+import EventFile from '../models/EventFile';
+import CreateEventService from '../services/CreateEventService';
+import File from '../models/File';
 
 /**
  * Controller for the all the projects results
@@ -16,14 +16,42 @@ class EventController {
 	 * @param {*} res
 	 */
 	async index(req, res) {
-		const results = await Event.findAll({
+		const events = await Event.findAll({
+			order: [
+				['date', 'ASC'],
+				[{ model: EventSession, as: 'sessions' }, 'date', 'ASC'],
+			],
 			include: [
-				{ model: EventProgram, as: 'program' },
-				{ model: EventReport, as: 'report' },
-				{ model: EventSession, as: 'session' },
+				{
+					model: EventSession,
+					as: 'sessions',
+					include: [
+						{
+							model: EventFile,
+							as: 'files',
+							include: [{ model: File, as: 'file' }],
+						},
+					],
+				},
+				{
+					model: EventFile,
+					as: 'files',
+					include: [{ model: File, as: 'file' }],
+				},
 			],
 		});
-		return res.json(results);
+
+		const eventsFormatted = events.map(event => ({
+			...JSON.parse(JSON.stringify(event)),
+			sessions: event.sessions?.map(session => ({
+				...JSON.parse(JSON.stringify(session)),
+				files: session?.files?.map(({ file }) => file),
+			})),
+
+			files: event?.files?.map(({ file }) => file),
+		}));
+
+		return res.json(eventsFormatted);
 	}
 
 	/**
@@ -32,10 +60,19 @@ class EventController {
 	 * @param {*} res
 	 */
 	async create(req, res) {
-		const event = req.body;
-		const createdEvent = await Event.create(event);
+		const { event, sessions } = req.body;
 
-		return res.json(createdEvent);
+		const {
+			createdEvent,
+			createdEventSessions,
+			files,
+		} = await CreateEventService.run({ event, sessions });
+
+		return res.json({
+			event: createdEvent,
+			sessions: createdEventSessions,
+			files,
+		});
 	}
 
 	/**
@@ -46,6 +83,8 @@ class EventController {
 	async delete(req, res) {
 		const { id } = req.params;
 
+		await EventFile.destroy({ where: { eventId: id } });
+		await EventSession.destroy({ where: { eventId: id } });
 		await Event.destroy({ where: { id } });
 
 		return res.json();
@@ -57,27 +96,24 @@ class EventController {
 	 * @param {*} res
 	 */
 	async update(req, res) {
-		// get from the body the consts
-		const { title, description, shortDescription, type } = req.body;
 		const { id } = req.params;
+		const { event, sessions } = req.body;
 
-		// create a object
-		const updatedEvent = {
-			title,
-			description,
-			shortDescription,
-			type,
-		};
+		await EventFile.destroy({ where: { eventId: id } });
+		await EventSession.destroy({ where: { eventId: id } });
+		await Event.destroy({ where: { id } });
 
-		// Find from the route id and updates the object
-		const createdResult = await Event.update(updatedEvent, {
-			where: { id },
-			returning: true,
-			plain: true,
+		const {
+			createdEvent,
+			createdEventSessions,
+			files,
+		} = await CreateEventService.run({ event, sessions });
+
+		return res.json({
+			event: createdEvent,
+			sessions: createdEventSessions,
+			files,
 		});
-
-		// 1 because of an random null
-		return res.json(createdResult[1]);
 	}
 }
 
