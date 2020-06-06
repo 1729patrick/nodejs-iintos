@@ -11,7 +11,7 @@ class EmailController {
 	 */
 	async send(req, res) {
 		const data = req.body;
-		
+
 		Queue.add(UserToUserEmail.key, data);
 
 		return res.json();

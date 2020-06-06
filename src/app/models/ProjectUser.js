@@ -13,6 +13,7 @@ class ProjectUser extends Model {
 			{ sequelize }
 		);
 	}
+
 	static associate(models) {
 		this.belongsTo(models.Project, { foreignKey: 'projectId', as: 'project' });
 		this.belongsTo(models.User, { foreignKey: 'userId', as: 'professor' });

@@ -33,7 +33,7 @@ class SchoolController {
 		return res.json(schools);
 	}
 
-	/**~
+	/**
 	 * Creates a Single Schools
 	 */
 	async create(req, res) {
@@ -49,7 +49,7 @@ class SchoolController {
 	 */
 	async delete(req, res) {
 		try {
-			//Find from the route id and deletes the object
+			// Find from the route id and deletes the object
 			await School.destroy({ where: { id: req.params.id } });
 
 			return res.json();
@@ -66,19 +66,19 @@ class SchoolController {
 	 * @param {*} res
 	 */
 	async update(req, res) {
-		//Get the essential params
+		// Get the essential params
 		const { name, phone, country, city, active, postalCode } = req.body;
 
 		const updatedSchool = { name, phone, country, city, active, postalCode };
 
-		//Find from the route id and updates the object
+		// Find from the route id and updates the object
 		const school = await School.update(updatedSchool, {
 			where: { id: req.params.id },
 			returning: true,
 			plain: true,
 		});
 
-		//1 because of an null
+		// 1 because of an null
 		return res.json(school[1]);
 	}
 }

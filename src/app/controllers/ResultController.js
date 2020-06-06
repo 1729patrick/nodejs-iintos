@@ -64,6 +64,7 @@ class ResultController {
 
 		return res.json(createdResult);
 	}
+
 	/**
 	 * Deletes a project result given it's id by params
 	 * @param {*} req
@@ -94,7 +95,7 @@ class ResultController {
 			description,
 		};
 
-		//Find from the route id and updates the object
+		// Find from the route id and updates the object
 		const createdResult = await Result.update(updatedResult, {
 			where: { id },
 			returning: true,

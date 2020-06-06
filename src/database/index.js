@@ -25,6 +25,10 @@ import News from '../app/models/News';
 import Stem from '../app/models/Stem';
 import Log from '../app/models/Log';
 
+import Event from '../app/models/Event';
+import EventSession from '../app/models/EventSession';
+import EventFile from '../app/models/EventFile';
+
 const models = [
 	User,
 	School,
@@ -44,6 +48,9 @@ const models = [
 	News,
 	Stem,
 	Log,
+	Event,
+	EventFile,
+	EventSession,
 ];
 
 class Database {
