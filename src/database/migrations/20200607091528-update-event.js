@@ -3,6 +3,7 @@
 module.exports = {
 	up: (queryInterface, Sequelize) => {
 		return queryInterface.changeColumn('Events', 'date', {
+			type: Sequelize.DATE,
 			allowNull: true,
 		});
 	},
