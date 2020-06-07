@@ -45,7 +45,12 @@ class EventController {
 			...JSON.parse(JSON.stringify(event)),
 			sessions: event.sessions?.map(session => ({
 				...JSON.parse(JSON.stringify(session)),
-				files: session?.files?.map(({ file }) => file),
+				files: session?.files
+					?.filter(({ file }) => !file.link)
+					?.map(({ file }) => file),
+				links: session?.files
+					?.filter(({ file }) => file.link)
+					?.map(({ file }) => file?.link),
 			})),
 
 			files: event?.files?.map(({ file }) => file),
