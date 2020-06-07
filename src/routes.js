@@ -52,12 +52,13 @@ router.get('/stem', StemController.index);
 
 // Event area
 router.get('/events', EventController.index);
-router.post('/events', EventController.create);
-router.put('/events/:id', EventController.update);
-router.delete('/events/:id', EventController.delete);
 
 // ----- After this point, the user needs autentication -----
 router.use(authMiddleware);
+
+router.post('/events', EventController.create);
+router.put('/events/:id', EventController.update);
+router.delete('/events/:id', EventController.delete);
 
 // Output Admin area
 router.post('/outputResults', OutputResultController.create);
