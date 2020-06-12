@@ -62,7 +62,7 @@ class EventController {
 			event.files.forEach(file => {
 				if (!ids[file.id]) {
 					ids[file.id] = true;
-					sessionFiles.push(file);
+					eventFiles.push(file);
 				}
 			});
 
