@@ -27,10 +27,11 @@ class CreateEventService {
 
 		sessionsWithEventId.forEach(async (eventSession, index) => {
 			eventSession.files.forEach(fileId => {
-				eventSessionsFilesToCreate.push({
-					fileId,
-					eventSessionId: createdEventSessions[index].id,
-				});
+				if (!eventSessionsFilesToCreate.find(e => e.fileId === fileId))
+					eventSessionsFilesToCreate.push({
+						fileId,
+						eventSessionId: createdEventSessions[index].id,
+					});
 			});
 
 			const filesCreatted = await File.bulkCreate(
@@ -38,10 +39,11 @@ class CreateEventService {
 			);
 
 			filesCreatted.forEach(({ id: fileId }) => {
-				eventSessionsFilesToCreate.push({
-					fileId,
-					eventSessionId: createdEventSessions[index].id,
-				});
+				if (!eventSessionsFilesToCreate.find(e => e.fileId === fileId))
+					eventSessionsFilesToCreate.push({
+						fileId,
+						eventSessionId: createdEventSessions[index].id,
+					});
 			});
 
 			files.push(await EventFile.bulkCreate(eventSessionsFilesToCreate));
