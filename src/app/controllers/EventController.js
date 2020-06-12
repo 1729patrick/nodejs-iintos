@@ -56,7 +56,38 @@ class EventController {
 			files: event?.files?.map(({ file }) => file),
 		}));
 
-		return res.json(eventsFormatted);
+		const eventsFormatted_ = eventsFormatted.map(event => {
+			const ids = {};
+			const eventFiles = [];
+			event.files.forEach(file => {
+				if (!ids[file.id]) {
+					ids[file.id] = true;
+					sessionFiles.push(file);
+				}
+			});
+
+			return {
+				...event,
+				files: eventFiles,
+				sessions: event.sessions.map(session => {
+					const ids_ = {};
+					const sessionFiles = [];
+					session.files.forEach(file => {
+						if (!ids_[file.id]) {
+							ids_[file.id] = true;
+							sessionFiles.push(file);
+						}
+					});
+
+					return {
+						...session,
+						files: sessionFiles,
+					};
+				}),
+			};
+		});
+
+		return res.json(eventsFormatted_);
 	}
 
 	/**
