@@ -14,7 +14,7 @@ class NewsController {
 	 */
 	async index(req, res) {
 		const results = await News.findAll({
-			order: [['createdAt', 'ASC']],
+			order: [['createdAt', 'DESC']],
 			include: [
 				{
 					model: File,
