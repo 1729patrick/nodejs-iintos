@@ -14,7 +14,9 @@ class NewsController {
 	 */
 	async index(req, res) {
 		const results = await News.findAll({
-			include: [{
+			order: [['createdAt', 'ASC']],
+			include: [
+				{
 					model: File,
 					as: 'image',
 				},
@@ -33,7 +35,6 @@ class NewsController {
 	 * @param {*} res
 	 */
 	async create(req, res) {
-
 		if (req.body.youtube) {
 			let video_id = req.body.youtube.split('v=')[1];
 			var ampersandPosition = video_id.indexOf('&');
@@ -48,9 +49,9 @@ class NewsController {
 			link: req.body.link,
 			youtube: req.body.youtube ? video_id : req.body.youtube,
 			imageId: req.body.imageId,
-			userId: req.body.userId
-		}
-		console.log(newNews)
+			userId: req.body.userId,
+		};
+		console.log(newNews);
 
 		const createdResult = await News.create(newNews);
 
@@ -62,18 +63,13 @@ class NewsController {
 	 * @param {*} res
 	 */
 	async createFromResults(req, res) {
-		const {
-			title,
-			description,
-			userId,
-			projectId
-		} = req.body;
+		const { title, description, userId, projectId } = req.body;
 		console.log(req.body);
 		//gets the project associated to the result
 		const project = await Project.findOne({
 			where: {
-				id: projectId
-			}
+				id: projectId,
+			},
 		});
 
 		// Create a new News
@@ -81,7 +77,7 @@ class NewsController {
 		const newNews = {
 			title: newTitle,
 			description,
-			userId
+			userId,
 		};
 
 		const createdResult = await News.create(newNews);
@@ -98,8 +94,8 @@ class NewsController {
 		const newsId = req.params.id;
 		await News.destroy({
 			where: {
-				id: newsId
-			}
+				id: newsId,
+			},
 		});
 
 		return res.json();
@@ -111,11 +107,7 @@ class NewsController {
 	 */
 	async update(req, res) {
 		// get from the body the consts
-		const {
-			title,
-			description,
-			imageId
-		} = req.body;
+		const { title, description, imageId } = req.body;
 		const newsId = req.params.id;
 
 		// create a object
@@ -128,7 +120,7 @@ class NewsController {
 		//Find from the route id and updates the object
 		const result = await News.update(updatedResult, {
 			where: {
-				id: newsId
+				id: newsId,
 			},
 			returning: true,
 			plain: true,
