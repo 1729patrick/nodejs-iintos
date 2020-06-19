@@ -60,8 +60,13 @@ class EventController {
 			const ids = {};
 			const eventFiles = [];
 			event.files.forEach(file => {
-				if (!ids[file.id]) {
+				if (!file.link && !ids[file.id]) {
 					ids[file.id] = true;
+					eventFiles.push(file);
+				}
+
+				if (file.link && !ids[file.link]) {
+					ids[file.link] = true;
 					eventFiles.push(file);
 				}
 			});
