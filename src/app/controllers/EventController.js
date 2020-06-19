@@ -64,11 +64,6 @@ class EventController {
 					ids[file.id] = true;
 					eventFiles.push(file);
 				}
-
-				if (file.link && !ids[file.link]) {
-					ids[file.link] = true;
-					eventFiles.push(file);
-				}
 			});
 
 			return {
@@ -76,10 +71,16 @@ class EventController {
 				files: eventFiles,
 				sessions: event.sessions.map(session => {
 					const ids_ = {};
+
 					const sessionFiles = [];
 					session.files.forEach(file => {
 						if (!ids_[file.id]) {
 							ids_[file.id] = true;
+							sessionFiles.push(file);
+						}
+
+						if (file.link && !ids_[file.link]) {
+							ids_[file.link] = true;
 							sessionFiles.push(file);
 						}
 					});
