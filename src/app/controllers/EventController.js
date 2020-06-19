@@ -78,16 +78,21 @@ class EventController {
 							ids_[file.id] = true;
 							sessionFiles.push(file);
 						}
+					});
 
-						if (file.link && !ids_[file.link]) {
-							ids_[file.link] = true;
-							sessionFiles.push(file);
+					const sessionLinks = [];
+					const links = {};
+					session.links.forEach(link => {
+						if (!links[link]) {
+							links[link] = true;
+							sessionLinks.push(link);
 						}
 					});
 
 					return {
 						...session,
 						files: sessionFiles,
+						links: sessionLinks,
 					};
 				}),
 			};
