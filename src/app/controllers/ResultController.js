@@ -37,7 +37,7 @@ class ResultController {
 				description,
 				projectId,
 				files: resultFile.map(({ id, file }) => ({
-					id,
+					id: file.id,
 					url: file.url,
 					name: file.name,
 				})),
