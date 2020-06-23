@@ -19,7 +19,7 @@ class SchoolController {
 
 		if (
 			!JSON.parse(all) &&
-			(req.role === 'Coordinator' || req.role === 'Professor')
+			(req.role === 'Coordinator' || req.role === 'Teacher')
 		) {
 			where = { ...where, id: req.schoolId };
 		}
