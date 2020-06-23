@@ -34,7 +34,7 @@ class UserController {
 				};
 		}
 
-		if (req.role === 'Coordinator' || req.role === 'Professor') {
+		if (req.role === 'Coordinator' || req.role === 'Teacher') {
 			where = {
 				...where,
 				schoolId: req.schoolId,
@@ -80,6 +80,7 @@ class UserController {
 				user.role.name = 'Teacher';
 			}
 		});
+
 		return res.json(
 			users.map(user => ({
 				...user,
