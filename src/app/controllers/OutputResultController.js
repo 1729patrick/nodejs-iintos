@@ -12,6 +12,7 @@ class OutputResultController {
 	 */
 	async index(req, res) {
 		const results = await OutputResult.findAll({
+			order: [['id', 'ASC']],
 			include: [
 				{
 					model: OutputResultFile,
