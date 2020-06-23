@@ -90,7 +90,7 @@ class ActivityController {
 					students,
 					professors,
 					files: activityFile.map(({ id, file }) => ({
-						id,
+						id: file.id,
 						url: file.url,
 						name: file.name,
 					})),
