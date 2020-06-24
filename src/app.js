@@ -27,7 +27,6 @@ class App {
 
 		this.server.use(
 			'/api/files',
-			loggerMiddleware,
 			express.static(join(__dirname, '..', 'tmp', 'uploads'))
 		);
 	}

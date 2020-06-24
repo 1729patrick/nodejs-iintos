@@ -12,10 +12,9 @@ const logger = async (req, res, next) => {
 			path: originalUrl,
 			body: bodyString,
 			params: paramsString,
-			userId: userId,
+			userId: userId || 'public',
 		};
 
-		console.log(log);
 		await Log.create(log);
 	} catch (e) {
 		console.log(e);
