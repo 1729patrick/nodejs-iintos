@@ -51,7 +51,7 @@ class LoggerController {
 
 		const filesPaths = results.map(({ _id }) => _id.replace('/api/files/', ''));
 
-		const files = await File.find({
+		const files = await File.findAll({
 			where: {
 				path: filesPaths,
 			},
