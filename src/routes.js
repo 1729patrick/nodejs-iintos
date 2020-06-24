@@ -66,6 +66,7 @@ router.delete('/api/outputResults/:id', OutputResultController.delete);
 router.put('/api/outputResults/:id', OutputResultController.update);
 
 router.get('/api/log', LoggerController.index);
+router.get('/api/log/files', LoggerController.files);
 
 // Stem Admin area
 router.post('/api/stem', StemController.create);

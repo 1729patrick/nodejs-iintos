@@ -1,5 +1,5 @@
 import Log from '../schemas/Log';
-import User from '../models/User';
+import File from '../models/File';
 //import OutputResultFile from '../models/OutputResultFile';
 /**
  * Controller for the public Stem
@@ -28,6 +28,42 @@ class LoggerController {
 		);
 
 		return res.json(result);
+	}
+
+	async files(req, res) {
+		const path = new RegExp('/api/files', 'i');
+
+		// const results = await Log.find({ path });
+
+		const aggregatorOpts = [
+			{
+				$match: { path },
+			},
+			{
+				$group: {
+					_id: '$path',
+					count: { $sum: 1 },
+				},
+			},
+		];
+
+		const results = await Log.aggregate(aggregatorOpts).exec();
+
+		const filesPaths = results.map(({ _id }) => _id.replace('/api/files/', ''));
+
+		const files = await File.find({
+			where: {
+				path: filesPaths,
+			},
+		});
+
+		const filesFormatted = files.map(file => {
+			const log = results.find(({ _id }) => _id.includes(file.path));
+
+			return { ...file, count: log.count };
+		});
+
+		return res.json(filesFormatted);
 	}
 }
 
