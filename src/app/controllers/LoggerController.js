@@ -58,6 +58,8 @@ class LoggerController {
 		});
 
 		const filesFormatted = files.map(file => {
+			file = JSON.parse(JSON.stringify(file));
+
 			const log = results.find(({ _id }) => _id.includes(file.path));
 
 			return { ...file, count: log.count };
