@@ -8,6 +8,8 @@ import Youch from 'youch';
 import { join } from 'path';
 
 import routes from './routes';
+
+import loggerMiddleware from './app/middlewares/logger';
 import './database';
 
 class App {
@@ -25,6 +27,7 @@ class App {
 
 		this.server.use(
 			'/api/files',
+			loggerMiddleware,
 			express.static(join(__dirname, '..', 'tmp', 'uploads'))
 		);
 	}
