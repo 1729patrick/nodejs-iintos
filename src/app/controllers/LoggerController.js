@@ -65,7 +65,9 @@ class LoggerController {
 			return { ...file, count: log.count };
 		});
 
-		return res.json(filesFormatted);
+		return res.json(
+			filesFormatted.map(({ url, name, count }) => ({ url, name, count }))
+		);
 	}
 }
 
