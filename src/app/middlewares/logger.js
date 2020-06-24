@@ -10,8 +10,8 @@ const logger = async (req, res, next) => {
 		const log = {
 			method: method,
 			path: originalUrl,
-			body: bodyString,
-			params: paramsString,
+			body: bodyString || '{}',
+			params: paramsString || '{}',
 			userId: userId || 'public',
 		};
 
