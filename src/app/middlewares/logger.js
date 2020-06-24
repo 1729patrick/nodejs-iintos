@@ -1,11 +1,8 @@
-import jwt from 'jsonwebtoken';
-import Log from '../models/Log';
+import Log from '../schemas/Log';
 
 const logger = async (req, res, next) => {
 	try {
-		const { headers, body, userId, originalUrl, method, params } = req;
-		const { authorization } = headers;
-
+		const { body, userId, originalUrl, method, params } = req;
 
 		const bodyString = JSON.stringify(body);
 		const paramsString = JSON.stringify(params);
@@ -18,9 +15,7 @@ const logger = async (req, res, next) => {
 			userId: userId,
 		};
 
-		const createdResult = await Log.create(log);
-
-	
+		await Log.create(log);
 	} catch (e) {
 		console.log(e);
 	}

@@ -1,4 +1,4 @@
-import Log from '../models/Log';
+import Log from '../schemas/Log';
 import User from '../models/User';
 //import OutputResultFile from '../models/OutputResultFile';
 /**
@@ -12,30 +12,22 @@ class LoggerController {
 	 * @param {*} res
 	 */
 	async index(req, res) {
-		const results = await Log.findAll({
-			include: [
-				{
-					model: User,
-					as: 'user',
-					attributes: ['name'],
-				},
-			],
-		});
+		const results = await Log.find();
 
-		const x = results.map(
-			({ id, method, path, body, params, user, createdAt }) => {
+		const result = results.map(
+			({ id, method, path, body, params, createdAt }) => {
 				return {
 					id,
 					method,
 					path,
 					body,
 					params,
-					username: user ? user.name : 'public area',
 					createdAt,
 				};
 			}
 		);
-		return res.json(x);
+
+		return res.json(result);
 	}
 }
 
