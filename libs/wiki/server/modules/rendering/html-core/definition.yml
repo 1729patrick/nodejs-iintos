@@ -1,8 +1,0 @@
-key: htmlCore
-title: Core
-description: Basic HTML Parser
-author: requarks.io
-input: html
-output: html
-icon: mdi-language-html5
-props: {}
