@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: EventController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: EventController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Event from '../models/Event';
+import EventSession from '../models/EventSession';
+import EventFile from '../models/EventFile';
+import CreateEventService from '../services/CreateEventService';
+import File from '../models/File';
+
+/**
+ * Controller for the all the events
+ *
+ * @class EventController
+ */
+class EventController {
+	/**
+	 * Return all the Events
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 */
+	async index(req, res) {
+		const events = await Event.findAll({
+			order: [
+				['date', 'DESC'],
+				[{ model: EventSession, as: 'sessions' }, 'date', 'ASC'],
+			],
+			include: [
+				{
+					model: EventSession,
+					as: 'sessions',
+					include: [
+						{
+							model: EventFile,
+							as: 'files',
+							include: [{ model: File, as: 'file' }],
+						},
+					],
+				},
+				{
+					model: EventFile,
+					as: 'files',
+					include: [{ model: File, as: 'file' }],
+				},
+			],
+		});
+
+		const eventsFormatted = events.map(event => ({
+			...JSON.parse(JSON.stringify(event)),
+			sessions: event.sessions?.map(session => ({
+				...JSON.parse(JSON.stringify(session)),
+				files: session?.files
+					?.filter(({ file }) => !file.link?.length)
+					?.map(({ file }) => file),
+				links: session?.files
+					?.filter(({ file }) => file.link?.length)
+					?.map(({ file }) => file.link),
+			})),
+
+			files: event?.files?.map(({ file }) => file),
+		}));
+
+		const eventsFormatted_ = eventsFormatted.map(event => {
+			const ids = {};
+			const eventFiles = [];
+			event.files.forEach(file => {
+				if (!ids[file.id]) {
+					ids[file.id] = true;
+					eventFiles.push(file);
+				}
+			});
+
+			return {
+				...event,
+				files: eventFiles,
+				sessions: event.sessions.map(session => {
+					const ids_ = {};
+
+					const sessionFiles = [];
+					session.files.forEach(file => {
+						if (!file.link &amp;&amp; !ids_[file.id]) {
+							ids_[file.id] = true;
+							sessionFiles.push(file);
+						}
+					});
+
+					const sessionLinks = [];
+					const links = {};
+					session.links.forEach(link => {
+						if (!links[link]) {
+							links[link] = true;
+							sessionLinks.push(link);
+						}
+					});
+
+					return {
+						...session,
+						files: sessionFiles,
+						links: sessionLinks,
+					};
+				}),
+			};
+		});
+
+		return res.json(eventsFormatted_);
+	}
+
+	/**
+	 * Create a new Event for a project
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 */
+	async create(req, res) {
+		const { event, sessions } = req.body;
+
+		const {
+			createdEvent,
+			createdEventSessions,
+			files,
+		} = await CreateEventService.run({ event, sessions });
+
+		return res.json({
+			event: createdEvent,
+			sessions: createdEventSessions,
+			files,
+		});
+	}
+
+	/**
+	 * Deletes Event given it's id
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 */
+	async delete(req, res) {
+		const { id } = req.params;
+
+		await EventFile.destroy({ where: { eventId: id } });
+		await EventSession.destroy({ where: { eventId: id } });
+		await Event.destroy({ where: { id } });
+
+		return res.json();
+	}
+
+	/**
+	 * Updates a Event given it's id
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 */
+	async update(req, res) {
+		const { id } = req.params;
+		const { event, sessions } = req.body;
+
+		await EventFile.destroy({ where: { eventId: id } });
+		await EventSession.destroy({ where: { eventId: id } });
+		await Event.destroy({ where: { id } });
+
+		const {
+			createdEvent,
+			createdEventSessions,
+			files,
+		} = await CreateEventService.run({ event, sessions });
+
+		return res.json({
+			event: createdEvent,
+			sessions: createdEventSessions,
+			files,
+		});
+	}
+}
+
+export default new EventController();
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ActivityController.html">ActivityController</a></li><li><a href="EmailController.html">EmailController</a></li><li><a href="EventController.html">EventController</a></li><li><a href="FileController.html">FileController</a></li><li><a href="HelpController.html">HelpController</a></li><li><a href="LoggerController.html">LoggerController</a></li><li><a href="NewsController.html">NewsController</a></li><li><a href="OutputResultController.html">OutputResultController</a></li><li><a href="ProfessorController.html">ProfessorController</a></li><li><a href="ProjectController.html">ProjectController</a></li><li><a href="ProjectUserController.html">ProjectUserController</a></li><li><a href="ResultController.html">ResultController</a></li><li><a href="RolesController.html">RolesController</a></li><li><a href="SchoolController.html">SchoolController</a></li><li><a href="SchoolProjectController.html">SchoolProjectController</a></li><li><a href="SessionController.html">SessionController</a></li><li><a href="StemController.html">StemController</a></li><li><a href="UserController.html">UserController</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.5</a> on Tue Jul 28 2020 18:41:46 GMT+0100 (Western European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

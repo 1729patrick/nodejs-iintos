@@ -7,7 +7,20 @@ import File from '../models/File';
 
 import authConfig from '../../config/auth';
 
+/**
+ * Controller for the login
+ *
+ * @class SessionController
+ */
 class SessionController {
+	/**
+	 * Create a login and return the jwt token
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 *
+	 * @memberof SessionController
+	 */
 	async create(req, res) {
 		const { email, password } = req.body;
 

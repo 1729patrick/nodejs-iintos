@@ -4,7 +4,20 @@ import ProjectUser from '../models/ProjectUser';
 import User from '../models/User';
 import Role from '../models/Role';
 
+/**
+ * Controller for the professors
+ *
+ * @class ProfessorController
+ */
 class ProfessorController {
+	/**
+	 * List professors included in project
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 *
+	 * @memberof ProfessorController
+	 */
 	async index(req, res) {
 		const { projectId, destination } = req.query;
 
@@ -36,7 +49,7 @@ class ProfessorController {
 		}
 		let schoolProject;
 		// if it's the admin the school id is null
-		// so 
+		// so
 		if (currentUser.schoolId === null) {
 			schoolProject = await SchoolProject.findAll({
 				where: {

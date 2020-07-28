@@ -4,13 +4,16 @@ import Role from '../models/Role';
 import School from '../models/School';
 
 /**
- *	Controller for the binding of an user and an project
+ * Controller for the binding of an user and an project
+ *
+ * @class ProjectUserController
  */
 class ProjectUserController {
 	/**
 	 * Gets all the user in this project
-	 * @param {} req
-	 * @param {*} res
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async index(req, res) {
 		const projectId = req.params.id;
@@ -80,12 +83,24 @@ class ProjectUserController {
 		res.json({ students, professors });
 	}
 
+	/**
+	 * Create a project participant
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 */
 	async create(req, res) {
 		const projectUser = await ProjectUser.create(req.body);
 
 		res.json(projectUser);
 	}
 
+	/**
+	 * Delete a project participant
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 */
 	async delete(req, res) {
 		const { id } = req.params;
 		const projectUser = await ProjectUser.destroy({ where: { id } });
@@ -93,6 +108,12 @@ class ProjectUserController {
 		res.json(projectUser);
 	}
 
+	/**
+	 * Check if user can edit the project participant
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 */
 	async canEdit(req, res) {
 		const { projectId } = req.params;
 

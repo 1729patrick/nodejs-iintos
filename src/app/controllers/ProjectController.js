@@ -8,9 +8,20 @@ import { Op } from 'sequelize';
 import Queue from '../../lib/Queue';
 import NewProjectEmail from '../jobs/NewProjectEmail';
 
-// Project controller that returns the essencial information
+/**
+ * Project controller that returns the essential information of the project
+ *
+ * @class ProjectController
+ */
 class ProjectController {
-	//Returns all the projects
+	/**
+	 * Returns all the projects
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 *
+	 * @memberof ProjectController
+	 */
 	async index(req, res) {
 		const { avaliable = false, destination = 'MOBILITY' } = req.query;
 
@@ -91,8 +102,9 @@ class ProjectController {
 
 	/**
 	 * Create a new Project
-	 * @param {*} req
-	 * @param {*} res
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async create(req, res) {
 		//creates a new project
@@ -132,6 +144,12 @@ class ProjectController {
 		return res.json(project);
 	}
 
+	/**
+	 * Return the project details by finding by id
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 */
 	async findOne(req, res) {
 		const project = await Project.findOne({
 			where: { id: req.params.id },
@@ -141,7 +159,14 @@ class ProjectController {
 		return res.json(project);
 	}
 
-	// Updates a Project
+	/**
+	 * Updates a Project
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 *
+	 * @memberof ProjectController
+	 */
 	async update(req, res) {
 		const {
 			global,
@@ -182,7 +207,14 @@ class ProjectController {
 		return res.json(project[1]);
 	}
 
-	// Delete a  Project
+	/**
+	 * Delete a Project
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 *
+	 * @memberof ProjectController
+	 */
 	async delete(req, res) {
 		try {
 			const projectId = req.params.id;

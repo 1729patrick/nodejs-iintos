@@ -1,14 +1,18 @@
 import OutputResult from '../models/OutputResult';
 import OutputResultFile from '../models/OutputResultFile';
 import File from '../models/File';
+
 /**
  * Controller for the public output results
+ *
+ * @class OutputResultController
  */
 class OutputResultController {
 	/**
 	 * Gets all the Output Results in the public area
-	 * @param {} req
-	 * @param {*} res
+	 *
+	 * @param {} req The request object
+	 * @param {*} res The response object
 	 */
 	async index(req, res) {
 		const results = await OutputResult.findAll({
@@ -45,8 +49,9 @@ class OutputResultController {
 
 	/**
 	 * Create a new Output Result
-	 * @param {*} req
-	 * @param {*} res
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async create(req, res) {
 		const { files, ...result } = req.body;
@@ -61,8 +66,9 @@ class OutputResultController {
 	}
 	/**
 	 * Delete an output result given it's id by params
-	 * @param {*} req
-	 * @param {*} res
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async delete(req, res) {
 		const outputResultId = req.params.id;
@@ -72,9 +78,10 @@ class OutputResultController {
 		return res.json();
 	}
 	/**
-	 *	Update an output result given it's id
-	 * @param {*} req
-	 * @param {*} rest
+	 * Update an output result given it's id
+	 *
+	 * @param {*} req The request object
+	 * @param {*} rest The response object
 	 */
 	async update(req, res) {
 		// get from the body the consts

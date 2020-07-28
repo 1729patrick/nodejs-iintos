@@ -4,14 +4,16 @@ import File from '../models/File';
 
 /**
  * Controller for the all the projects results
+ *
+ * @class ResultController
  */
 class ResultController {
 	/**
 	 *
-	 * /get
 	 * Return all the results from a single project, given its id in the params
-	 * @param {*} req
-	 * @param {*} res
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async index(req, res) {
 		const projectId = req.params.id;
@@ -49,8 +51,9 @@ class ResultController {
 
 	/**
 	 * Create a new Result for a project
-	 * @param {*} req
-	 * @param {*} res
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async create(req, res) {
 		const { files, ...result } = req.body;
@@ -67,8 +70,9 @@ class ResultController {
 
 	/**
 	 * Deletes a project result given it's id by params
-	 * @param {*} req
-	 * @param {*} res
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async delete(req, res) {
 		const { id } = req.params;
@@ -81,8 +85,9 @@ class ResultController {
 
 	/**
 	 * Updates a project result given it's id
-	 * @param {*} req
-	 * @param {*} res
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async update(req, res) {
 		// get from the body the consts

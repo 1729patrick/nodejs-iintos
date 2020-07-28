@@ -7,9 +7,20 @@ import File from '../models/File';
 import Queue from '../../lib/Queue';
 import ActivationEmail from '../jobs/ActivationEmail';
 
-// Controller of all users, includes the cruds
+/**
+ * Controller of all users, includes the cruds
+ *
+ * @class UserController
+ */
 class UserController {
-	// Get, Returns all the users in database
+	/**
+	 * Returns all the users in database
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 *
+	 * @memberof UserController
+	 */
 	async index(req, res) {
 		const { role } = req.query;
 
@@ -93,7 +104,14 @@ class UserController {
 		);
 	}
 
-	// Post, creates a single user
+	/**
+	 * Create a single user
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 *
+	 * @memberof UserController
+	 */
 	async create(req, res) {
 		const { user, school } = req.body;
 
@@ -106,7 +124,14 @@ class UserController {
 		return res.json(userCreated);
 	}
 
-	// Delete a user
+	/**
+	 * Delete a user
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 *
+	 * @memberof UserController
+	 */
 	async delete(req, res) {
 		// Find from the route id and deletes the object
 		await User.destroy({
@@ -118,7 +143,14 @@ class UserController {
 		return res.json();
 	}
 
-	// Updates a user
+	/**
+	 * Updates a user
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 *
+	 * @memberof UserController
+	 */
 	async update(req, res) {
 		let { password, oldPassword, ...user } = req.body;
 		const id = oldPassword ? req.userId : req.params.id;

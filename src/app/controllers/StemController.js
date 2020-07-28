@@ -1,13 +1,17 @@
 import Stem from '../models/Stem';
 //import OutputResultFile from '../models/OutputResultFile';
+
 /**
  * Controller for the public Stem
+ *
+ * @class StemController
  */
 class StemController {
 	/**
-	 * Gets all the Output Results in the public area
-	 * @param {} req
-	 * @param {*} res
+	 * Gets all the stem in the public area
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async index(req, res) {
 		const results = await Stem.findAll({});
@@ -16,8 +20,9 @@ class StemController {
 
 	/**
 	 * Create a new Stem
-	 * @param {*} req
-	 * @param {*} res
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async create(req, res) {
 		const createdResult = await Stem.create(req.body);
@@ -25,9 +30,10 @@ class StemController {
 		return res.json(createdResult);
 	}
 	/**
-	 * Delete an output result given it's id by params
-	 * @param {*} req
-	 * @param {*} res
+	 * Delete an stem given it's id by params
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async delete(req, res) {
 		const stemId = req.params.id;
@@ -36,7 +42,7 @@ class StemController {
 		return res.json();
 	}
 	/**
-	 *	Update an output result given it's id
+	 *	Update an stem given it's id
 	 * @param {*} req
 	 * @param {*} rest
 	 */

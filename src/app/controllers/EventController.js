@@ -5,15 +5,16 @@ import CreateEventService from '../services/CreateEventService';
 import File from '../models/File';
 
 /**
- * Controller for the all the projects results
+ * Controller for the all the events
+ *
+ * @class EventController
  */
 class EventController {
 	/**
-	 *
-	 * /get
 	 * Return all the Events
-	 * @param {*} req
-	 * @param {*} res
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async index(req, res) {
 		const events = await Event.findAll({
@@ -41,9 +42,9 @@ class EventController {
 			],
 		});
 
-		const eventsFormatted = events.map((event) => ({
+		const eventsFormatted = events.map(event => ({
 			...JSON.parse(JSON.stringify(event)),
-			sessions: event.sessions?.map((session) => ({
+			sessions: event.sessions?.map(session => ({
 				...JSON.parse(JSON.stringify(session)),
 				files: session?.files
 					?.filter(({ file }) => !file.link?.length)
@@ -56,10 +57,10 @@ class EventController {
 			files: event?.files?.map(({ file }) => file),
 		}));
 
-		const eventsFormatted_ = eventsFormatted.map((event) => {
+		const eventsFormatted_ = eventsFormatted.map(event => {
 			const ids = {};
 			const eventFiles = [];
-			event.files.forEach((file) => {
+			event.files.forEach(file => {
 				if (!ids[file.id]) {
 					ids[file.id] = true;
 					eventFiles.push(file);
@@ -69,11 +70,11 @@ class EventController {
 			return {
 				...event,
 				files: eventFiles,
-				sessions: event.sessions.map((session) => {
+				sessions: event.sessions.map(session => {
 					const ids_ = {};
 
 					const sessionFiles = [];
-					session.files.forEach((file) => {
+					session.files.forEach(file => {
 						if (!file.link && !ids_[file.id]) {
 							ids_[file.id] = true;
 							sessionFiles.push(file);
@@ -82,7 +83,7 @@ class EventController {
 
 					const sessionLinks = [];
 					const links = {};
-					session.links.forEach((link) => {
+					session.links.forEach(link => {
 						if (!links[link]) {
 							links[link] = true;
 							sessionLinks.push(link);
@@ -103,8 +104,9 @@ class EventController {
 
 	/**
 	 * Create a new Event for a project
-	 * @param {*} req
-	 * @param {*} res
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async create(req, res) {
 		const { event, sessions } = req.body;
@@ -124,8 +126,9 @@ class EventController {
 
 	/**
 	 * Deletes Event given it's id
-	 * @param {*} req
-	 * @param {*} res
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async delete(req, res) {
 		const { id } = req.params;
@@ -139,8 +142,9 @@ class EventController {
 
 	/**
 	 * Updates a Event given it's id
-	 * @param {*} req
-	 * @param {*} res
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async update(req, res) {
 		const { id } = req.params;

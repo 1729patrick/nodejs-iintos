@@ -1,15 +1,17 @@
 import Log from '../schemas/Log';
 import File from '../models/File';
-//import OutputResultFile from '../models/OutputResultFile';
+
 /**
- * Controller for the public Stem
+ * Controller for the Logger
+ *
+ * @class LoggerController
  */
 class LoggerController {
 	/**
 	 * Gets all the Logs
 	 *
-	 * @param {} req
-	 * @param {*} res
+	 * @param {*} req The request object
+	 * @param {*} res The request object
 	 */
 	async index(req, res) {
 		const results = await Log.find();
@@ -30,6 +32,14 @@ class LoggerController {
 		return res.json(result);
 	}
 
+	/**
+	 * Gets the files downloads
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 *
+	 * @memberof LoggerController
+	 */
 	async files(req, res) {
 		const path = new RegExp('/api/files', 'i');
 

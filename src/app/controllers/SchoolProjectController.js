@@ -7,9 +7,20 @@ import User from '../models/User';
 import Queue from '../../lib/Queue';
 import NewSchoolInProjectEmail from '../jobs/NewSchoolInProjectEmail';
 
-// Controler for the binding of a school anda project
+/**
+ * Controller for the binding of a school and project
+ *
+ * @class SchoolProjectController
+ */
 class SchoolProjectController {
-	//Creates a binding between a project and a school
+	/**
+	 * Creates a binding between a project and a school
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 *
+	 * @memberof SchoolProjectController
+	 */
 	async create(req, res) {
 		const { projectId, schoolId } = req.body;
 
@@ -90,7 +101,13 @@ class SchoolProjectController {
 		return res.json(schoolProject);
 	}
 
-	//Get all the school from a projects :id
+	/**
+	 * Get all the school from a projects :id
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 * @memberof SchoolProjectController
+	 */
 	async index(req, res) {
 		const projectId = req.params.id;
 
@@ -109,7 +126,14 @@ class SchoolProjectController {
 		res.json(project);
 	}
 
-	// Deletes the bind between a school and a project
+	/**
+	 * Deletes the bind between a school and a project
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 *
+	 * @memberof SchoolProjectController
+	 */
 	async delete(req, res) {
 		const id = req.params.id;
 

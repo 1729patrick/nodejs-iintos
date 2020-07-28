@@ -10,15 +10,18 @@ import NewActivitiyEmail from '../jobs/NewActivityEmail';
 
 import CreateEvent from '../jobs/CreateEvent';
 import DeleteEvent from '../jobs/DeleteEvent';
+
 /**
  * Activity controller
+ *
+ * @class ActivityController
  */
 class ActivityController {
 	/**
 	 * Gets all the activities from a given id
 	 *
-	 * @param {*} req Request
-	 * @param {*} res Response
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async index(req, res) {
 		const projectId = req.params.id;
@@ -102,6 +105,12 @@ class ActivityController {
 		return res.json(formattedAcitivities);
 	}
 
+	/**
+	 * Create multiple activities
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 */
 	async createsAll(req, res) {
 		const activities = req.body;
 		const results = Activity.bulkCreate(activities);
@@ -110,10 +119,10 @@ class ActivityController {
 	}
 
 	/**
-	 * Creates a new activty in the project
+	 * Creates a new activity in the project
 	 *
-	 * @param {Request parameters} req
-	 * @param {*} res
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async create(req, res) {
 		const { students, professors, files, ...activity } = req.body;
@@ -197,8 +206,9 @@ class ActivityController {
 
 	/**
 	 * Deletes a activity given its id
-	 * @param {*} req
-	 * @param {*} res
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async delete(req, res) {
 		const activityId = req.params.id;
@@ -251,6 +261,12 @@ class ActivityController {
 		return res.json(acitivityUsers);
 	}
 
+	/**
+	 * Update a activity given its id
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res the response object
+	 */
 	async update(req, res) {
 		const activityId = req.params.id;
 
@@ -420,6 +436,12 @@ class ActivityController {
 		return res.json(creattedActivity);
 	}
 
+	/**
+	 * List activities in the project
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res the response object
+	 */
 	async list(req, res) {
 		const userId = req.userId;
 		const activities = await Activity.findAll({

@@ -1,12 +1,19 @@
 import School from '../models/School';
 
-// Controller for the School routes
+/**
+ * Controller for the School
+ *
+ * @class SchoolController
+ */
 class SchoolController {
 	/**
-	 * Get all the Schools
+	 * Get all Schools
 	 *
-	 * */
-
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 *
+	 * @memberof SchoolController
+	 */
 	async index(req, res) {
 		const { active, all = false } = req.query;
 
@@ -35,17 +42,24 @@ class SchoolController {
 
 	/**
 	 * Creates a Single Schools
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 *
+	 * @memberof SchoolController
 	 */
 	async create(req, res) {
 		const school = await School.create({ active: true, ...req.body });
 
 		return res.json(school);
 	}
-
 	/**
 	 * Delete a Schools
-	 * @param {*} req
-	 * @param {*} res
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 *
+	 * @memberof SchoolController
 	 */
 	async delete(req, res) {
 		try {
@@ -61,9 +75,12 @@ class SchoolController {
 	}
 
 	/**
-	 * Updates a School
-	 * @param {*} req
-	 * @param {*} res
+	 * Update a school
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
+	 *
+	 * @memberof SchoolController
 	 */
 	async update(req, res) {
 		// Get the essential params

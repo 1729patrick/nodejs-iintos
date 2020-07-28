@@ -1,16 +1,19 @@
 import News from '../models/News';
 import User from '../models/User';
 import Project from '../models/Project';
-//import OutputResultFile from '../models/OutputResultFile';
 import File from '../models/File';
+
 /**
  * Controller for the public News
+ *
+ * @class NewsController
  */
 class NewsController {
 	/**
-	 * Gets all the Output Results in the public area
-	 * @param {} req
-	 * @param {*} res
+	 * Gets all the news in the public area
+	 *
+	 * @param {} req The request object
+	 * @param {*} res The response object
 	 */
 	async index(req, res) {
 		const results = await News.findAll({
@@ -31,8 +34,9 @@ class NewsController {
 
 	/**
 	 * Create a new News
-	 * @param {*} req
-	 * @param {*} res
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async create(req, res) {
 		if (req.body.youtube) {
@@ -59,8 +63,9 @@ class NewsController {
 	}
 	/**
 	 * Creates a news from a result with the project name
-	 * @param {} req
-	 * @param {*} res
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async createFromResults(req, res) {
 		const { title, description, userId, projectId } = req.body;
@@ -86,9 +91,10 @@ class NewsController {
 	}
 
 	/**
-	 * Delete an output result given it's id by params
-	 * @param {*} req
-	 * @param {*} res
+	 * Delete an news given it's id by params
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async delete(req, res) {
 		const newsId = req.params.id;
@@ -101,7 +107,8 @@ class NewsController {
 		return res.json();
 	}
 	/**
-	 *	Update an output result given it's id
+	 *	Update an news given it's id
+
 	 * @param {*} req
 	 * @param {*} rest
 	 */

@@ -1,6 +1,20 @@
 import { Op } from 'sequelize';
 import Role from '../models/Role';
+
+/**
+ * Controller for roles
+ *
+ * @class RolesController
+ */
 class RolesController {
+	/**
+	 * Return all the roles for users
+	 *
+	 * @param {*} req
+	 * @param {*} res
+	 *
+	 * @memberof RolesController
+	 */
 	async index(req, res) {
 		let where = {};
 		if (req.role === 'Coordinator') {

@@ -1,13 +1,17 @@
 import Queue from '../../lib/Queue';
 import UserToUserEmail from '../jobs/UserToUserEmail';
+
 /**
- * Controller for the public Stem
+ * Controller for the Email notifications
+ *
+ * @class EmailController
  */
 class EmailController {
 	/**
-	 * Create a new Stem
-	 * @param {*} req
-	 * @param {*} res
+	 * Send a email
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The response object
 	 */
 	async send(req, res) {
 		const data = req.body;
