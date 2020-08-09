@@ -17,15 +17,6 @@ class EventController {
 	 * @param {*} res The response object
 	 */
 	async index(req, res) {
-		await File.findAndUpdate({ id: 651 }, { id: 12000 });
-		await File.findAndUpdate({ id: 652 }, { id: 651 });
-		await File.findAndUpdate({ id: 12000 }, { id: 652 });
-
-		await File.findAndUpdate({ id: 658 }, { id: 12001 });
-		await File.findAndUpdate({ id: 659 }, { id: 658 });
-		await File.findAndUpdate({ id: 12001 }, { id: 659 });
-
-		return true;
 		const events = await Event.findAll({
 			order: [
 				['date', 'DESC'],
