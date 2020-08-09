@@ -2,7 +2,7 @@
 
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		return queryInterface.addColumn('Schools', 'showContact', {
+		return queryInterface.removeColumn('Schools', 'showContact', {
 			type: Sequelize.BOOLEAN,
 			allowNull: true,
 			defaultValue: false,
