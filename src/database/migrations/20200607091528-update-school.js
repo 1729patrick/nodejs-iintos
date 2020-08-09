@@ -3,9 +3,8 @@
 module.exports = {
 	up: (queryInterface, Sequelize) => {
 		return queryInterface.addColumn('Schools', 'contactEmail', {
-			type: Sequelize.BOOLEAN,
+			type: Sequelize.STRING,
 			allowNull: true,
-			defaultValue: false,
 		});
 	},
 
