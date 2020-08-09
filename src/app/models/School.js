@@ -10,6 +10,8 @@ class School extends Model {
 				active: Sequelize.BOOLEAN,
 				city: Sequelize.STRING,
 				postalCode: Sequelize.STRING,
+				showContact: Sequelize.BOOLEAN,
+				contactEmail: Sequelize.STRING,
 			},
 			{ sequelize }
 		);
