@@ -5,6 +5,7 @@ module.exports = {
 		return queryInterface.changeColumn('Schools', 'showContact', {
 			type: Sequelize.BOOLEAN,
 			allowNull: true,
+			defaultValue: false,
 		});
 	},
 

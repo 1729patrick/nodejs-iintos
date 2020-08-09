@@ -5,7 +5,6 @@ module.exports = {
 		return queryInterface.addColumn('Schools', 'contactEmail', {
 			type: Sequelize.STRING,
 			allowNull: true,
-			defaultValue: false,
 		});
 	},
 
