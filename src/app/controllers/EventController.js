@@ -98,7 +98,7 @@ class EventController {
 
 					return {
 						...session,
-						files: sessionFiles,
+						files: sessionFiles.sort((a, b) => a.id - b.id),
 						links: sessionLinks,
 					};
 				}),
