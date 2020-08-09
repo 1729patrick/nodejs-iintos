@@ -21,7 +21,12 @@ class EventController {
 			order: [
 				['date', 'DESC'],
 				[{ model: EventSession, as: 'sessions' }, 'date', 'ASC'],
-				[EventSession, { model: EventFile, as: 'files' }, 'id', 'ASC'],
+				[
+					{ model: EventSession, as: 'sessions' },
+					{ model: EventFile, as: 'files' },
+					'id',
+					'ASC',
+				],
 			],
 			include: [
 				{
