@@ -16,7 +16,10 @@ class OutputResultController {
 	 */
 	async index(req, res) {
 		const results = await OutputResult.findAll({
-			order: [['id', 'ASC']],
+			order: [
+				['id', 'ASC'],
+				[{ model: OutputResultFile, as: 'outputResultFile' }, 'id', 'ASC'],
+			],
 			include: [
 				{
 					model: OutputResultFile,
@@ -57,7 +60,7 @@ class OutputResultController {
 		const { files, ...result } = req.body;
 		const createdResult = await OutputResult.create(result);
 		await Promise.all(
-			files.map(fileId =>
+			files.map((fileId) =>
 				OutputResultFile.create({ fileId, outputResultId: createdResult.id })
 			)
 		);
@@ -104,7 +107,7 @@ class OutputResultController {
 		await OutputResultFile.destroy({ where: { outputResultId } });
 
 		await Promise.all(
-			files.map(fileId => OutputResultFile.create({ fileId, outputResultId }))
+			files.map((fileId) => OutputResultFile.create({ fileId, outputResultId }))
 		);
 
 		// 1 because of an random null
