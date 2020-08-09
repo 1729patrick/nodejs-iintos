@@ -2,7 +2,7 @@
 
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		return queryInterface.removeColumn('Schools', 'contactEmail', {
+		return queryInterface.addColumn('Schools', 'contactEmail', {
 			type: Sequelize.STRING,
 			allowNull: true,
 		});
