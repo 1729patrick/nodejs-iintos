@@ -84,9 +84,27 @@ class SchoolController {
 	 */
 	async update(req, res) {
 		// Get the essential params
-		const { name, phone, country, city, active, postalCode } = req.body;
+		const {
+			name,
+			phone,
+			country,
+			city,
+			active,
+			postalCode,
+			contactEmail,
+			showContact,
+		} = req.body;
 
-		const updatedSchool = { name, phone, country, city, active, postalCode };
+		const updatedSchool = {
+			name,
+			phone,
+			country,
+			city,
+			active,
+			postalCode,
+			contactEmail,
+			showContact,
+		};
 
 		// Find from the route id and updates the object
 		const school = await School.update(updatedSchool, {
