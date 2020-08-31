@@ -17,7 +17,7 @@ class LoggerController {
 		const results = await Log.find();
 
 		const result = results.map(
-			({ id, method, path, body, params, createdAt }) => {
+			({ id, method, path, body, params, createdAt, user }) => {
 				return {
 					id,
 					method,
@@ -25,6 +25,7 @@ class LoggerController {
 					body,
 					params,
 					createdAt,
+					user,
 				};
 			}
 		);
@@ -67,7 +68,7 @@ class LoggerController {
 			},
 		});
 
-		const filesFormatted = files.map(file => {
+		const filesFormatted = files.map((file) => {
 			file = JSON.parse(JSON.stringify(file));
 
 			const log = results.find(({ _id }) => _id.includes(file.path));
