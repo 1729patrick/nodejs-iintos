@@ -16,21 +16,21 @@ class LoggerController {
 	async index(req, res) {
 		const results = await Log.find();
 
-		const result = results.map(
-			({ id, method, path, body, params, createdAt, user }) => {
-				return {
-					id,
-					method,
-					path,
-					body,
-					params,
-					createdAt,
-					user,
-				};
-			}
-		);
+		// const result = results.map(
+		// 	({ id, method, path, body, params, createdAt, user }) => {
+		// 		return {
+		// 			id,
+		// 			method,
+		// 			path,
+		// 			body,
+		// 			params,
+		// 			createdAt,
+		// 			user,
+		// 		};
+		// 	}
+		// );
 
-		return res.json(result);
+		return res.json(results);
 	}
 
 	/**
