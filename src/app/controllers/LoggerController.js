@@ -1,5 +1,6 @@
 import Log from '../schemas/Log';
 import File from '../models/File';
+import User from '../models/User';
 
 /**
  * Controller for the Logger
@@ -13,7 +14,7 @@ class LoggerController {
 	 * @param {*} req The request object
 	 * @param {*} res The request object
 	 */
-	async index(req, res) {
+	async index1(req, res) {
 		const results = await Log.find();
 
 		// const result = results.map(
@@ -31,6 +32,63 @@ class LoggerController {
 		// );
 
 		return res.json(results);
+	}
+
+	/**
+	 * Gets all the Logs
+	 *
+	 * @param {*} req The request object
+	 * @param {*} res The request object
+	 */
+	async index(req, res) {
+		const aggregatorOpts = [
+			{
+				$match: {
+					userId: {
+						$not: /^public/,
+					},
+				},
+			},
+			{
+				$group: {
+					_id: '$userId',
+					dates: {
+						$push: {
+							$dateToString: { format: '%Y-%m-%d', date: '$createdAt' },
+						},
+					},
+					count: { $sum: 1 },
+				},
+			},
+			{ $sort: { _id: -1 } },
+		];
+
+		const results = await Log.aggregate(aggregatorOpts).exec();
+
+		const resultsMapped = results.map(({ _id, dates }) => {
+			return {
+				userId: _id,
+				dates: [...new Set(dates)],
+			};
+		});
+
+		const usersIds = resultsMapped.reduce(
+			(prev, { userId }) => [...prev, userId],
+			[]
+		);
+
+		const users_ = await User.findAll({ where: { id: usersIds } });
+
+		const result = resultsMapped.map(({ userId, dates }) => {
+			const { name, email } = users_.find(({ id }) => id === +userId) || {};
+
+			return {
+				user: { name, email },
+				dates,
+			};
+		});
+
+		return res.json(result);
 	}
 
 	/**
@@ -68,7 +126,7 @@ class LoggerController {
 			},
 		});
 
-		const filesFormatted = files.map((file) => {
+		const filesFormatted = files.map(file => {
 			file = JSON.parse(JSON.stringify(file));
 
 			const log = results.find(({ _id }) => _id.includes(file.path));
