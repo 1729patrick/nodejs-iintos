@@ -68,7 +68,7 @@ class LoggerController {
 		const resultsMapped = results.map(({ _id, dates }) => {
 			return {
 				userId: _id,
-				dates: [...new Set(dates)],
+				dates: [...new Set(dates)].reverse(),
 			};
 		});
 
