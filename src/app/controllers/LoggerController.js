@@ -60,7 +60,7 @@ class LoggerController {
 					count: { $sum: 1 },
 				},
 			},
-			{ $sort: { dates: -1 } },
+			{ $sort: { dates: 1 } },
 		];
 
 		const results = await Log.aggregate(aggregatorOpts).exec();
