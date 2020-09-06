@@ -92,11 +92,16 @@ class ActivityController {
 					endDate,
 					students,
 					professors,
-					files: activityFile.map(({ id, file }) => ({
-						id: file.id,
-						url: file.url,
-						name: file.name,
-					})),
+					files: activityFile
+						.filter(({ file }) => !file.link)
+						.map(({ file }) => ({
+							id: file.id,
+							url: file.url,
+							name: file.name,
+						})),
+					links: activityFile
+						.filter(({ file }) => file.link)
+						.map(({ file }) => file.link),
 					studentsStr: students.map(({ name }) => name).join(', '),
 					professorsStr: professors.map(({ name }) => name).join(', '),
 				};
@@ -125,7 +130,7 @@ class ActivityController {
 	 * @param {*} res The response object
 	 */
 	async create(req, res) {
-		const { students, professors, files, ...activity } = req.body;
+		const { students, professors, files, links, ...activity } = req.body;
 		const creattedActivity = await Activity.create(activity);
 
 		const users = new Set([
@@ -145,8 +150,12 @@ class ActivityController {
 			})
 		);
 
+		const filesLinks = await Promise.all(
+			links.map(link => File.create({ name: '', path: '', link }))
+		);
+
 		await Promise.all(
-			files.map(fileId =>
+			[...files, ...filesLinks.map(({ id }) => id)].map(fileId =>
 				ActivityFile.create({
 					fileId,
 					activityId,
@@ -308,6 +317,7 @@ class ActivityController {
 		// get the body request
 		const {
 			files,
+			links,
 			students,
 			professors,
 			done,
@@ -339,8 +349,13 @@ class ActivityController {
 				activityId,
 			},
 		});
+
+		const filesLinks = await Promise.all(
+			links.map(link => File.create({ name: '', path: '', link }))
+		);
+
 		await Promise.all(
-			files.map(fileId =>
+			[...files, ...filesLinks.map(({ id }) => id)].map(fileId =>
 				ActivityFile.create({
 					fileId,
 					activityId,
@@ -349,7 +364,7 @@ class ActivityController {
 		);
 
 		const users = new Set([
-			...students.map(v => +v),
+			// ...students.map(v => +v),
 			...professors.map(v => +v),
 		]);
 

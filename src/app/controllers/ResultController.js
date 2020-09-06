@@ -38,11 +38,16 @@ class ResultController {
 				title,
 				description,
 				projectId,
-				files: resultFile.map(({ id, file }) => ({
-					id: file.id,
-					url: file.url,
-					name: file.name,
-				})),
+				files: resultFile
+					.filter(({ file }) => !file.link)
+					.map(({ file }) => ({
+						id: file.id,
+						url: file.url,
+						name: file.name,
+					})),
+				links: resultFile
+					.filter(({ file }) => file.link)
+					.map(({ file }) => file.link),
 			})
 		);
 
@@ -56,11 +61,15 @@ class ResultController {
 	 * @param {*} res The response object
 	 */
 	async create(req, res) {
-		const { files, ...result } = req.body;
+		const { files, links, ...result } = req.body;
 		const createdResult = await Result.create(result);
 
+		const filesLinks = await Promise.all(
+			links.map(link => File.create({ name: '', path: '', link }))
+		);
+
 		await Promise.all(
-			files.map(fileId =>
+			[...files, ...filesLinks.map(({ id }) => id)].map(fileId =>
 				ResultFile.create({ fileId, resultId: createdResult.id })
 			)
 		);
@@ -91,7 +100,7 @@ class ResultController {
 	 */
 	async update(req, res) {
 		// get from the body the consts
-		const { title, description, files } = req.body;
+		const { title, description, files, links } = req.body;
 		const { id } = req.params;
 
 		// create a object
@@ -108,8 +117,13 @@ class ResultController {
 		});
 
 		await ResultFile.destroy({ where: { resultId: id } });
+
+		const filesLinks = await Promise.all(
+			links.map(link => File.create({ name: '', path: '', link }))
+		);
+
 		await Promise.all(
-			files.map(fileId =>
+			[...files, ...filesLinks.map(({ id }) => id)].map(fileId =>
 				ResultFile.create({ fileId, resultId: createdResult[1].id })
 			)
 		);
