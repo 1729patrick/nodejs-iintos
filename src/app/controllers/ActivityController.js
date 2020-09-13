@@ -93,7 +93,7 @@ class ActivityController {
 					students,
 					professors,
 					files: activityFile
-						.filter(({ file }) => !file.link)
+						.filter(({ file }) => !file.link && file.name)
 						.map(({ file }) => ({
 							id: file.id,
 							url: file.url,
