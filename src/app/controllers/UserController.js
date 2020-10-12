@@ -174,6 +174,13 @@ class UserController {
 			};
 		}
 
+		if ((req.role === 'Admin' || req.role === 'Coordinator') && password) {
+			user = {
+				...user,
+				password,
+			};
+		}
+
 		const ogActive = ogUser.active;
 
 		// Find from the route id and updates the object
