@@ -39,7 +39,7 @@ class ActivityController {
 						as: 'projectUser',
 						include: {
 							model: User,
-							as: 'professor',
+							as: 'partner',
 						},
 					},
 				},
@@ -170,7 +170,7 @@ class ActivityController {
 						include: [
 							{
 								model: User,
-								as: 'professor',
+								as: 'partner',
 							},
 						],
 					})
@@ -233,7 +233,7 @@ class ActivityController {
 					include: [
 						{
 							model: User,
-							as: 'professor',
+							as: 'partner',
 						},
 					],
 				},
@@ -291,7 +291,7 @@ class ActivityController {
 					include: [
 						{
 							model: User,
-							as: 'professor',
+							as: 'partner',
 						},
 					],
 				},
@@ -390,7 +390,7 @@ class ActivityController {
 				ProjectUser.findByPk(professorId.id, {
 					include: [{
 						model: User,
-						as: 'professor'
+						as: 'partner'
 					}],
 				});
 			})
@@ -425,7 +425,7 @@ class ActivityController {
 				include: [
 					{
 						model: User,
-						as: 'professor',
+						as: 'partner',
 					},
 				],
 			});
@@ -471,7 +471,7 @@ class ActivityController {
 							include: [
 								{
 									model: User,
-									as: 'professor',
+									as: 'partner',
 									where: {
 										id: req.userId,
 									},

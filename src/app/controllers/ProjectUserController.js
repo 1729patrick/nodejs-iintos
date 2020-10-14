@@ -27,7 +27,7 @@ class ProjectUserController {
 				},
 				{
 					model: User,
-					as: 'professor',
+					as: 'partner',
 					attributes: { exclude: 'passwordHash' },
 					include: [
 						{

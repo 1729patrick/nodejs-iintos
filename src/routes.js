@@ -25,6 +25,7 @@ import NewsController from './app/controllers/NewsController';
 import StemController from './app/controllers/StemController';
 import LoggerController from './app/controllers/LoggerController';
 import EmailController from './app/controllers/EmailController';
+import PartnerController from './app/controllers/PartnerController';
 
 import EventController from './app/controllers/EventController';
 
@@ -117,6 +118,12 @@ router.delete('/api/activities/:id', ActivityController.delete);
 router.put('/api/activities/:id', ActivityController.update);
 router.get('/api/activities', ActivityController.list);
 router.post('/api/allActivities', ActivityController.createsAll);
+
+router.get('/api/projects/:id/partners', PartnerController.index);
+router.get('/api/projects/:id/partners/status', PartnerController.status);
+router.post('/api/projects/:id/partners', PartnerController.create);
+router.delete('/api/projects/:id/partners', PartnerController.delete);
+router.put('/api/projects/partners/:id', PartnerController.update);
 
 // Roles Area
 router.get('/api/roles', authMiddleware, RolesController.index);

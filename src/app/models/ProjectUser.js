@@ -9,6 +9,8 @@ class ProjectUser extends Model {
 				studentName: Sequelize.STRING,
 				schoolId: Sequelize.INTEGER,
 				coordinator: Sequelize.BOOLEAN,
+				active: Sequelize.BOOLEAN,
+				reasonInactive: Sequelize.STRING,
 			},
 			{ sequelize }
 		);
@@ -16,7 +18,7 @@ class ProjectUser extends Model {
 
 	static associate(models) {
 		this.belongsTo(models.Project, { foreignKey: 'projectId', as: 'project' });
-		this.belongsTo(models.User, { foreignKey: 'userId', as: 'professor' });
+		this.belongsTo(models.User, { foreignKey: 'userId', as: 'partner' });
 		this.belongsTo(models.School, { foreignKey: 'schoolId', as: 'school' });
 	}
 }

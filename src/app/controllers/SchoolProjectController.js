@@ -62,7 +62,7 @@ class SchoolProjectController {
 			include: [
 				{
 					model: User,
-					as: 'professor',
+					as: 'partner',
 				},
 			],
 		});
