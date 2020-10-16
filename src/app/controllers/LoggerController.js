@@ -77,7 +77,10 @@ class LoggerController {
 			[]
 		);
 
-		const users_ = await User.findAll({ where: { id: usersIds } });
+		const users_ = await User.findAll({
+			where: { id: usersIds },
+			order: [['createdAt', 'DESC']],
+		});
 
 		const result = resultsMapped.map(({ userId, dates }) => {
 			const { name, email } = users_.find(({ id }) => id === +userId) || {};
@@ -124,6 +127,7 @@ class LoggerController {
 			where: {
 				path: filesPaths,
 			},
+			order: [['createdAt', 'DESC']],
 		});
 
 		const filesFormatted = files.map(file => {

@@ -2,10 +2,9 @@
 
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		return queryInterface.addColumn('ProjectUsers', 'active', {
-			type: Sequelize.BOOLEAN,
-			allowNull: false,
-			defaultValue: true,
+		return queryInterface.addColumn('SchoolProjects', 'reasonInactive', {
+			type: Sequelize.STRING,
+			allowNull: true,
 		});
 	},
 

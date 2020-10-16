@@ -17,7 +17,7 @@ const logger = async (req, res, next) => {
 
 		await Log.create(log);
 	} catch (e) {
-		console.log(e);
+		// console.log(e);
 	}
 	return next();
 };

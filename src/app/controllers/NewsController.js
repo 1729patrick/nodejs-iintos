@@ -55,7 +55,6 @@ class NewsController {
 			imageId: req.body.imageId,
 			userId: req.body.userId,
 		};
-		console.log(newNews);
 
 		const createdResult = await News.create(newNews);
 
@@ -69,7 +68,6 @@ class NewsController {
 	 */
 	async createFromResults(req, res) {
 		const { title, description, userId, projectId } = req.body;
-		console.log(req.body);
 		//gets the project associated to the result
 		const project = await Project.findOne({
 			where: {

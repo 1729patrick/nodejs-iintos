@@ -35,7 +35,10 @@ class SchoolController {
 			return res.json([]);
 		}
 
-		const schools = await School.findAll({ where });
+		const schools = await School.findAll({
+			where,
+			order: [['createdAt', 'DESC']],
+		});
 
 		return res.json(schools);
 	}

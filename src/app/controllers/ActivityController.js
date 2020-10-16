@@ -39,7 +39,7 @@ class ActivityController {
 						as: 'projectUser',
 						include: {
 							model: User,
-							as: 'partner',
+							as: 'professor',
 						},
 					},
 				},
@@ -54,7 +54,9 @@ class ActivityController {
 					],
 				},
 			],
+			order: [['createdAt', 'DESC']],
 		});
+
 		const formattedAcitivities = activities.map(
 			({
 				activityUser,
@@ -66,22 +68,10 @@ class ActivityController {
 				endDate,
 				activityFile,
 			}) => {
-				const professors = [];
-				const students = [];
-				activityUser.forEach(({ projectUser, ...user }) => {
-					if (!projectUser) return;
-					if (projectUser.professor) {
-						return professors.push({
-							id: projectUser.id,
-							name: projectUser.professor.name,
-						});
-					}
-
-					return students.push({
-						id: projectUser.id,
-						name: projectUser.studentName,
-					});
-				});
+				const professors = activityUser.map(({ projectUser }) => ({
+					id: projectUser?.id,
+					name: projectUser?.professor?.name,
+				}));
 
 				return {
 					id,
@@ -90,7 +80,6 @@ class ActivityController {
 					description,
 					startDate,
 					endDate,
-					students,
 					professors,
 					files: activityFile
 						.filter(({ file }) => !file.link && file.name)
@@ -102,7 +91,6 @@ class ActivityController {
 					links: activityFile
 						.filter(({ file }) => file.link)
 						.map(({ file }) => file.link),
-					studentsStr: students.map(({ name }) => name).join(', '),
 					professorsStr: professors.map(({ name }) => name).join(', '),
 				};
 			}
@@ -130,13 +118,10 @@ class ActivityController {
 	 * @param {*} res The response object
 	 */
 	async create(req, res) {
-		const { students, professors, files, links, ...activity } = req.body;
+		const { professors, files, links, ...activity } = req.body;
 		const creattedActivity = await Activity.create(activity);
 
-		const users = new Set([
-			...students.map(v => +v),
-			...professors.map(v => +v),
-		]);
+		const users = new Set([...professors.map(v => +v)]);
 
 		const activityId = creattedActivity.id;
 
@@ -170,7 +155,7 @@ class ActivityController {
 						include: [
 							{
 								model: User,
-								as: 'partner',
+								as: 'professor',
 							},
 						],
 					})
@@ -233,11 +218,12 @@ class ActivityController {
 					include: [
 						{
 							model: User,
-							as: 'partner',
+							as: 'professor',
 						},
 					],
 				},
 			],
+			order: [['createdAt', 'DESC']],
 		});
 
 		await ActivityFile.destroy({
@@ -291,11 +277,12 @@ class ActivityController {
 					include: [
 						{
 							model: User,
-							as: 'partner',
+							as: 'professor',
 						},
 					],
 				},
 			],
+			order: [['createdAt', 'DESC']],
 		});
 		// Deletes the link
 
@@ -379,74 +366,6 @@ class ActivityController {
 				});
 			})
 		);
-		/*
-		console.log(professors);
-		//get the users project
-		const projectUsers = await Promise.all(
-			professors
-			.filter(p => p)
-			.map(professorId => {
-				console.log(professorId);
-				ProjectUser.findByPk(professorId.id, {
-					include: [{
-						model: User,
-						as: 'partner'
-					}],
-				});
-			})
-		);
-		/*
-		console.log('AQUI');
-		console.log(projectUsers);
-		const professorsEmails = projectUsers.map(({ id, professor }) => {
-			const activity = activitityUsers.find(
-				({ projectUserId }) => projectUserId === id
-			);
-
-			return {
-				email: professor ? professor.email : '',
-				activityUserId: activity ? activity.id : null,
-			};
-		});
-		console.log('AQUI34');
-
-		Queue.add(CreateEvent.key, {
-			participants: professorsEmails,
-			title,
-			description,
-			startDate,
-			endDate,
-		});
-
-		//Sends email if it's done
-		if (done) {
-			const professorList = await ProjectUser.findAll({
-				where: { projectId },
-				include: [
-					{
-						model: User,
-						as: 'partner',
-					},
-				],
-			});
-
-			const x = professorList.map(aux => {
-				return aux.professor;
-			});
-
-			x.forEach(email => {
-				Queue.add(NewActivitiyEmail.key, {
-					newActivity: {
-						title: creattedActivity.title,
-						done: done,
-						description: creattedActivity.description,
-						projectId: creattedActivity.projectId,
-					},
-					receiver: { email: email },
-				});
-			});
-		}
-		*/
 
 		return res.json(creattedActivity);
 	}
@@ -471,7 +390,7 @@ class ActivityController {
 							include: [
 								{
 									model: User,
-									as: 'partner',
+									as: 'professor',
 									where: {
 										id: req.userId,
 									},
@@ -481,6 +400,7 @@ class ActivityController {
 					],
 				},
 			],
+			order: [['createdAt', 'DESC']],
 		});
 
 		const acitivtiesFiltered = activities.filter(activity => {

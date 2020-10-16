@@ -2,9 +2,15 @@
 
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		return queryInterface.addColumn('ProjectUsers', 'reasonInactive', {
-			type: Sequelize.STRING,
+		return queryInterface.addColumn('SchoolProjects', 'userId', {
+			type: Sequelize.INTEGER,
 			allowNull: true,
+			references: {
+				model: 'Users',
+				key: 'id',
+			},
+			onUpdate: 'cascade',
+			onDelete: 'set null',
 		});
 	},
 

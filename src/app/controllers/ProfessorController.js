@@ -26,6 +26,7 @@ class ProfessorController {
 		//gets all the users in the project
 		const projectUser = await ProjectUser.findAll({
 			where: { projectId, userId: { [Op.ne]: null } },
+			order: [['createdAt', 'DESC']],
 		});
 
 		//removes all the
@@ -43,6 +44,7 @@ class ProfessorController {
 				attributes: {
 					exclude: ['passwordHash'],
 				},
+				order: [['createdAt', 'DESC']],
 			});
 
 			return res.json(users);
@@ -54,14 +56,18 @@ class ProfessorController {
 			schoolProject = await SchoolProject.findAll({
 				where: {
 					projectId,
+					active: true,
 				},
+				order: [['createdAt', 'DESC']],
 			});
 		} else {
 			schoolProject = await SchoolProject.findAll({
 				where: {
 					projectId,
 					schoolId: currentUser.schoolId,
+					active: true,
 				},
+				order: [['createdAt', 'DESC']],
 			});
 		}
 		const formattedSchoolProject = schoolProject.map(
@@ -70,6 +76,7 @@ class ProfessorController {
 
 		let role = await Role.findAll({
 			where: { name: { [Op.in]: ['Professor', 'Coordinator'] } },
+			order: [['createdAt', 'DESC']],
 		});
 
 		role = role.map(({ id }) => id);
@@ -84,6 +91,7 @@ class ProfessorController {
 			attributes: {
 				exclude: ['passwordHash'],
 			},
+			order: [['createdAt', 'DESC']],
 		});
 
 		return res.json(users);

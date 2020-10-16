@@ -68,7 +68,6 @@ class CreateUserService {
 		});
 
 		if (role) {
-
 			transaction.commit();
 			return restUser;
 		}
@@ -80,6 +79,7 @@ class CreateUserService {
 			const coordinator = await User.findAll({
 				attributes: ['email'],
 				where: { schoolId, roleId: 2, active: true }, // 2 Coordinator because of id in the db
+				order: [['createdAt', 'DESC']],
 			});
 
 			if (coordinator) {
@@ -90,6 +90,7 @@ class CreateUserService {
 			const admin = await User.findAll({
 				attributes: ['email'],
 				where: { roleId: 1 }, // 1 Admin
+				order: [['createdAt', 'DESC']],
 			});
 
 			if (admin) {

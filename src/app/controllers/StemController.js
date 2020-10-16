@@ -14,7 +14,7 @@ class StemController {
 	 * @param {*} res The response object
 	 */
 	async index(req, res) {
-		const results = await Stem.findAll({});
+		const results = await Stem.findAll({ order: [['createdAt', 'DESC']] });
 		return res.json(results);
 	}
 

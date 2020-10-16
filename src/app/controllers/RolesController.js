@@ -18,12 +18,16 @@ class RolesController {
 	async index(req, res) {
 		let where = {};
 		if (req.role === 'Coordinator') {
-			where = { where: { name: { [Op.in]: ['Coordinator', 'Professor'] } } };
+			where = {
+				where: { name: { [Op.in]: ['Coordinator', 'Professor'] } },
+				order: [['createdAt', 'DESC']],
+			};
 		}
 
 		if (req.role === 'IINTOS-Admin' || req.role === 'IINTOS-Partner') {
 			where = {
 				where: { name: { [Op.in]: ['IINTOS-Admin', 'IINTOS-Partner'] } },
+				order: [['createdAt', 'DESC']],
 			};
 		}
 

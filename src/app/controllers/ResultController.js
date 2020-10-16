@@ -30,6 +30,7 @@ class ResultController {
 					},
 				],
 			},
+			order: [['createdAt', 'DESC']],
 		});
 
 		const formattedResult = results.map(

@@ -32,6 +32,7 @@ class ProjectController {
 					{
 						model: SchoolProject,
 						as: 'schoolProject',
+						where: { active: true },
 					},
 				],
 			};
@@ -41,6 +42,7 @@ class ProjectController {
 					{
 						model: ProjectUser,
 						as: 'projectUser',
+						where: { active: true },
 					},
 				],
 			};
@@ -57,6 +59,7 @@ class ProjectController {
 		let projects = await Project.findAll({
 			...include,
 			...where,
+			order: [['createdAt', 'DESC']],
 		});
 
 		if (req.role === 'Professor') {
@@ -123,6 +126,7 @@ class ProjectController {
 		let userList = await User.findAll({
 			attributes: ['email'],
 			where: { roleId: 2, active: true }, // 2 Coordinator because of id in the db
+			order: [['createdAt', 'DESC']],
 		});
 
 		userList = userList.map(({ email }) => email);
@@ -221,7 +225,10 @@ class ProjectController {
 			//Find from the route id and deletes the object
 			await ProjectUser.destroy({ where: { projectId } });
 
-			const results = await Result.findAll({ where: { projectId } });
+			const results = await Result.findAll({
+				where: { projectId },
+				order: [['createdAt', 'DESC']],
+			});
 
 			await Promise.all(
 				results.map(({ id: resultId }) =>
@@ -232,20 +239,6 @@ class ProjectController {
 			await Result.destroy({ where: { projectId } });
 
 			await SchoolProject.destroy({ where: { projectId } });
-
-			// const activitites = await Activity.findAll({ where: { projectId } });
-
-			// await Promise.all(
-			// 	activitites.map(({ id: activityId }) => {
-			// 		ActivityUser.destroy({ where: { activityId } });
-			// 	})
-			// );
-
-			// await Promise.all(
-			// 	activitites.map(({ id: activityId }) => {
-			// 		ActivityFile.destroy({ where: { activityId } });
-			// 	})
-			// );
 
 			// await Activity.destroy({ where: { projectId } });
 			await Project.destroy({ where: { id: projectId } });

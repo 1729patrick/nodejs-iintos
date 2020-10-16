@@ -37,6 +37,7 @@ class SchoolProjectController {
 					attributes: ['name', 'phone', 'country', 'city', 'postalCode'],
 				},
 			],
+			order: [['createdAt', 'DESC']],
 		});
 		//map to only get it's ids
 		schoolList = schoolList.map(({ schoolId }) => schoolId);
@@ -47,6 +48,7 @@ class SchoolProjectController {
 		let coordinatorList = await User.findAll({
 			attributes: ['email', 'schoolId'],
 			where: { roleId: 2, active: true }, // 2 Coordinator because of id in the db
+			order: [['createdAt', 'DESC']],
 		});
 
 		//Filter out the coordinators that arent in the project
@@ -65,6 +67,7 @@ class SchoolProjectController {
 					as: 'partner',
 				},
 			],
+			order: [['createdAt', 'DESC']],
 		});
 		//filters out the students
 		const professors = [];
@@ -112,7 +115,7 @@ class SchoolProjectController {
 		const projectId = req.params.id;
 
 		const project = await SchoolProjects.findAll({
-			where: { projectId },
+			where: { projectId, active: true },
 			attributes: ['id', 'schoolId'],
 			include: [
 				{
@@ -121,6 +124,7 @@ class SchoolProjectController {
 					attributes: ['name', 'phone', 'country', 'city', 'postalCode'],
 				},
 			],
+			order: [['createdAt', 'DESC']],
 		});
 
 		res.json(project);

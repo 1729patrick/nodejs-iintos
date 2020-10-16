@@ -17,6 +17,7 @@ class ProjectUserController {
 	 */
 	async index(req, res) {
 		const projectId = req.params.id;
+
 		const projectUser = await ProjectUser.findAll({
 			where: { projectId },
 			include: [
@@ -27,7 +28,7 @@ class ProjectUserController {
 				},
 				{
 					model: User,
-					as: 'partner',
+					as: 'professor',
 					attributes: { exclude: 'passwordHash' },
 					include: [
 						{
@@ -43,44 +44,26 @@ class ProjectUserController {
 					],
 				},
 			],
-		});
-
-		let students = [],
-			professors = [];
-		projectUser.forEach(user => {
-			if (user.professor) {
-				return professors.push(user);
-			}
-
-			return students.push(user);
+			order: [['createdAt', 'DESC']],
 		});
 
 		//map the role and school of professor
-		professors = professors.map(({ id, coordinator, professor }) => {
-			const { name, email, active, school = {}, role = {} } = professor;
-			return {
-				professor: {
+		const projectUserFormatted = projectUser.map(
+			({ id, coordinator, professor }) => {
+				const { name, email, active, school = {}, role = {} } = professor;
+				return {
 					id,
 					name,
 					email,
 					active,
 					coordinator,
-					school: school ? school.name : '',
-					role: role.name,
-				},
-			};
-		});
-		//map the role and school of student
-		students = students.map(student => {
-			const { id, studentName, school = {} } = student;
-			return {
-				id,
-				studentName,
-				school: school.name,
-			};
-		});
+					school: school ? school?.name : '',
+					role: role?.name,
+				};
+			}
+		);
 
-		res.json({ students, professors });
+		res.json(projectUserFormatted);
 	}
 
 	/**

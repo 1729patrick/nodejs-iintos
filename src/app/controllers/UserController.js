@@ -84,6 +84,7 @@ class UserController {
 			],
 			raw: true,
 			nest: true,
+			order: [['createdAt', 'DESC']],
 		});
 
 		users.forEach(user => {
