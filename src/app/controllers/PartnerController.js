@@ -1,5 +1,5 @@
-import { Op } from 'sequelize';
-import schoolProject from '../models/schoolProject';
+import Queue from '../../lib/Queue';
+import JoinRequestProject from '../jobs/JoinRequestProject';
 import User from '../models/User';
 import SchoolProject from '../models/SchoolProject';
 import School from '../models/School';
@@ -93,12 +93,18 @@ class PartnerController {
 	}
 
 	async create(req, res) {
+		const projectId = req.params.id;
+
 		const schoolProject = await SchoolProject.create({
 			schoolId: req.schoolId,
 			userId: req.userId,
-			projectId: req.params.id,
+			projectId,
 			active: false,
 		});
+
+		const message = 'New partner request to your project!';
+
+		Queue.add(JoinRequestProject.key, { message, projectId });
 
 		return res.json(schoolProject);
 	}

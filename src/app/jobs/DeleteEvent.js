@@ -1,6 +1,4 @@
 import Api from '../../lib/Axios';
-import { Op } from 'sequelize';
-import ActivityUser from '../models/ActivityUser';
 
 class DeleteEvent {
 	get key() {

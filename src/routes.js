@@ -26,6 +26,7 @@ import StemController from './app/controllers/StemController';
 import LoggerController from './app/controllers/LoggerController';
 import EmailController from './app/controllers/EmailController';
 import PartnerController from './app/controllers/PartnerController';
+import NotificationsController from './app/controllers/NotificationsController';
 
 import EventController from './app/controllers/EventController';
 
@@ -129,6 +130,9 @@ router.put('/api/projects/partners/:id', PartnerController.update);
 router.get('/api/roles', authMiddleware, RolesController.index);
 
 router.get('/api/professors', ProfessorController.index);
+
+router.get('/api/notifications', NotificationsController.index);
+router.put('/api/notifications/:id', NotificationsController.update);
 
 // SchoolProject area
 router.post('/api/schoolProjects', SchoolProjectController.create);

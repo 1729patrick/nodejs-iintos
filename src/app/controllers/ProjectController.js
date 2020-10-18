@@ -118,6 +118,7 @@ class ProjectController {
 			await SchoolProject.create({
 				projectId: project.id,
 				schoolId: req.schoolId,
+				userId: req.userId,
 			});
 		}
 
