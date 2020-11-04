@@ -1,28 +1,29 @@
-import Sequelize, {
-	Model
-} from 'sequelize';
+import Sequelize, { Model } from 'sequelize';
 
 class News extends Model {
 	static init(sequelize) {
-		return super.init({
-			title: Sequelize.STRING,
-			description: Sequelize.STRING,
-			link: Sequelize.STRING,
-			youtube: Sequelize.STRING
-		}, {
-			sequelize
-		});
+		return super.init(
+			{
+				title: Sequelize.STRING,
+				description: Sequelize.STRING,
+				resultId: Sequelize.INTEGER,
+				userId: Sequelize.INTEGER,
+			},
+			{
+				sequelize,
+			}
+		);
 	}
 
 	static associate(models) {
 		this.belongsTo(models.User, {
 			foreignKey: 'userId',
-			as: 'author'
+			as: 'author',
 		});
 
-		this.belongsTo(models.File, {
-			foreignKey: 'imageId',
-			as: 'image',
+		this.belongsTo(models.Result, {
+			foreignKey: 'resultId',
+			as: 'result',
 		});
 	}
 }

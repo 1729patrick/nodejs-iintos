@@ -1,6 +1,8 @@
 import News from '../models/News';
 import User from '../models/User';
 import Project from '../models/Project';
+import Result from '../models/Result';
+import ResultFile from '../models/ResultFile';
 import File from '../models/File';
 
 /**
@@ -20,16 +22,43 @@ class NewsController {
 			order: [['createdAt', 'DESC']],
 			include: [
 				{
-					model: File,
-					as: 'image',
+					model: Result,
+					as: 'result',
+					include: {
+						model: ResultFile,
+						as: 'resultFile',
+						include: [
+							{
+								model: File,
+								as: 'file',
+							},
+						],
+					},
 				},
 				{
 					model: User,
 					as: 'author',
+					attributes: {
+						exclude: ['passwordHash'],
+					},
 				},
 			],
 		});
-		return res.json(results);
+
+		const resultsMapped = results.map(
+			({ title, description, id, result, author, createdAt }) => {
+				const files = result?.resultFile
+					?.filter(({ file }) => file?.name)
+					?.map(({ file }) => file);
+				const links = result?.resultFile
+					?.filter(({ file }) => file?.link)
+					?.map(({ file }) => file);
+
+				return { id, title, description, author, files, links, createdAt };
+			}
+		);
+
+		return res.json(resultsMapped);
 	}
 
 	/**
@@ -67,7 +96,7 @@ class NewsController {
 	 * @param {*} res The response object
 	 */
 	async createFromResults(req, res) {
-		const { title, description, userId, projectId } = req.body;
+		const { title, description, userId, projectId, id: resultId } = req.body;
 		//gets the project associated to the result
 		const project = await Project.findOne({
 			where: {
@@ -76,11 +105,16 @@ class NewsController {
 		});
 
 		// Create a new News
-		const newTitle = 'Result: ' + project.title + ' - ' + title;
+		const newTitle =
+			'Result ' +
+			title.toUpperCase() +
+			' of the project ' +
+			project.title.toUpperCase();
 		const newNews = {
 			title: newTitle,
 			description,
 			userId,
+			resultId,
 		};
 
 		const createdResult = await News.create(newNews);
