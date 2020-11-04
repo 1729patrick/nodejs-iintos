@@ -1,6 +1,7 @@
 import Result from '../models/Result';
 import ResultFile from '../models/ResultFile';
 import File from '../models/File';
+import News from '../models/News';
 
 /**
  * Controller for the all the projects results
@@ -20,27 +21,31 @@ class ResultController {
 
 		const results = await Result.findAll({
 			where: { projectId },
-			include: {
-				model: ResultFile,
-				as: 'resultFile',
-				include: [
-					{
-						model: File,
-						as: 'file',
-					},
-				],
-			},
+			include: [
+				{
+					model: ResultFile,
+					as: 'resultFile',
+					include: [
+						{
+							model: File,
+							as: 'file',
+						},
+					],
+				},
+				{ model: News, as: 'news' },
+			],
 			order: [['createdAt', 'DESC']],
 		});
 
 		const formattedResult = results.map(
-			({ id, title, description, projectId, resultFile }) => ({
+			({ id, title, description, projectId, resultFile, news }) => ({
 				id,
 				title,
 				description,
 				projectId,
+				showSendNews: !news?.length,
 				files: resultFile
-					.filter(({ file }) => !file.link)
+					.filter(({ file }) => file.name)
 					.map(({ file }) => ({
 						id: file.id,
 						url: file.url,

@@ -12,6 +12,7 @@ class Result extends Model {
 	}
 	static associate(models) {
 		this.belongsTo(models.Project, { foreignKey: 'projectId', as: 'project' });
+		this.hasMany(models.News, { foreignKey: 'resultId', as: 'news' });
 		this.hasMany(models.ResultFile, {
 			foreignKey: 'resultId',
 			as: 'resultFile',
